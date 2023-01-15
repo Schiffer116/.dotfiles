@@ -1,0 +1,222 @@
+{
+    "backlight": {
+        "interval": 2,
+            "align": 0,
+            "rotate": 0,
+            "format": "{icon} {percent}%",
+            "format-icons": ["", "", "", ""],
+            "on-click": "",
+            "on-click-middle": "",
+            "on-click-right": "",
+            "on-update": "",
+            "scroll-step": 5.0,
+            "on-scroll-up": "gdbus call -e -d de.mherzberg -o /de/mherzberg/wlrbrightness -m de.mherzberg.wlrbrightness.increase 0.1",
+            "on-scroll-down": "gdbus call -e -d de.mherzberg -o /de/mherzberg/wlrbrightness -m de.mherzberg.wlrbrightness.decrease 0.1",
+            "smooth-scrolling-threshold": 1,
+    },
+
+    "custom/spotify": {
+        "format": " {}",
+        "max-length": 40,
+        "exec": "~/.config/hypr/scripts/mediaplayer.sh",
+        "exec": "~/.config/hypr/scripts/mediaplayer.sh", // Script in resources folder
+        "exec-if": "pgrep spotify",
+    },
+
+    "wlr/workspaces-cn": {
+        "format": "{icon}",
+        "all-outputs": true,
+        "sort-by-number": true,
+        "format-icons": {
+            "1": "一",
+            "2": "二",
+            "3": "三",
+            "4": "四",
+            "5": "五",
+            "6": "六",
+            "7": "七",
+            "8": "八",
+            "9": "九",
+            "10": "十",
+            "focused": "",
+            "default": ""
+        },
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+    },
+
+    "wlr/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "all-outputs": true,
+        "sort-by-number": true,
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+        },
+        "format-icons": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9",
+            "10": "10",
+            "focused": "",
+            "default": "",
+            "persistent": "5",
+        },
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+    },
+
+    "custom/brightness": {
+        "format": "",
+    },
+
+
+    "battery": {
+        "interval": 60,
+        "align": 0,
+        "rotate": 0,
+        //"bat": "BAT1",
+        //"adapter": "ACAD",
+        "full-at": 100,
+        "design-capacity": false,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-full": "{icon} Full",
+        //"format-good": "",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": true,
+        "on-click-right": "~/.config/hypr/scripts/glassmorphismToggle",
+    },
+
+    "clock": {
+        "interval": 60,
+        "align": 0,
+        "rotate": 0,
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%b %d - %H:%M} ",
+        "format-alt": " {:%a %b %d, %G }",
+        "on-click-right": "~/.config/hypr/scripts/changeWallpaper",
+    },
+
+    "cpu": {
+        // "interval": 5,
+        // "format": " {usage}%",
+        "interval": 1,
+        //"format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% ",
+        //"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "format": "   {usage:}%",
+    },
+
+    "custom/menu": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "$HOME/.config/hypr/scripts/menu",
+    },
+
+    "custom/power": {
+        "format": "    ",
+        "tooltip": false,
+        "on-click": "archlinux-logout",
+    },
+
+    "disk": {
+        "interval": 30,
+        "format": " {free}",
+    },
+
+    "memory": {
+        "interval": 10,
+        "format": "  {used:0.1f}G",
+    },
+
+    "network": {
+        "interval": 5,
+        "format": "  {essid}",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "睊 Disconnected",
+        "format-disabled": "睊 Disabled",
+        "tooltip-format": " {ifname} via {gwaddr}",
+    },
+
+    "custom/weather": {
+        "format": "{}",
+        "format-alt": "{alt}: {}",
+        "format-alt-click": "click-right",
+        "interval": 1800,
+        "return-type": "json",
+        "exec": "~/.config/hypr/scripts/weather.sh",
+        "exec-if": "ping wttr.in -c1"
+    },
+
+    "custom/updater":{
+        "format": " {}",
+        "exec": "checkupdates | wc -l",
+        "exec-if": "[[ $(checkupdates | wc -l) ]]",
+        "interval": 15,
+        "on-click": "kitty --class update -T update -o font_size=13 -e yay -Syu && notify-send 'The system has been updated' "
+    },
+
+    "custom/cycle_wall":{
+        "format":"",
+        "on-click": "~/.config/hypr/scripts/changeWallpaper",
+        "tooltip-format": "Change wallpaper",
+    },
+
+    "pulseaudio": {
+        /* "format": "{icon} {volume}% {format_source}", */
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-bluetooth": " {volume}%",
+        "format-bluetooth-muted":" Mute",
+        "format-source": " {volume}",
+        "format-source-muted":"",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "scroll-step": 5.0,
+        "on-click-right": "pavucontrol",
+        "on-scroll-down": "~/.config/hypr/scripts/volume --inc",
+        "on-scroll-up": "~/.config/hypr/scripts/volume --dec",
+        "smooth-scrolling-threshold": 1,
+    },
+
+    "custom/keybindings": {
+        "format":" 爵 ",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/keyhint",
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 6,
+    },
+    "hyprland/window": {
+        "format": "{}",
+        "separate-outputs": true,
+    },
+}
