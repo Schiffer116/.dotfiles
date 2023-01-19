@@ -5,10 +5,11 @@ export HISTCONTROL=ignoreboth:erasedups
 export PAGER='most'
 export LC_TIME=en_US.utf8
 export RANGER_LOAD_DEFAULT_RC=false
-export RANGER_DEVICONS_SEPARATOR=" "
+export RANGER_DEVICONS_SEPARATOR="  "
 export ANKI_WAYLAND=1
-export QT_QPA_PLATFORM=wayland
+export QT_QPA_PLATFORM=wayland;
 export DISABLE_QT5_COMPAT=1
+export MANPAGER=less
 
 #Ibus settings if you need them
 #type ibus-setup in terminal to change settings and start the daemon
@@ -36,26 +37,16 @@ bind "set completion-ignore-case on"
 
 ### ALIASES ###
 
+#flathub
+#alias anki='flatpak run net.ankiweb.Anki'
+
 #list
-alias ls='ls --color=auto'
-alias la='ls -a'
+alias ls='exa -aG --color=always --icons'
+alias la='exa -a --color=always --icons'
 alias ll='ls -alFh'
-alias l='ls'
 alias l.="ls -A | egrep '^\.'"
 
-#list
-alias sps='sudo pacman -S'
-alias spr='sudo pacman -R'
-alias sprs='sudo pacman -Rs'
-alias sprdd='sudo pacman -Rdd'
-
 #fix obvious typo's
-alias cd..='cd ..'
-alias pdw='pwd'
-alias udpate='sudo pacman -Syyu'
-alias upate='sudo pacman -Syyu'
-alias updte='sudo pacman -Syyu'
-alias updqte='sudo pacman -Syyu'
 alias upqll='paru -Syu --noconfirm'
 alias upal='paru -Syu --noconfirm'
 
@@ -235,10 +226,6 @@ alias nsamba="sudo $EDITOR /etc/samba/smb.conf"
 alias ngnupgconf="sudo $EDITOR /etc/pacman.d/gnupg/gpg.conf"
 alias nhosts="sudo $EDITOR /etc/hosts"
 alias nhostname="sudo $EDITOR /etc/hostname"
-alias nb="$EDITOR ~/.bashrc"
-alias nz="$EDITOR ~/.zshrc"
-alias nf="$EDITOR ~/.config/fish/config.fish"
-alias nneofetch="$EDITOR ~/.config/neofetch/config.conf"
 
 #reading logs with bat
 alias lcalamares="bat /var/log/Calamares.log"

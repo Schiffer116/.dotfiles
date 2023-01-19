@@ -1,5 +1,5 @@
 {
-  "include": "~/.config/hypr/waybar/modules",
+  "include": "~/.config/waybar/modules",
   "layer": "top",
   "mode": "dock",
   "exclusive": true,
@@ -7,14 +7,10 @@
   "position": "top",
   "spacing": 2,
   "fixed-center": true,
-  "ipc": true,
-  "margin-left": 9,
-  "margin-right": 9,
-  "margin-top": 8,
-  "margin-bottom": -1,
+  "ipc": false,
 
   "modules-left": ["custom/power", "wlr/workspaces", "cpu", "memory"],
-  "modules-center": ["custom/spotify"],
-  "modules-right": ["backlight", "network", "pulseaudio", "battery", "clock"],
+  "modules-center": [],
+  "modules-right": ["backlight", "network", "battery", "clock"],
 }
 

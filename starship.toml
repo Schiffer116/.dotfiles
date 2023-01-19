@@ -1,142 +1,203 @@
 format = """
-[](#ffffff)\
 $os\
-[](bg:#68bcd7 fg:#ffffff)\
 $username\
-[](bg:#1859b1 fg:#68bcd7)\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
 $directory\
-[](fg:#1859b1 bg:#ae8cb0)\
+$vcsh\
 $git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
 $git_status\
-[](fg:#ae8cb0 bg:#86BBD8)\
+$hg_branch\
+$docker_context\
+$package\
 $c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
 $elixir\
 $elm\
+$erlang\
 $golang\
+$guix_shell\
 $haskell\
+$haxe\
+$helm\
 $java\
 $julia\
-$nodejs\
+$kotlin\
+$lua\
 $nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
 $rust\
 $scala\
-[](fg:#86BBD8 bg:#06969A)\
-$docker_context\
-[](fg:#06969A bg:#33658A)\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$jobs\
+$battery\
 $time\
-[ ](fg:#33658A)\
-"""
+$status\
+$container\
+$shell\
+$character"""
 
-# Disable the blank line at the start of the prompt
-# add_newline = false
+add_newline = false
 
-# You can also replace your username with a neat symbol like   or disable this
-# and use the os module below
-[username]
-show_always = true
-style_user = "bg:#68bcd7"
-style_root = "bg:#68bcd7"
-format = '[ $user ]($style)'
+[os]
+format = "[  ]($style)"
+style = "fg:#8AADF4"
 disabled = false
 
-# An alternative to the username module which displays a symbol that
-# represents the current operating system
-[os]
-style = "bold fg:#68bcd7 bg:#ffffff"
-format = '[  ]($style)'
-disabled = false # Disabled by default
+#[username]
+#format = "[Schiffer]($style)"
+#show_always = true
+#style_user = "fg:#ffffff"
+#style_root = "fg:#ffffff"
+#disabled = false
 
-[directory]
-style = "bg:#1859b1"
-format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
+[bun]
+format = "via [$symbol]($style)"
 
-# Here is how you can shorten some long paths by text replacement
-# similar to mapped_locations in Oh My Posh:
-[directory.substitutions]
-"Documents" = " "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
-# Keep in mind that the order matters. For example:
-# "Important Documents" = "  "
-# will not be replaced, because "Documents" was already substituted before.
-# So either put "Important Documents" before "Documents" or use the substituted version:
-# "Important  " = "  "
+[buf]
+format = "via [$symbol]($style)"
 
-[c]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[cmake]
+format = "via [$symbol]($style)"
 
-[docker_context]
-symbol = " "
-style = "bg:#06969A"
-format = '[ $symbol $context ]($style) $path'
+[cobol]
+format = "via [$symbol]($style)"
+
+[crystal]
+format = "via [$symbol]($style)"
+
+[daml]
+format = "via [$symbol]($style)"
+
+[dart]
+format = "via [$symbol]($style)"
+
+[deno]
+format = "via [$symbol]($style)"
+
+[dotnet]
+format = "[$symbol(🎯 $tfm )]($style)"
 
 [elixir]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
 
 [elm]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
 
-[git_branch]
-symbol = ""
-style = "bg:#ae8cb0"
-format = '[ $symbol $branch ]($style)'
-
-[git_status]
-style = "bg:#ae8cb0"
-format = '[$all_status$ahead_behind ]($style)'
+[erlang]
+format = 'via [$symbol]($style)'
 
 [golang]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
 
-[haskell]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[haxe]
+format = 'via [$symbol]($style)'
 
-[java]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[helm]
+format = 'via [$symbol]($style)'
 
 [julia]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
 
-[nodejs]
-symbol = ""
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[kotlin]
+format = 'via [$symbol]($style)'
+
+[lua]
+format = 'via [$symbol]($style)'
+
+[meson]
+format = 'via [$symbol]($style)'
 
 [nim]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
+
+[nodejs]
+format = 'via [$symbol]($style)'
+
+[ocaml]
+format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
+
+[opa]
+format = 'via [$symbol]($style)'
+
+[perl]
+format = 'via [$symbol]($style)'
+
+[php]
+format = 'via [$symbol]($style)'
+
+[pulumi]
+format = 'via [$symbol$stack]($style)'
+
+[purescript]
+format = 'via [$symbol]($style)'
+
+[python]
+format = 'via [$symbol]($style)'
+
+[raku]
+format = 'via [$symbol]($style)'
+
+[red]
+format = 'via [$symbol]($style)'
+
+[rlang]
+format = 'via [$symbol]($style)'
+
+[ruby]
+format = 'via [$symbol]($style)'
 
 [rust]
-symbol = ""
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+format = 'via [$symbol]($style)'
 
-[scala]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[swift]
+format = 'via [$symbol]($style)'
 
-[time]
-disabled = true
-time_format = "%R" # Hour:Minute Format
-style = "bg:#33658A"
-format = '[ ♥ $time ]($style)'
+[vagrant]
+format = 'via [$symbol]($style)'
 
+[vlang]
+format = 'via [$symbol]($style)'
+
+[zig]
+format = 'via [$symbol]($style)'

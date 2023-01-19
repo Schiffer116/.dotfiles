@@ -1,18 +1,18 @@
 {
     "backlight": {
         "interval": 2,
-            "align": 0,
-            "rotate": 0,
-            "format": "{icon} {percent}%",
-            "format-icons": ["", "", "", ""],
-            "on-click": "",
-            "on-click-middle": "",
-            "on-click-right": "",
-            "on-update": "",
-            "scroll-step": 5.0,
-            "on-scroll-up": "gdbus call -e -d de.mherzberg -o /de/mherzberg/wlrbrightness -m de.mherzberg.wlrbrightness.increase 0.1",
-            "on-scroll-down": "gdbus call -e -d de.mherzberg -o /de/mherzberg/wlrbrightness -m de.mherzberg.wlrbrightness.decrease 0.1",
-            "smooth-scrolling-threshold": 1,
+        "align": 0,
+        "rotate": 0,
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", ""],
+        "on-click": "",
+        "on-click-middle": "",
+        "on-click-right": "",
+        "on-update": "",
+        "scroll-step": 5.0,
+        "on-scroll-up": "light -U 5",
+        "on-scroll-down": "light -A 5",
+        "smooth-scrolling-threshold": 1,
     },
 
     "custom/spotify": {
@@ -70,7 +70,6 @@
             "10": "10",
             "focused": "",
             "default": "",
-            "persistent": "5",
         },
         "on-scroll-up": "hyprctl dispatch workspace e+1",
         "on-scroll-down": "hyprctl dispatch workspace e-1",
@@ -94,8 +93,8 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon} {capacity}%",
-        "format-alt": "{time} {icon}",
+        "format": "{icon}  {capacity}%",
+        "format-alt": "{time}  {icon}",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
         "format-full": "{icon} Full",
@@ -121,7 +120,7 @@
         "interval": 1,
         //"format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% ",
         //"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-        "format": "   {usage:}%",
+        "format": " {usage:}%",
     },
 
     "custom/menu": {
@@ -131,7 +130,7 @@
     },
 
     "custom/power": {
-        "format": "    ",
+        "format": "",
         "tooltip": false,
         "on-click": "archlinux-logout",
     },
@@ -143,12 +142,12 @@
 
     "memory": {
         "interval": 10,
-        "format": "  {used:0.1f}G",
+        "format": " {used:0.1f}G",
     },
 
     "network": {
         "interval": 5,
-        "format": "  {essid}",
+        "format": "  {essid}",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "format-ethernet": " {ipaddr}/{cidr}",
         "format-linked": " {ifname} (No IP)",
@@ -203,6 +202,12 @@
         "on-scroll-down": "~/.config/hypr/scripts/volume --inc",
         "on-scroll-up": "~/.config/hypr/scripts/volume --dec",
         "smooth-scrolling-threshold": 1,
+    },
+
+    "wireplumber": {
+        "format": "{volume}%",
+        "format-muted": "",
+        "on-click": "helvum",
     },
 
     "custom/keybindings": {

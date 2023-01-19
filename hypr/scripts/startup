@@ -19,10 +19,14 @@ ${SCRIPTSDIR}/notifications &
 # Lauch statusbar (waybar)
 ${SCRIPTSDIR}/statusbar &
 
-dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
+#dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
+
+wireplumber &
+
+# Pipewire
+#/usr/bin/pipewire &
+#/usr/bin/pipewire-pulse &
+#/usr/bin/pipewire-media-session &
 
 #insync start &
-#dropbox &
-#telegram-desktop &
-#discord &
 #nm-applet-indicator
