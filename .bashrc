@@ -2,21 +2,19 @@
 export EDITOR='nvim'
 export VISUAL='nvim'
 export HISTCONTROL=ignoreboth:erasedups
-export PAGER='most'
+#export PAGER='most'
 export LC_TIME=en_US.utf8
 export RANGER_LOAD_DEFAULT_RC=false
 export RANGER_DEVICONS_SEPARATOR="  "
 export ANKI_WAYLAND=1
-export QT_QPA_PLATFORM=wayland;
+export QT_QPA_PLATFORM=wayland
 export DISABLE_QT5_COMPAT=1
 export MANPAGER=less
-
-#Ibus settings if you need them
-#type ibus-setup in terminal to change settings and start the daemon
-#delete the hashtags of the next lines and restart
-#export GTK_IM_MODULE=ibus
-#export XMODIFIERS=@im=dbus
-#export QT_IM_MODULE=ibus
+#ibus
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
+pidof ibus-daemon > /dev/null || ibus-daemon -drx
 
 PS1='[\u@\h \W]\$ '
 
@@ -46,17 +44,10 @@ alias la='exa -a --color=always --icons'
 alias ll='ls -alFh'
 alias l.="ls -A | egrep '^\.'"
 
-#fix obvious typo's
-alias upqll='paru -Syu --noconfirm'
-alias upal='paru -Syu --noconfirm'
-
 ## Colorize the grep command output for ease of use (good for log files)##
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
-
-#readable output
-alias df='df -h'
 
 #keyboard
 alias give-me-azerty-be="sudo localectl set-x11-keymap be"
@@ -90,7 +81,7 @@ alias merge="xrdb -merge ~/.Xresources"
 
 # Aliases for software managment
 # pacman or pm
-alias pacman='sudo pacman --color auto'
+alias pacman='pacman --color auto'
 alias update='sudo pacman -Syyu'
 
 # paru as aur helper - updates everything
@@ -131,14 +122,6 @@ alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable s
 alias toly="sudo pacman -S ly --noconfirm --needed ; sudo systemctl enable ly.service -f ; echo 'Ly is active - reboot now'"
 alias togdm="sudo pacman -S gdm --noconfirm --needed ; sudo systemctl enable gdm.service -f ; echo 'Gdm is active - reboot now'"
 alias tolxdm="sudo pacman -S lxdm --noconfirm --needed ; sudo systemctl enable lxdm.service -f ; echo 'Lxdm is active - reboot now'"
-
-# kill commands
-# quickly kill conkies
-alias kc='killall conky'
-# quickly kill polybar
-alias kp='killall polybar'
-# quickly kill picom
-alias kpi='killall picom'
 
 #hardware info --short
 alias hw="hwinfo --short"
@@ -181,20 +164,9 @@ shopt -s dotglob
 shopt -s histappend # do not overwrite history
 shopt -s expand_aliases # expand aliases
 
-#youtube download
-alias yta-aac="yt-dlp --extract-audio --audio-format aac "
-alias yta-best="yt-dlp --extract-audio --audio-format best "
-alias yta-flac="yt-dlp --extract-audio --audio-format flac "
-alias yta-mp3="yt-dlp --extract-audio --audio-format mp3 "
-alias ytv-best="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "
-
 #Recent Installed Packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | nl"
-
-#iso and version used to install ArcoLinux
-alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
-alias isoo="cat /etc/dev-rel"
 
 #Cleanup orphaned packages
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
@@ -313,33 +285,6 @@ alias wsimplescreenrecorder="wf-recorder -a"
 alias btrfsfs="sudo btrfs filesystem df /"
 alias btrfsli="sudo btrfs su li / -t"
 
-#snapper aliases
-alias snapcroot="sudo snapper -c root create-config /"
-alias snapchome="sudo snapper -c home create-config /home"
-alias snapli="sudo snapper list"
-alias snapcr="sudo snapper -c root create"
-alias snapch="sudo snapper -c home create"
-
-#Leftwm aliases
-alias lti="leftwm-theme install"
-alias ltu="leftwm-theme uninstall"
-alias lta="leftwm-theme apply"
-alias ltupd="leftwm-theme update"
-alias ltupg="leftwm-theme upgrade"
-
-#arcolinux applications
-#att is a symbolic link now
-#alias att="archlinux-tweak-tool"
-alias adt="arcolinux-desktop-trasher"
-alias abl="arcolinux-betterlockscreen"
-alias agm="arcolinux-get-mirrors"
-alias amr="arcolinux-mirrorlist-rank-info"
-alias aom="arcolinux-osbeck-as-mirror"
-alias ars="arcolinux-reflector-simple"
-alias atm="arcolinux-tellme"
-alias avs="arcolinux-vbox-share"
-alias awa="arcolinux-welcome-app"
-
 #remove
 alias rmgitcache="rm -r ~/.cache/git"
 
@@ -351,24 +296,6 @@ alias personal='cp -Rf /personal/* ~'
 
 [[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
 
-# reporting tools - install when not installed
 neofetch
-#screenfetch
-#alsi
-#paleofetch
-#fetch
-#hfetch
-#sfetch
-#ufetch
-#ufetch-arco
-#pfetch
-#sysinfo
-#sysinfo-retro
-#cpufetch
-#colorscript random
-
-
-
-
 
 eval "$(starship init bash)"

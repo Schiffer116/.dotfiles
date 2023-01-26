@@ -21,12 +21,9 @@ ${SCRIPTSDIR}/statusbar &
 
 #dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
 
-wireplumber &
-
-# Pipewire
-#/usr/bin/pipewire &
-#/usr/bin/pipewire-pulse &
-#/usr/bin/pipewire-media-session &
+sleep 2
+waybar &
+ibus-daemon
 
 #insync start &
 #nm-applet-indicator

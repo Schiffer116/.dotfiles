@@ -1,13 +1,8 @@
 {
     "backlight": {
-        "interval": 2,
-        "align": 0,
-        "rotate": 0,
+        "interval": 10,
         "format": "{icon} {percent}%",
         "format-icons": ["", "", "", ""],
-        "on-click": "",
-        "on-click-middle": "",
-        "on-click-right": "",
         "on-update": "",
         "scroll-step": 5.0,
         "on-scroll-up": "light -U 5",
@@ -16,33 +11,11 @@
     },
 
     "custom/spotify": {
-        "format": " {}",
+        "interval": 1,
+        "format": "{}",
         "max-length": 40,
         "exec": "~/.config/hypr/scripts/mediaplayer.sh",
-        "exec": "~/.config/hypr/scripts/mediaplayer.sh", // Script in resources folder
         "exec-if": "pgrep spotify",
-    },
-
-    "wlr/workspaces-cn": {
-        "format": "{icon}",
-        "all-outputs": true,
-        "sort-by-number": true,
-        "format-icons": {
-            "1": "一",
-            "2": "二",
-            "3": "三",
-            "4": "四",
-            "5": "五",
-            "6": "六",
-            "7": "七",
-            "8": "八",
-            "9": "九",
-            "10": "十",
-            "focused": "",
-            "default": ""
-        },
-        "on-scroll-up": "hyprctl dispatch workspace e+1",
-        "on-scroll-down": "hyprctl dispatch workspace e-1",
     },
 
     "wlr/workspaces": {
@@ -75,11 +48,6 @@
         "on-scroll-down": "hyprctl dispatch workspace e-1",
     },
 
-    "custom/brightness": {
-        "format": "",
-    },
-
-
     "battery": {
         "interval": 60,
         "align": 0,
@@ -97,7 +65,7 @@
         "format-alt": "{time}  {icon}",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
-        "format-full": "{icon} Full",
+        "format-full": "{icon}  Full",
         //"format-good": "",
         "format-icons": ["", "", "", "", ""],
         "tooltip": true,
@@ -109,24 +77,15 @@
         "align": 0,
         "rotate": 0,
         "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%b %d - %H:%M} ",
+        "format": " {:%b %d  %H:%M} ",
         "format-alt": " {:%a %b %d, %G }",
         "on-click-right": "~/.config/hypr/scripts/changeWallpaper",
     },
 
     "cpu": {
-        // "interval": 5,
-        // "format": " {usage}%",
         "interval": 1,
-        //"format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% ",
-        //"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "format": " {usage:}%",
-    },
-
-    "custom/menu": {
-        "format": "",
-        "tooltip": false,
-        "on-click": "$HOME/.config/hypr/scripts/menu",
+        "tooltip": true,
     },
 
     "custom/power": {
@@ -137,7 +96,7 @@
 
     "disk": {
         "interval": 30,
-        "format": " {free}",
+        "format": " {used}",
     },
 
     "memory": {
@@ -166,6 +125,49 @@
         "exec-if": "ping wttr.in -c1"
     },
 
+    "custom/language": {
+        "interval": 1,
+        "format": "{}",
+        "exec": "~/.config/hypr/scripts/language --get",
+        "on-click": "~/.config/hypr/scripts/language --next",
+    },
+
+    "bluetooth": {
+        "format": " {status}",
+        "format-connected": " {device_alias}",
+        "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+        // "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
+    },
+
+    "wireplumber": {
+        "format": " {volume}%",
+        "format-muted": " Muted",
+        "format-icons": ["", "", ""],
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+        "smooth-scrolling-threshold": 1,
+    },
+
+    "hyprland/window": {
+        "format": "{}",
+        "separate-outputs": true,
+    },
+
+    "custom/menu": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "$HOME/.config/hypr/scripts/menu",
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 6,
+    },
+
     "custom/updater":{
         "format": " {}",
         "exec": "checkupdates | wc -l",
@@ -176,14 +178,14 @@
 
     "custom/cycle_wall":{
         "format":"",
-        "on-click": "~/.config/hypr/scripts/changeWallpaper",
-        "tooltip-format": "Change wallpaper",
+            "on-click": "~/.config/hypr/scripts/changeWallpaper",
+            "tooltip-format": "Change wallpaper",
     },
 
     "pulseaudio": {
         /* "format": "{icon} {volume}% {format_source}", */
         "format": "{icon} {volume}%",
-        "format-muted": "",
+        "format-muted": " ",
         "format-bluetooth": " {volume}%",
         "format-bluetooth-muted":" Mute",
         "format-source": " {volume}",
@@ -202,26 +204,5 @@
         "on-scroll-down": "~/.config/hypr/scripts/volume --inc",
         "on-scroll-up": "~/.config/hypr/scripts/volume --dec",
         "smooth-scrolling-threshold": 1,
-    },
-
-    "wireplumber": {
-        "format": "{volume}%",
-        "format-muted": "",
-        "on-click": "helvum",
-    },
-
-    "custom/keybindings": {
-        "format":" 爵 ",
-        "tooltip": false,
-        "on-click": "~/.config/hypr/scripts/keyhint",
-    },
-
-    "tray": {
-        "icon-size": 18,
-        "spacing": 6,
-    },
-    "hyprland/window": {
-        "format": "{}",
-        "separate-outputs": true,
     },
 }

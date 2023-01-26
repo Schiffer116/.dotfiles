@@ -1,0 +1,22 @@
+#!/bin/bash
+
+curLang="$(ibus engine)"
+
+if [[ "$1" == "--get" ]]
+then
+    if [[ "$curLang" == "BambooUs" ]]
+    then
+        echo E
+    else
+        echo V
+    fi
+else
+    if [[ "$curLang" == "BambooUs" ]]
+    then
+        ibus engine Bamboo
+        echo V
+    else
+        ibus engine BambooUs
+        echo E
+    fi
+fi
