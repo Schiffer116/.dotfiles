@@ -144,6 +144,7 @@
     },
 
     "wireplumber": {
+        "interval": 1,
         "format": " {volume}%",
         "format-muted": " Muted",
         "format-icons": ["", "", ""],
@@ -185,7 +186,7 @@
     "pulseaudio": {
         /* "format": "{icon} {volume}% {format_source}", */
         "format": "{icon} {volume}%",
-        "format-muted": " ",
+        "format-muted": " Muted",
         "format-bluetooth": " {volume}%",
         "format-bluetooth-muted":" Mute",
         "format-source": " {volume}",
@@ -201,8 +202,8 @@
         },
         "scroll-step": 5.0,
         "on-click-right": "pavucontrol",
-        "on-scroll-down": "~/.config/hypr/scripts/volume --inc",
-        "on-scroll-up": "~/.config/hypr/scripts/volume --dec",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
         "smooth-scrolling-threshold": 1,
     },
 }

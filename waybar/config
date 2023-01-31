@@ -11,6 +11,6 @@
 
   "modules-left": ["custom/power", "wlr/workspaces", "cpu", "memory", "disk", "custom/weather"],
   "modules-center": ["custom/spotify"],
-  "modules-right": ["custom/language", "backlight", "network", "bluetooth", "wireplumber", "battery", "clock"],
+  "modules-right": ["custom/language", "backlight", "network", "pulseaudio", "battery", "clock"],
 }
 

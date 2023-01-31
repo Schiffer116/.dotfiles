@@ -19,6 +19,7 @@ window#waybar.hidden {
   opacity: 0.7;
 }
 
+#pulseaudio,
 #window,
 #custom-power,
 #clock,
@@ -80,6 +81,12 @@ window#waybar.hidden {
     color: rgba(229,180,226,255);
     /*margin-left: 0;*/
 }
+
+#pulseaudio {
+    color: rgba(229,180,226,255);
+    /*margin-left: 0;*/
+}
+
 
 #workspaces {
     padding-left: 8px;
