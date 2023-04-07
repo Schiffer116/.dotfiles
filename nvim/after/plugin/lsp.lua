@@ -3,11 +3,8 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-  'tsserver',
-  'rust_analyzer',
 })
 
---[[
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
     settings = {
@@ -18,7 +15,7 @@ lsp.configure('sumneko_lua', {
         }
     }
 })
-]]--
+
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
@@ -29,8 +26,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
--- disable completion with tab
--- this helps with copilot setup
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
 
@@ -66,7 +61,5 @@ end)
 lsp.setup()
 
 vim.diagnostic.config({
-    virtual_text = true,
+    virtual_text = true
 })
-
-
