@@ -5,8 +5,8 @@
         "format-icons": ["", "", "", ""],
         "on-update": "",
         "scroll-step": 5.0,
-        "on-scroll-up": "light -U 5",
-        "on-scroll-down": "light -A 5",
+        "on-scroll-up": "~/.config/hypr/scripts/brightness.sh --dec",
+        "on-scroll-down": "~/.config/hypr/scripts/brightness.sh --inc",
         "smooth-scrolling-threshold": 1,
     },
 
@@ -61,15 +61,14 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon}  {capacity}%",
-        "format-alt": "{time}  {icon}",
+        "format": "{icon} {capacity}%",
+        "format-alt": "{time} {icon}",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
-        "format-full": "{icon}  Full",
+        "format-full": "{icon} Full",
         //"format-good": "",
         "format-icons": ["", "", "", "", ""],
         "tooltip": true,
-        "on-click-right": "~/.config/hypr/scripts/glassmorphismToggle",
     },
 
     "clock": {
@@ -89,7 +88,7 @@
     },
 
     "custom/power": {
-        "format": "",
+        "format": " ",
         "tooltip": false,
         "on-click": "archlinux-logout",
     },
@@ -106,7 +105,7 @@
 
     "network": {
         "interval": 5,
-        "format": "  {essid}",
+        "format": " {essid}",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "format-ethernet": " {ipaddr}/{cidr}",
         "format-linked": " {ifname} (No IP)",
@@ -128,8 +127,8 @@
     "custom/language": {
         "interval": 1,
         "format": "{}",
-        "exec": "~/.config/hypr/scripts/language --get",
-        "on-click": "~/.config/hypr/scripts/language --next",
+        "exec": "~/.config/hypr/scripts/language.sh --get",
+        "on-click": "~/.config/hypr/scripts/language.sh --next",
     },
 
     "bluetooth": {
@@ -167,20 +166,6 @@
     "tray": {
         "icon-size": 18,
         "spacing": 6,
-    },
-
-    "custom/updater":{
-        "format": " {}",
-        "exec": "checkupdates | wc -l",
-        "exec-if": "[[ $(checkupdates | wc -l) ]]",
-        "interval": 15,
-        "on-click": "kitty --class update -T update -o font_size=13 -e yay -Syu && notify-send 'The system has been updated' "
-    },
-
-    "custom/cycle_wall":{
-        "format":"",
-            "on-click": "~/.config/hypr/scripts/changeWallpaper",
-            "tooltip-format": "Change wallpaper",
     },
 
     "pulseaudio": {

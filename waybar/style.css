@@ -1,7 +1,7 @@
 * {
-    font-family: "Roboto Mono", "Fira Code Nerd Font";
+    font-family: "JetBrains Mono ExtraBold";
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     /*color: rgba(182,187,211,255);*/
     color: rgba(210, 210, 210, 1);
 }
@@ -105,10 +105,8 @@ window#waybar.hidden {
     background-color: rgba(0,0,0,0);
 	color: rgba(15, 148, 210, 1);
 	font-size: 25px;
-    padding-left: 12px;
-    padding-right: 12px;
-    margin-left: 0px;
-    margin-right: 3px;
+    margin: 6px 0;
+    padding: 0 0 0 10px;
 }
 
 #custom-weather {
@@ -118,5 +116,3 @@ window#waybar.hidden {
 #custom-language {
 	color: rgba(164,185,239,255);
 }
-
-
