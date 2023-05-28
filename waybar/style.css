@@ -2,13 +2,12 @@
     font-family: "JetBrains Mono ExtraBold";
     font-size: 16px;
     font-weight: 600;
-    /*color: rgba(182,187,211,255);*/
     color: rgba(210, 210, 210, 1);
 }
 
 window#waybar {
-	background-color: rgba(23, 22, 29, 1);
-	border-bottom: 0px solid rgba(48, 47, 54, 1);
+	background-color: rgba(37, 42, 51, 1);
+	border-bottom: 3px solid rgba(56, 62, 75, 1);
 	transition-property: background-color;
 	transition-duration: .5s;
 	border-radius: 0px;
@@ -35,9 +34,9 @@ window#waybar.hidden {
 #backlight,
 #battery {
 	padding: 0px 16px;
-	margin: 6px 3px;
-	background-color: rgba(15, 12, 19, 1);
-    /*background-color: rgba(51, 54, 61, 0);*/
+	margin: 6px 5px 10px 5px;
+	/* background-color: rgba(15, 12, 19, 1); */
+    background-color: rgba(29, 32, 39, 1);
     border-radius: 15px;
 }
 
@@ -105,13 +104,13 @@ window#waybar.hidden {
     background-color: rgba(0,0,0,0);
 	color: rgba(15, 148, 210, 1);
 	font-size: 25px;
-    margin: 6px 0;
+    margin: 6px 6px 8px 10px;
     padding: 0 0 0 10px;
 }
 
-#custom-weather {
-    /*color: rgba(214, 133, 133, 1);*/
-}
+/* #custom-weather {
+    color: rgba(214, 133, 133, 1);
+} */
 
 #custom-language {
 	color: rgba(164,185,239,255);
