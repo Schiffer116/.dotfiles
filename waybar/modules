@@ -21,8 +21,8 @@
     "wlr/workspaces": {
         "format": "{icon}",
         "on-click": "activate",
-        "all-outputs": true,
         "sort-by-number": true,
+
         "persistent_workspaces": {
             "1": [],
             "2": [],
@@ -30,6 +30,7 @@
             "4": [],
             "5": [],
         },
+
         "format-icons": {
             "1": "1",
             "2": "2",
