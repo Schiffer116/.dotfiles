@@ -15,7 +15,7 @@
         "format": "{}",
         "max-length": 40,
         "exec": "~/.config/hypr/scripts/mediaplayer.sh",
-        "exec-if": "pgrep spotify",
+        // "exec-if": "pgrep spotify",
     },
 
     "wlr/workspaces": {
