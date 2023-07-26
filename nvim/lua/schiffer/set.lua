@@ -25,3 +25,5 @@ vim.opt.updatetime = 50
 
 vim.opt.smartindent = true
 
+vim.cmd([[hi WinSeparator guifg=#89B4FA guibg=None]])
+

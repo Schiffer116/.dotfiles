@@ -1,4 +1,14 @@
 require('lualine').setup({
-    options = { theme = 'catppuccin' }
+    options = {
+        icon_enabled = true,
+        theme = 'catppuccin',
+    },
+    sections = {
+        lualine_a = {
+            {
+                'buffers',
+            }
+        }
+    }
 })
 
