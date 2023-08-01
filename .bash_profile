@@ -15,6 +15,7 @@ export DISABLE_QT5_COMPAT=1
 
 # PATH
 export PATH=$PATH:$HOME/.local/bin/
+export PATH=$PATH:$HOME/scripts/
 
 #ibus
 export GTK_IM_MODULE=ibus
@@ -25,8 +26,13 @@ pidof ibus-daemon > /dev/null || ibus-daemon -drx
 # cleanup
 export HISTFILE=$HOME/bash/history
 export CARGO_HOME=$HOME/.cargo
+export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 # export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+export ZDOTDIR="$HOME"/.config/zsh
+export STACK_ROOT="$XDG_DATA_HOME"/stack
+export STACK_XDG=1
+
 
 source "$HOME"/.bashrc
 eval "$(starship init bash)"

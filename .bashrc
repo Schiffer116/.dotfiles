@@ -5,6 +5,8 @@ bind "set completion-ignore-case on"
 
 ### ALIASES ###
 
+bind -x '"\C-f":"cd $(find . -type d -print | fzf) && tmux new -s $((echo $(basename $(pwd))) | cut -c 1-7) && cd"'
+
 # nvim-dap
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
 

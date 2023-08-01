@@ -4,7 +4,7 @@
 
 THEME='Arc-Dark'
 ICONS='arcolinux-candy-beauty'
-FONT='Noto Sans 11'
+FONT='JetBrains Mono'
 CURSOR='Bibata-Modern-Ice'
 
 SCHEMA='gsettings set org.gnome.desktop.interface'
