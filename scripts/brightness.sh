@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 get_backlight() {
-    LIGHT=$(light | sed 's/\.[0-9]*//')
+    LIGHT=$(light | cut -d. -f1)
 	echo "${LIGHT}"
 }
 

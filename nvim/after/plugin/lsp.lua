@@ -90,3 +90,9 @@ require('mason-lspconfig').setup_handlers({
     })
   end,
 })
+
+
+-- Hover border color
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = "rounded",
+})

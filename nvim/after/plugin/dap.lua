@@ -12,11 +12,11 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 
-vim.keymap.set("n", '<leader>d', function() require('dap').toggle_breakpoint() end)
-vim.keymap.set("n", '<F1>', function() require('dap').continue() end)
-vim.keymap.set("n", '<F2>', function() require('dap').step_into() end)
-vim.keymap.set("n", '<F3>', function() require('dap').step_over() end)
-vim.keymap.set("n", '<F4>', function() require('dap').step_out() end)
+vim.keymap.set("n", '<leader>b', function() require('dap').toggle_breakpoint() end)
+vim.keymap.set("n", '<leader>c', function() require('dap').continue() end)
+vim.keymap.set("n", '<leader>i', function() require('dap').step_into() end)
+vim.keymap.set("n", '<leader>o', function() require('dap').step_over() end)
+vim.keymap.set("n", '<leader>t', function() require('dap').step_out() end)
 
 
 dap.adapters.lldb = {
@@ -26,7 +26,7 @@ dap.adapters.lldb = {
     name = "lldb"
 }
 
-dap.defaults.fallback.external_terminal = {
+dap.defaults.fallback.externatl_terminal = {
   command = '/usr/local/bin/kitty',
   args = {
     '--hold',

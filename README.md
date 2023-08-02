@@ -1,2 +1,2 @@
-# Arch-Config
-Configuration for Arch and Linux related software
+# dotfiles
+Configuration for Linux related software

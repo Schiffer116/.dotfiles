@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTSDIR=$HOME/.config/hypr/scripts
+SCRIPTSDIR=$HOME/scripts
 
 # Kill already running process
 _ps=(waybar mako)
@@ -19,11 +19,6 @@ done
 # Lauch statusbar (waybar)
 "${SCRIPTSDIR}"/statusbar &
 
-#dex $HOME/.config/autostart/arcolinux-welcome-app.desktop &
-
 sleep 2
 waybar &
 ibus-daemon
-
-#insync start &
-#nm-applet-indicator
