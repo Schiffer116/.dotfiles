@@ -77,7 +77,7 @@ alias icat='kitty +kitten icat'
 alias ls='exa --color=always --icons'
 alias la='exa -a --color=always --icons'
 alias ll='exa -ahl --color=always --icons'
-alias tree='exa --tree'
+alias tree='exa --tree --color=always --icons'
 
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'

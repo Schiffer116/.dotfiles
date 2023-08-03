@@ -59,6 +59,6 @@ require('lazy').setup({
     },
 
     'xiyaowong/transparent.nvim',
-    'tpope/vim-fugitive'
+    'tpope/vim-fugitive',
+    'numToStr/Comment.nvim'
 })
-

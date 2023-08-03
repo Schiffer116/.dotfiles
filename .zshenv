@@ -1,8 +1,8 @@
 ### EXPORT ###
-export EDITOR=nvim
+export EDITOR='nvim'
 export HISTCONTROL=ignoreboth:erasedups
 export PAGER='most'
-export MANPAGER=less
+export MANPAGER='nvim +Man!'
 
 export LIBVA_DRIVER_NAME=vdpau
 export VDPAU_DRIVER=nvidia
