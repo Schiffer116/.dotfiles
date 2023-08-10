@@ -4,8 +4,8 @@
         "format-icons": ["󰃞", "󰃟", "󰃝", "󰃠"],
         "on-update": "",
         "scroll-step": 5.0,
-        "on-scroll-up": "$HOME/scripts/brightness.sh --inc",
-        "on-scroll-down": "$HOME/scripts/brightness.sh --dec",
+        "on-scroll-up": "$HOME/scripts/brightness.sh --dec",
+        "on-scroll-down": "$HOME/scripts/brightness.sh --inc",
         "smooth-scrolling-threshold": 1,
         "tooltip": false
     },
@@ -172,8 +172,8 @@
         },
         "scroll-step": 5.0,
         "on-click-right": "pavucontrol",
-        "on-scroll-up": "$HOME/scripts/volume.sh --inc",
-        "on-scroll-down": "$HOME/scripts/volume.sh --dec",
+        "on-scroll-up": "$HOME/scripts/volume.sh --dec",
+        "on-scroll-down": "$HOME/scripts/volume.sh --inc",
         "smooth-scrolling-threshold": 1,
     },
 }
