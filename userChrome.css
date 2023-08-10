@@ -17,10 +17,9 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 
 /* Modify these to change relative widths or default height */
 #navigator-toolbox{
-  --uc-navigationbar-width: 50vw;
+  --uc-navigationbar-width: 30vw;
   --uc-toolbar-height: 40px;
   --uc-urlbar-min-width: 50vw; /* minimum width for opened urlbar */
-
 }
 
 #scrollbutton-up,
@@ -33,11 +32,14 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 /* prevent urlbar overflow on narrow windows */
 /* Dependent on how many items are in navigation toolbar ADJUST AS NEEDED */
 @media screen and (max-width: 1500px){
-  #urlbar-container{ min-width:unset !important }
+    #urlbar-container{
+      min-width: 60px !important;
+      flex-shrink: 1 !important;
+    }
 }
 
 #TabsToolbar{
-  margin-left: calc(var(--uc-navigationbar-width) + 5px);
+  margin-left: calc(var(--uc-navigationbar-width) + 3px);
   --tabs-navbar-shadow-size: 0px;
 }
 #tabbrowser-tabs{
@@ -84,11 +86,34 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 #urlbar-container:not(:hover) .urlbar-history-dropmarker{ margin-inline-start: -28px; }
 
 /* Fix customization view */
-#customization-panelWrapper > .panel-arrowbox > .panel-arrow{ margin-inline-end: initial !important; }
+#customization-panelWrapper > .panel-arrowbox > .panel-arrow{ margin-inline-end: initial !important; } 
 
 
 
 
+/*====== Simplifying interface ======*/
 
-#stop-reload-button{ padding: 0 !important; margin-right: -40px }
+/* Autohide back button when disabled */
+#back-button, #forward-button {
+    transform: scale(1, 1) !important;
+    transition: margin-left 150ms var(--animation-easing-function), opacity 250ms var(--animation-easing-function), transform 350ms var(--animation-easing-function) !important;
+}
 
+#back-button[disabled="true"], #forward-button[disabled="true"] {
+    margin-left: -34px !important;
+    opacity: 0 !important;
+    transform: scale(0.8, 0.8) !important;
+    pointer-events: none !important;
+}
+
+/* Fix URL bar overlapping elements */
+#urlbar-container {
+    min-width: initial !important;
+}
+
+/* Remove gap after pinned tabs */
+#tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs])
+> #tabbrowser-arrowscrollbox
+> .tabbrowser-tab[first-visible-unpinned-tab] {
+    margin-inline-start: 0 !important;
+}

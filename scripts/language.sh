@@ -1,23 +1,28 @@
 #!/bin/sh
 
-curLang="$(ibus engine)"
 
-if [ "$1" = "--get" ]
-then
-    if [ "$curLang" = "BambooUs" ]
-    then
+get_lang() {
+    cur_lang="$(ibus engine)"
+    if [ "$cur_lang" = "BambooUs" ]; then
         echo E
     else
         echo V
     fi
-else
-    if [ "$curLang" = "BambooUs" ]
-    then
+}
+
+
+cycle_lang() {
+    if [ "$(get_lang)" = "E" ]; then
         ibus engine Bamboo
-        echo V
-    else
+    elif [ "$(get_lang)" = "V" ]; then
         ibus engine BambooUs
-        echo E
     fi
-fi
+}
 
+
+if [ "$1" = "--get" ]; then
+    get_lang
+elif [ "$1" = "--next" ]; then
+    cycle_lang
+    pkill -RTMIN+4 waybar
+fi

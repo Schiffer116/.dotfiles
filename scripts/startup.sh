@@ -1,24 +1,14 @@
 #!/bin/bash
 
-SCRIPTSDIR=$HOME/scripts
 
-# Kill already running process
-_ps=(waybar mako)
-for _prs in "${_ps[@]}"; do
-	if [[ $(pidof "${_prs}") ]]; then
-		killall -9 "${_prs}"
-	fi
-done
 
-# Apply themes
-"${SCRIPTSDIR}"/gtkthemes &
+apply_themes() {
+    CURSOR='Bibata-Modern-Ice'
+    SCHEMA='gsettings set org.gnome.desktop.interface'
+	${SCHEMA} cursor-theme "$CURSOR"
+}
 
-# Lauch notification daemon (mako)
-"${SCRIPTSDIR}"/notifications &
-
-# Lauch statusbar (waybar)
-"${SCRIPTSDIR}"/statusbar &
-
-sleep 2
+apply_themes
+mako &
 waybar &
 ibus-daemon

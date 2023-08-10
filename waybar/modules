@@ -1,19 +1,20 @@
 {
     "backlight": {
         "format": "{icon} {percent}%",
-        "format-icons": ["", ""],
+        "format-icons": ["󰃞", "󰃟", "󰃝", "󰃠"],
         "on-update": "",
         "scroll-step": 5.0,
-        "on-scroll-up": "$HOME/scripts/brightness.sh --dec",
-        "on-scroll-down": "$HOME/scripts/brightness.sh --inc",
+        "on-scroll-up": "$HOME/scripts/brightness.sh --inc",
+        "on-scroll-down": "$HOME/scripts/brightness.sh --dec",
         "smooth-scrolling-threshold": 1,
+        "tooltip": false
     },
 
     "custom/spotify": {
         "format": "{}",
         "max-length": 40,
         "exec": "~/scripts/mediaplayer.sh",
-        // "exec-if": "pgrep spotify",
+        "exec-if": "pgrep spotify",
     },
 
     "wlr/workspaces": {
@@ -104,12 +105,12 @@
 
     "network": {
         "interval": 5,
-        "format": " {essid}",
+        "format": "󰖩 {essid}",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "format-ethernet": " {ipaddr}/{cidr}",
-        "format-linked": " {ifname} (No IP)",
-        "format-disconnected": "睊 Disconnected",
-        "format-disabled": "睊 Disabled",
+        "format-ethernet": "󰈁 {ipaddr}/{cidr}",
+        "format-linked": "󰌹 {ifname} (No IP)",
+        "format-disconnected": "󰖪 Disconnected",
+        "format-disabled": "󱚿 Disabled",
         "tooltip-format": " {ifname} via {gwaddr}",
     },
 
@@ -124,11 +125,11 @@
     },
 
     "custom/language": {
-        "interval": 1,
-        "signal": 8,
+        "interval": "once",
+        "signal": 4,
         "format": "{}",
         "exec": "$HOME/scripts/language.sh --get",
-        "on-click": "$HOME/scripts/language.sh --next; pkill -RTMIN+8 waybar"
+        "on-click": "$HOME/scripts/language.sh --next",
     },
 
     "bluetooth": {
@@ -152,16 +153,6 @@
         "smooth-scrolling-threshold": 1,
     },
 
-    "hyprland/window": {
-        "format": "{}",
-        "separate-outputs": true,
-    },
-
-    "tray": {
-        "icon-size": 18,
-        "spacing": 6,
-    },
-
     "pulseaudio": {
         /* "format": "{icon} {volume}% {format_source}", */
         "format": "{icon} {volume}%",
@@ -181,8 +172,8 @@
         },
         "scroll-step": 5.0,
         "on-click-right": "pavucontrol",
-        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
-        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+        "on-scroll-up": "$HOME/scripts/volume.sh --inc",
+        "on-scroll-down": "$HOME/scripts/volume.sh --dec",
         "smooth-scrolling-threshold": 1,
     },
 }

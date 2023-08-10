@@ -1,26 +1,21 @@
 unsetopt beep
 zstyle :compinstall filename '/home/schiffer/.zshrc'
 
-
 # completion
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-
 
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
 
-
 # colors
 autoload -U colors && colors
-
 
 # History in cache directory:
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.cache/zsh/history
-
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -29,14 +24,12 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)		# Include hidden files.
 
-
 # Use vim keys in tab complete menu:
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
-
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
@@ -58,7 +51,6 @@ zle-line-init() {
 zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-
 
 bindkey -s "^f" 'tmux-session.sh^M'
 bindkey -s "^r" 'ranger^M'
@@ -93,7 +85,6 @@ eval "$(starship init zsh)"
 source "$HOME/.cargo/env"
 
 [ -f "/home/schiffer/.ghcup/env" ] && source "/home/schiffer/.ghcup/env" # ghcup-env
-
 
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'

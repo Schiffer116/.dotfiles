@@ -1,7 +1,6 @@
 ### EXPORT ###
 export EDITOR='nvim'
 export HISTCONTROL=ignoreboth:erasedups
-export PAGER='most'
 export MANPAGER='nvim +Man!'
 
 export LIBVA_DRIVER_NAME=vdpau
@@ -24,6 +23,5 @@ pidof ibus-daemon > /dev/null || ibus-daemon -drx
 
 # cleanup
 export CARGO_HOME=$HOME/.cargo
-# compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 
 source "$HOME/.cargo/env"

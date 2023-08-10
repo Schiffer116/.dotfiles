@@ -21,20 +21,10 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-session.sh<CR>")
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- windows and buffer
-vim.keymap.set("n", "<leader>h", "<C-w>h")
-vim.keymap.set("n", "<leader>j", "<C-w>j")
-vim.keymap.set("n", "<leader>k", "<C-w>k")
-vim.keymap.set("n", "<leader>l", "<C-w>l")
-
-vim.keymap.set("n", "<leader>H", "5<C-w><")
-vim.keymap.set("n", "<leader>J", "5<C-w>-")
-vim.keymap.set("n", "<leader>K", "5<C-w>+")
-vim.keymap.set("n", "<leader>L", "5<C-w>>")
-
-vim.keymap.set("n", "<leader><C-H>", "<C-w>H")
-vim.keymap.set("n", "<leader><C-J>", "<C-w>J")
-vim.keymap.set("n", "<leader><C-K>", "<C-w>K")
-vim.keymap.set("n", "<leader><C-L>", "<C-w>L")
+vim.keymap.set("n", "<C-w><", "10<C-w><")
+vim.keymap.set("n", "<C-w>-", "10<C-w>-")
+vim.keymap.set("n", "<C-w>+", "10<C-w>+")
+vim.keymap.set("n", "<C-w>>", "10<C-w>>")
 
 vim.keymap.set("n", "<leader>.", ":bn<CR>")
 vim.keymap.set("n", "<leader>,", ":bp<CR>")
