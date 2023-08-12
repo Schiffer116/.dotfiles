@@ -4,8 +4,8 @@
         "format-icons": ["󰃞", "󰃟", "󰃝", "󰃠"],
         "on-update": "",
         "scroll-step": 5.0,
-        "on-scroll-up": "$HOME/scripts/brightness.sh --dec",
-        "on-scroll-down": "$HOME/scripts/brightness.sh --inc",
+        "on-scroll-up": "$HOME/scripts/brightness.sh --inc",
+        "on-scroll-down": "$HOME/scripts/brightness.sh --dec",
         "smooth-scrolling-threshold": 1,
         "tooltip": false
     },
@@ -158,7 +158,7 @@
         "format": "{icon} {volume}%",
         "format-muted": " Muted",
         "format-bluetooth": " {volume}%",
-        "format-bluetooth-muted":" Mute",
+        "format-bluetooth-muted":" Muted",
         "format-source": " {volume}",
         "format-source-muted":"",
         "format-icons": {
@@ -172,8 +172,8 @@
         },
         "scroll-step": 5.0,
         "on-click-right": "pavucontrol",
-        "on-scroll-up": "$HOME/scripts/volume.sh --dec",
-        "on-scroll-down": "$HOME/scripts/volume.sh --inc",
+        "on-scroll-up": "$HOME/scripts/volume.sh --inc",
+        "on-scroll-down": "$HOME/scripts/volume.sh --dec",
         "smooth-scrolling-threshold": 1,
     },
 }

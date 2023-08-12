@@ -7,11 +7,17 @@
 
 window#waybar {
 	background-color: rgba(37, 42, 51, 1);
+	/* border-bottom: 3px solid rgba(56, 62, 75, 1); */
+}
+
+window#waybar {
+    background-color: transparent;
+}
+
+window#waybar > box {
+    margin-bottom: 20px;
 	border-bottom: 3px solid rgba(56, 62, 75, 1);
-	transition-property: background-color;
-	transition-duration: .5s;
-	border-radius: 0px;
-	padding: 100px;
+    box-shadow: 0px 5px 5px 1px #101010;
 }
 
 window#waybar.hidden {
@@ -34,8 +40,7 @@ window#waybar.hidden {
 #backlight,
 #battery {
 	padding: 0px 16px;
-	margin: 6px 5px 10px 5px;
-	/* background-color: rgba(15, 12, 19, 1); */
+	margin: 6px 5px 7px 5px;
     background-color: rgba(29, 32, 39, 1);
     border-radius: 15px;
 }

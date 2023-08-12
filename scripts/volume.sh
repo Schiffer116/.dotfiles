@@ -3,7 +3,7 @@
 iDIR="$HOME/.config/mako/icons"
 
 get_volume() {
-	volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d " " -f2 | tr -d '.' | sed 's/^0//')
+	volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d " " -f2 | tr -d '.' | sed 's/^0\{1,2\}//')
 	echo "$volume"
 }
 

@@ -1,6 +1,6 @@
 ### EXPORT ###
 export EDITOR='nvim'
-export HISTCONTROL=ignoreboth:erasedups
+export HISTCONTROL='ignoreboth:erasedups'
 export MANPAGER='nvim +Man!'
 
 export LIBVA_DRIVER_NAME=vdpau

@@ -17,7 +17,7 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 
 /* Modify these to change relative widths or default height */
 #navigator-toolbox{
-  --uc-navigationbar-width: 30vw;
+  --uc-navigationbar-width: 35vw;
   --uc-toolbar-height: 40px;
   --uc-urlbar-min-width: 50vw; /* minimum width for opened urlbar */
 }
@@ -104,6 +104,16 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
     opacity: 0 !important;
     transform: scale(0.8, 0.8) !important;
     pointer-events: none !important;
+}
+
+/* Remove UI elements */
+#identity-box, /* Site information */
+#tracking-protection-icon-container, /* Shield icon */
+#page-action-buttons > :not(#urlbar-zoom-button, #star-button-box), /* All url bar icons except for zoom level and bookmarks */
+#urlbar-go-button, /* Search URL magnifying glass */
+#alltabs-button, /* Menu to display all tabs at the end of tabs bar */
+.titlebar-buttonbox-container /* Minimize, maximize, and close buttons */ {
+    display: none !important;
 }
 
 /* Fix URL bar overlapping elements */

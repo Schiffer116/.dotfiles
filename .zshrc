@@ -1,3 +1,4 @@
+setopt HIST_IGNORE_ALL_DUPS
 unsetopt beep
 zstyle :compinstall filename '/home/schiffer/.zshrc'
 
@@ -74,8 +75,9 @@ alias tree='exa --tree --color=always --icons'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
-
-alias free="free -mt"
+alias du='du -h'
+alias df='df -h'
+alias free="free -hmt"
 
 #check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
@@ -84,10 +86,10 @@ eval "$(starship init zsh)"
 
 source "$HOME/.cargo/env"
 
-[ -f "/home/schiffer/.ghcup/env" ] && source "/home/schiffer/.ghcup/env" # ghcup-env
-
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+
+[ -f "/home/schiffer/.ghcup/env" ] && source "/home/schiffer/.ghcup/env" # ghcup-env
