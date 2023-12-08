@@ -15,15 +15,17 @@ window#waybar {
 }
 
 window#waybar > box {
-    margin-bottom: 20px;
+	background-color: rgba(37, 42, 51, 1);
+    margin-bottom: 10px;
 	border-bottom: 3px solid rgba(56, 62, 75, 1);
-    box-shadow: 0px 5px 5px 1px #101010;
+    box-shadow: 0px 3px 5px 0px #101010;
 }
 
 window#waybar.hidden {
   opacity: 0.7;
 }
 
+#custom-menu,
 #pulseaudio,
 #window,
 #custom-power,
@@ -40,7 +42,7 @@ window#waybar.hidden {
 #backlight,
 #battery {
 	padding: 0px 16px;
-	margin: 6px 5px 7px 5px;
+	margin: 6px 5px;
     background-color: rgba(29, 32, 39, 1);
     border-radius: 15px;
 }
@@ -59,14 +61,12 @@ window#waybar.hidden {
 }
 
 #clock {
-    /*margin-left: 10px;*/
     padding-right: 8px;
     margin-right: 6px;
 }
 
 #cpu {
 	color: rgba(164,185,239,255);
-    /*margin-left: 0;*/
 }
 
 #disk {
@@ -83,12 +83,10 @@ window#waybar.hidden {
 
 #wireplumber {
     color: rgba(229,180,226,255);
-    /*margin-left: 0;*/
 }
 
 #pulseaudio {
     color: rgba(229,180,226,255);
-    /*margin-left: 0;*/
 }
 
 
@@ -102,21 +100,21 @@ window#waybar.hidden {
 }
 
 #workspaces button.hover {
-    background-color: rgba(66, 65, 77, 1);
+    background-color: rgba(210, 210, 210, 1);
+    color: rgba(29, 32, 39, 1);
 }
 
 #custom-power {
     background-color: rgba(0,0,0,0);
 	color: rgba(15, 148, 210, 1);
 	font-size: 25px;
-    margin: 6px 6px 8px 10px;
-    padding: 0 0 0 10px;
+    margin: 0 0 0 8px;
 }
-
-/* #custom-weather {
-    color: rgba(214, 133, 133, 1);
-} */
 
 #custom-language {
 	color: rgba(164,185,239,255);
 }
+
+/* #custom-menu { */
+/*     color: rgba(238, 212, 159, 1); */
+/* } */

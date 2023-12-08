@@ -17,7 +17,7 @@
         "exec-if": "pgrep spotify",
     },
 
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
         "format": "{icon}",
         "on-click": "activate",
         "sort-by-number": true,
@@ -88,9 +88,9 @@
     },
 
     "custom/power": {
-        "format": " ",
+        "format": "",
         "tooltip": false,
-        "on-click": "archlinux-logout",
+        "on-click": "powermenu.sh",
     },
 
     "disk": {
@@ -176,4 +176,11 @@
         "on-scroll-down": "$HOME/scripts/volume.sh --dec",
         "smooth-scrolling-threshold": 1,
     },
+   "custom/menu": {
+        "interval": "once",
+        "format": " {}",
+        "exec": "$HOME/scripts/waybar-menu.sh",
+        "signal": 5,
+        "tooltip": false,
+    }
 }

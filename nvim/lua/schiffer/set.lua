@@ -1,4 +1,7 @@
-vim.opt.mouse = ''
+vim.g.netrw_keepdir = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_preview = 1
+vim.g.netrw_liststyle = 3
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -30,8 +33,8 @@ vim.opt.smartindent = true
 vim.cmd([[hi WinSeparator guifg=#89B4FA guibg=None]])
 
 vim.cmd[[
-augroup highlight_yank
-autocmd!
-au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=50})
-augroup END
+    augroup highlight_yank
+    autocmd!
+    au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=50})
+    augroup END
 ]]

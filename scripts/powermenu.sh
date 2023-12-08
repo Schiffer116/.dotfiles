@@ -28,11 +28,11 @@ run_cmd() {
         systemctl reboot
     elif [[ $1 == '--suspend' ]]; then
         # hacky way to do this
+        # brightness.sh --black-out
         amixer set Master mute
-        brightness.sh --black-out
         systemctl suspend
-        swaylock.sh
-        light -S 20
+        # swaylock.sh 
+        # light -S 20
     elif [[ $1 == '--lock' ]]; then
         amixer set Master mute
         playerctl pause

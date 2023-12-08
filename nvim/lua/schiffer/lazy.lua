@@ -24,9 +24,12 @@ require('lazy').setup({
             require("nvim-treesitter.install").update({ with_sync = true })
         end,
     },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+    },
 
     'mbbill/undotree',
-
     -- LSP
     'neovim/nvim-lspconfig',
     'williamboman/mason.nvim',
@@ -36,35 +39,38 @@ require('lazy').setup({
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
-
     {
         "L3MON4D3/LuaSnip",
-        -- follow latest release.
-        version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-        -- install jsregexp (optional!).
         build = "make install_jsregexp"
     },
-
-
     {
         'mfussenegger/nvim-dap',
-        { 
+        {
             "rcarriga/nvim-dap-ui",
-            dependencies = {"mfussenegger/nvim-dap"} 
+            dependencies = {"mfussenegger/nvim-dap"}
         }
     },
-
-    { 
+    {
         "catppuccin/nvim",
-        as = "catppuccin" 
+        name = "catppuccin",
+        priority = 1000
     },
 
     {
         'nvim-lualine/lualine.nvim',
-        dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
+        dependencies = { 'kyazdani42/nvim-web-devicons' }
     },
-
     'xiyaowong/transparent.nvim',
     'tpope/vim-fugitive',
     'numToStr/Comment.nvim',
+    {
+        "kylechui/nvim-surround",
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({
+
+            })
+        end
+    },
+    'norcalli/nvim-colorizer.lua',
 })

@@ -1,16 +1,13 @@
 {
     "include": "~/.config/waybar/modules",
-    "layer": "bottom",
-    // "mode": "dock",
-    "exclusive": true,
-    "passthrough": false,
+    "layer": "top",
     "position": "top",
     "spacing": 2,
     "fixed-center": true,
     "ipc": false,
-    "margin-bottom": -20,
+    "margin-bottom": -9,
 
-    "modules-left": ["custom/power", "wlr/workspaces", "cpu", "memory", "disk"],
+    "modules-left": ["custom/power", "custom/menu", "hyprland/workspaces", "cpu", "memory", "disk"],
     "modules-center": [],
     "modules-right": ["custom/language", "backlight", "network", "pulseaudio", "battery", "clock"],
 }
