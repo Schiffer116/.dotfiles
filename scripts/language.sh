@@ -38,3 +38,5 @@ case "$1" in
     "--vn") set_lang "unikey" ;;
     "--jp") set_lang "mozc" ;;
 esac
+
+eww update cur_lang="$(get_symbol)"

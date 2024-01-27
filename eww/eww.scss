@@ -1,0 +1,291 @@
+* {
+    font-family: "JetBrains Mono ExtraBold", "Symbols Nerd Font Mono", "Source Han Sans JP Heavy";
+    font-size: 15px;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 1);
+}
+
+$bg-color: rgba(17, 22, 31, 1);
+$bd-color: rgba(55, 52, 65, 1);
+
+button {
+    all: unset;
+}
+
+calendar {
+    text-shadow: none;
+    background-color: $bg-color;
+}
+
+.cpu_info,
+.ram_info,
+.disk_info,
+.song_info,
+.network_info,
+.battery_info {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.bar {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 15px;
+}
+
+.widget-bar {
+    background-color: $bg-color;
+    border-radius: 15px;
+    margin: 15px;
+    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+}
+
+.info {
+    background-color: $bg-color;
+    border-radius: 15px;
+    margin: 10px;
+    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+}
+
+.info-title {
+    margin-bottom: 5px;
+    margin-right: 10px;
+    font-size: 18;
+}
+
+.sep {
+    color: $bd-color;
+    font-size: 20px;
+    text-shadow: none;
+}
+
+.arch-logo {
+    font-size: 25px;
+    margin: 0 10px 0 15px;
+}
+
+.power-event-box {
+    color: rgba(15, 148, 210, 1);
+    transition: color 500ms;
+}
+
+.power-event-box:hover {
+    color: rgba(65, 208, 255, 1);
+}
+
+.workspace {
+    color: $bd-color;
+    transition: color 500ms;
+}
+
+.workspace:hover {
+    color: rgba(104, 163, 244, 0.5);
+}
+
+.workspace-label {
+    margin: 0 5px;
+    font-size: 18px;
+}
+
+.workspace-label-active {
+    margin: 0 5px;
+    font-size: 18px;
+    color: rgba(164, 223, 255, 1);
+}
+
+.circle {
+	background-color: $bd-color;
+    margin: 0 10px;
+}
+
+.circ-icon {
+    margin: 10px;
+    font-size: 7px;
+}
+
+.cpu {
+    color: rgba(164, 185, 239, 1);
+}
+
+.info-hardware {
+    font-size: 30px;
+    margin: 20px;
+}
+
+.ram {
+    color: rgba(177, 227, 173, 1);
+}
+
+.disk {
+    color: rgba(214, 133, 133, 1);
+}
+
+.weather-icon {
+    font-size: 25px;
+    margin: 0 10px;
+}
+
+.weather-temp {
+    font-size: 17px;
+}
+
+.language {
+    color: rgba(164,185,239,255);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.lang-button {
+    transition: background-color 500ms;
+}
+
+.lang-button:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+
+revealer {
+    background-color: #fff;
+}
+
+slider {
+    all: unset;
+}
+
+scale trough {
+    border-radius: 16px;
+    border: 2px solid #000;
+    min-height: 6px;
+    background-color: $bd-color;
+}
+
+highlight {
+    border: none;
+}
+
+trough {
+    background-color: $bg-color;
+}
+
+.backlight {
+    color: rgba(238, 212, 159, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.backlight-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: rgba(238, 212, 159, 1);
+	}
+}
+
+.color-temp {
+    color: red;
+    font-size: 22px;
+    margin: 0 10px;
+}
+
+.temp-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: red;
+	}
+}
+
+.network {
+    color: rgba(190, 228, 237, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.info-network {
+    font-size: 70px;
+}
+
+.sound {
+    color: rgba(229, 180, 226, 1);
+    font-size: 22px;
+    margin: 0 10px;
+}
+
+.volume-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: rgba(229, 180, 226, 1);
+	}
+}
+
+.battery {
+    color: rgba(177, 227, 173, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.info-battery {
+    font-size: 80px;
+}
+
+.clock {
+    margin: 0 20px 0 10px;
+}
+
+.clock label {
+    font-size: 17px;
+}
+
+.calendar {
+    background-color: rgba(0, 0, 0, 0);
+    text-shadow: none;
+}
+
+.calendar-padding {
+    margin: 10px;
+    padding: 8px;
+    background-color: $bg-color;
+    border-radius: 15px;
+    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+}
+
+
+.cover-art {
+    background-size: cover;
+    background-position: center;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 9px;
+    margin-right: 15px;
+    border-radius: 100px;
+}
+
+.cover-art-info {
+    background-size: cover;
+    background-position: center;
+    margin: 15px;
+    min-width: 104px;
+}
+
+.song-dummy > .info-title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.media-button {
+    margin: 4px;
+    font-weight: 900;
+    color: rgba(210, 210, 210, 1);
+}
+
+.media-button-label {
+    margin-left: 10px;
+}
+
+.media-button:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.song-scale {
+    all: unset;
+    margin-right: 13px;
+    min-width: 150px;
+}

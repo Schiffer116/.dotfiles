@@ -8,12 +8,9 @@ export LIBVA_DRIVER_NAME=iHD
 
 export RANGER_LOAD_DEFAULT_RC=false
 
-export QT_QPA_PLATFORM=wayland
 export DISABLE_QT5_COMPAT=1
 
-# PATH
-export PATH=$PATH:$HOME/.local/bin/
-export PATH=$PATH:$HOME/scripts
+export PATH=$PATH:$HOME/scripts:$HOME/Documents/eww/target/release
 
 # ibus
 export XMODIFIERS=@im=fcitx

@@ -1,0 +1,201 @@
+(defwindow cpu_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 140
+    :y 75
+    :width "320px"
+    :height "130px"
+    :anchor "top left")
+  (box :class "info"
+    (cpu :icon ""
+         :thicc 10
+         :role "info-hardware")
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+      (label :class "info-title"
+             :text "CPU"
+             :xalign 0)
+      (label :text "Usage: ${round(EWW_CPU.avg, 0)}%"
+             :xalign 0)
+      (label :text "Temp: ${EWW_TEMPS.DELL_SMM_CPU}C"
+             :xalign 0))))
+
+(defwindow ram_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 190
+    :y 75
+    :width "320px"
+    :height "130px"
+    :anchor "top left")
+  (box :class "info"
+    (ram :icon "󰍛"
+         :thicc 10
+         :role "info-hardware")
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+      (label :class "info-title"
+             :text "RAM"
+             :xalign 0)
+      (label :text "Total: ${round(EWW_RAM.total_mem / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0)
+      (label :text "Used: ${round(EWW_RAM.used_mem / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0)
+      (label :text "Available: ${round(EWW_RAM.available_mem / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0))))
+
+(defwindow disk_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 240
+    :y 75
+    :width "320px"
+    :height "130px"
+    :anchor "top left")
+  (box :class "info"
+    (disk :icon ""
+          :thicc 10
+          :role "info-hardware")
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+      (label :class "info-title"
+             :text "SDD"
+             :xalign 0)
+      (label :text "Total: ${round(EWW_DISK["/"].total / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0)
+      (label :text "Used: ${round(EWW_DISK["/"].used / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0)
+      (label :text "Available: ${round(EWW_DISK["/"].free / (1024 * 1024 * 1024), 0)}GB"
+             :xalign 0))))
+
+(defpoll artist :interval "1s"
+                :runwhile spotted
+                "playerctl -p spotify metadata artist")
+(defpoll song_color :initial "#A4DFFF"
+                    :interval "1s"
+                    :runwhile spotted
+                    "dom-color.sh &")
+(defpoll song_length :interval "1s"
+                     :runwhile spotted
+                     "playerctl -p spotify metadata mpris:length")
+(defpoll song_pos :interval "1s"
+                  :runwhile spotted
+                  "playerctl position")
+
+(defwindow song_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 10
+    :y 75
+    :width "320px"
+    :height "150px"
+    :anchor "top center")
+  (eventbox :onhover "eww update show_media_button=true"
+            :onhoverlost "eww update show_media_button=false; eww close song_info"
+    (box :class "info" 
+         :space-evenly false
+      (box :class "cover-art-info" 
+           :style "background-image: url('${cover_art}');")
+      (box :orientation "vertical"
+           :space-evenly false
+           :height 104
+           :class "song-dummy"
+        (label :class "info-title"
+               :wrap true
+               :text song_title
+               :limit-width 20
+               :xalign 0)
+        (label :text artist
+               :wrap true
+               :xalign 0)
+        (box :vexpand true
+          (scale :value song_pos
+                 :class "song-scale" 
+                 :css ".song-scale highlight { background-color: ${song_color}; }"
+                 :min 0
+                 :max { song_length / 1000000 }
+                 :onchange "playerctl -p spotify position {}"
+                 :orientation "horizontal"))))))
+
+(defpoll network_name :interval "1s"
+                      "nmcli -t -f active,ssid dev wifi | grep yes | cut -d':' -f2")
+
+(defwindow network_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 10
+    :y 75
+    :width "320px"
+    :height "130px"
+    :anchor "top right")
+  (box :class "info"
+    (network :strength network_strength
+             :role "info-network")
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+      (label :class "info-title"
+             :text "Network"
+             :xalign 0)
+      (label :text {network_name}
+             :xalign 0)
+      (label :text "Strength: ${network_strength}"
+             :xalign 0))))
+
+(defwindow battery_info []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 10
+    :y 75
+    :width "320px"
+    :height "130px"
+    :anchor "top right")
+  (box :class "info"
+    (battery :status {EWW_BATTERY.BAT0.status} 
+             :battery {EWW_BATTERY.BAT0.capacity}
+             :role "info-battery")
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+      (label :class "info-title"
+             :text "Battery"
+             :xalign 0)
+      (label :text "Remaining: ${EWW_BATTERY.BAT0.capacity}%"
+             :xalign 0)
+      (label :text "${EWW_BATTERY.BAT0.status}"
+             :xalign 0))))
+
+(defwindow calendar []
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry 
+    :x 10
+    :y 75
+    :width "320px"
+    :anchor "top right")
+  (eventbox :onhoverlost "eww close calendar"
+    (box :class "calendar-padding"
+      (calendar ))))

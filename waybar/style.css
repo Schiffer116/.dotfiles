@@ -41,7 +41,7 @@ window#waybar.hidden {
 #network,
 #backlight,
 #battery {
-	padding: 0px 16px;
+	padding: 1px 16px;
 	margin: 6px 5px;
     background-color: rgba(29, 32, 39, 1);
     border-radius: 15px;
@@ -89,7 +89,6 @@ window#waybar.hidden {
     color: rgba(229,180,226,255);
 }
 
-
 #workspaces {
     padding-left: 8px;
     padding-right: 8px;
@@ -100,8 +99,7 @@ window#waybar.hidden {
 }
 
 #workspaces button.hover {
-    background-color: rgba(210, 210, 210, 1);
-    color: rgba(29, 32, 39, 1);
+    background-color: rgba(0, 0, 0, 1);
 }
 
 #custom-power {
@@ -114,7 +112,3 @@ window#waybar.hidden {
 #custom-language {
 	color: rgba(164,185,239,255);
 }
-
-/* #custom-menu { */
-/*     color: rgba(238, 212, 159, 1); */
-/* } */

@@ -7,6 +7,10 @@ get_volume() {
 	echo "$volume"
 }
 
+set_volume() {
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ 0."$2"
+}
+
 get_icon() {
 	current=$(get_volume)
 	if [ "$current" -eq 0 ]; then
@@ -24,12 +28,12 @@ notify_user() {
 	notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume" "Volume at $(get_volume)%"
 }
 
-is_mute() {
-    pactl -- get-sink-mute @DEFAULT_SINK@ | cut -d ' ' -f2
+mutation() {
+    wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED
 }
 
 inc_volume() {
-    if [ "$(is_mute)" = "yes" ]; then
+    if [ "$(mutation)" = "MUTED" ]; then
         toggle_mute
         return 0
     fi
@@ -45,7 +49,7 @@ inc_volume() {
 }
 
 dec_volume() {
-    if [ "$(is_mute)" = "yes" ]; then
+    if [ "$(mutation)" = "MUTED" ]; then
         toggle_mute
         return 0
     fi
@@ -58,13 +62,14 @@ dec_volume() {
 }
 
 toggle_mute() {
-    if [ "$(is_mute)" = "no" ]; then
-		pactl -- set-sink-mute @DEFAULT_SINK@ toggle &&
-            notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$iDIR/volume-mute.png" "Volume" "Volume Muted"
-    elif [ "$(is_mute)" = "yes" ]; then
-        pactl -- set-sink-mute @DEFAULT_SINK@ toggle &&
-            notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume" "Volume Unmuted"
-	fi
+    if [ "$(mutation)" = "MUTED" ]; then
+        notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume" "Volume Unmuted"
+        eww update muted=false
+    else
+        notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$iDIR/volume-mute.png" "Volume" "Volume Muted"
+        eww update muted=true
+    fi
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle 
 }
 
 # Toggle Mic
@@ -79,14 +84,20 @@ toggle_mic() {
 }
 
 # Execute accordingly
-if [ "$1" = "--get" ]; then
-	get_volume
-elif [ "$1" = "--inc" ]; then
-	inc_volume
-elif [ "$1" = "--dec" ]; then
-	dec_volume
-elif [ "$1" = "--toggle" ]; then
-	toggle_mute
-elif [ "$1" = "--toggle-mic" ]; then
-	toggle_mic
-fi
+case $1 in
+    "--get") get_volume ;;
+    "--get-mute") 
+        if [ "$(mutation)" = "MUTED" ]; then
+            echo true
+        else 
+            echo false
+        fi
+        ;;
+    "--set") set_volume "$@" ;;
+    "--inc") inc_volume ;;
+    "--dec") dec_volume ;;
+    "--toggle") toggle_mute ;;
+    "--toggle-mic") toggle_mic ;;
+esac
+
+eww update volume="$(get_volume)"

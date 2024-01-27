@@ -2,12 +2,13 @@
     "backlight": {
         "format": "{icon} {percent}%",
         "format-icons": ["󰃞", "󰃟", "󰃝", "󰃠"],
-        "on-update": "",
         "scroll-step": 5.0,
         "on-scroll-up": "$HOME/scripts/brightness.sh --inc",
         "on-scroll-down": "$HOME/scripts/brightness.sh --dec",
         "smooth-scrolling-threshold": 1,
-        "tooltip": false
+        "tooltip": false,
+
+        "on-click": "$HOME/scripts/gamma.sh",
     },
 
     "custom/spotify": {
@@ -19,17 +20,15 @@
 
     "hyprland/workspaces": {
         "format": "{icon}",
-        "on-click": "activate",
+        "on-click": "",
         "sort-by-number": true,
-
-        "persistent_workspaces": {
+        "persistent-workspaces": {
             "1": [],
             "2": [],
             "3": [],
             "4": [],
             "5": [],
         },
-
         "format-icons": {
             "1": "1",
             "2": "2",
@@ -171,15 +170,16 @@
             "default": ["", "", ""]
         },
         "scroll-step": 5.0,
-        "on-click-right": "pavucontrol",
+        "on-click": "pavucontrol",
+        "on-click-right": "blueman-manager",
         "on-scroll-up": "$HOME/scripts/volume.sh --inc",
         "on-scroll-down": "$HOME/scripts/volume.sh --dec",
         "smooth-scrolling-threshold": 1,
     },
    "custom/menu": {
         "interval": "once",
-        "format": " {}",
-        "exec": "$HOME/scripts/waybar-menu.sh",
+        "format": " ",
+        "on-click": "$HOME/scripts/launcher.sh & $HOME/scripts/waybar-menu.sh",
         "signal": 5,
         "tooltip": false,
     }

@@ -45,9 +45,10 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-
 bindkey -s "^f" 'tmux-session.sh^M'
 bindkey -s "^r" 'ranger^M'
+bindkey -s "^v" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,1^M'
+bindkey -s "^h" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,0^M'
 
 alias wallpaper='swaybg -m fill -i'
 
@@ -70,7 +71,6 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias du='du -h'
 alias df='df -h'
-alias free="free -hmt"
 
 #check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'

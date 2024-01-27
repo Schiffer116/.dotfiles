@@ -1,41 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
-cachedir=~/.cache/rbn
-cachefile=${0##*/}-$1
+weather=$(curl -s 'wttr.in/daklak?T' | head --lines=4 | tail --lines=2)
+condition=$(echo "$weather" | head --lines=1 | grep -Eo '[A-Za-z]+( [A-Za-z]+)*')
+temperature=$(echo "$weather" | tail --lines=1 | grep -Eo '(\+|-)[0-9]+' | tr -d '+-')
 
-if [ ! -d $cachedir ]; then
-    mkdir -p $cachedir
-fi
-
-if [ ! -f $cachedir/"$cachefile" ]; then
-    touch $cachedir/"$cachefile"
-fi
-
-# Save current IFS
-SAVEIFS=$IFS
-# Change IFS to new line.
-IFS=$'\n'
-
-cacheage=$(($(date +%s) - $(stat -c '%Y' "$cachedir/$cachefile")))
-if [ $cacheage -gt 1740 ] || [ ! -s $cachedir/"$cachefile" ]; then
-    data=$(curl -s https://en.wttr.in/"$1"\?0qnT 2>&1)
-    echo "${data[0]}" | cut -f1 -d, > $cachedir/"$cachefile"
-    echo "${data[1]}" | sed -E 's/^.{15}//' >> $cachedir/"$cachefile"
-    #echo ${data[2]} | sed -E 's/^.{15}//' >> $cachedir/$cachefile
-    echo "${data[2]}" | sed -E -e 's/^.{15}//' -e 's/\s|\+//g' -e 's/\(.*\)//' >> $cachedir/"$cachefile"
-fi
-
-weather=$(cat $cachedir/"$cachefile")
-
-# Restore IFSClear
-IFS=$SAVEIFS
-
-temperature=$(echo "${weather[2]}" | sed -E 's/([[:digit:]])+\.\./\1 to /g')
-
-#echo ${weather[1]##*,}
-
-# https://fontawesome.com/icons?s=solid&c=weather
-case $(echo "${weather[1]##*,}" | tr '[:upper:]' '[:lower:]') in
+case $(echo "$condition" | tr '[:upper:]' '[:lower:]') in
 "clear" | "sunny")
     condition=""
     ;;
@@ -71,10 +40,7 @@ case $(echo "${weather[1]##*,}" | tr '[:upper:]' '[:lower:]') in
     ;;
 *)
     condition=""
-    echo -e "{\"text\":\""$condition"\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"
     ;;
 esac
 
-#echo $temp $condition
-
-echo -e "{\"text\":\""$condition $temperature"\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"
+echo "$condition""$temperature"

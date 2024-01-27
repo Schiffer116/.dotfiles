@@ -1,0 +1,56 @@
+(include "./bar/widgets.yuck")
+
+(defwindow bar
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+
+  :monitor 0
+  :geometry (geometry 
+    :width "100%"
+    :height "50px"
+    :anchor "top center")
+  (bar))
+
+(defwidget bar []
+  (centerbox :orientation "h"
+             :class "widget-bar"
+    (left)
+    (center)
+    (right)))
+
+(defwidget sep [] 
+  (label :class "sep" :text "|"))
+
+(defwidget left []
+  (box :orientation "h" 
+       :space-evenly false 
+       :halign "start"
+    (power)
+    (sep)
+    (workspaces)
+    (sep)
+    (cpu :icon ""
+         :thicc 4)
+    (ram :icon ""
+         :thicc 4)
+    (disk :icon ""
+          :thicc 4)
+    (weather)))
+
+(defwidget center []
+  (box :orientation "h" :space-evenly false :halign "center"
+    (media_player)))
+
+(defwidget right []
+  (box :orientation "h" :space-evenly false :halign "end"
+    (language)
+    (sep)
+    (temp :temp color_temp)
+    (backlight :brightness brightness)
+    (sound :volume volume)
+    (network :strength network_strength)
+    (battery :status {EWW_BATTERY.BAT0.status} 
+             :battery {EWW_BATTERY.BAT0.capacity})
+    (sep)
+    (clock)))

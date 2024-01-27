@@ -28,6 +28,10 @@ require('lazy').setup({
         "nvim-treesitter/nvim-treesitter-textobjects",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
     },
+    {
+      "luckasRanarison/tree-sitter-hyprlang",
+      dependencies = { "nvim-treesitter/nvim-treesitter" },
+    },
 
     'mbbill/undotree',
     -- LSP

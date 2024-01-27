@@ -27,6 +27,11 @@ notify_user() {
 	notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Brightness" "Brightness at $(get_brightness)%"
 }
 
+set_brightness() {
+    light -S "$2"
+    notify_user
+}
+
 inc_brightness() {
     cur_light=$(get_brightness)
     if [ "$cur_light" -le 100 ]; then
@@ -50,6 +55,8 @@ black_out() {
 
 if [ "$1" = "--get" ]; then
     get_brightness
+elif [ "$1" = "--set" ]; then
+    set_brightness "$@"
 elif [ "$1" = "--inc" ]; then
 	inc_brightness
 elif [ "$1" = "--dec" ]; then
@@ -57,3 +64,5 @@ elif [ "$1" = "--dec" ]; then
 elif [ "$1" = "--black-out" ]; then
     black_out
 fi
+
+eww update brightness="$(get_brightness)"
