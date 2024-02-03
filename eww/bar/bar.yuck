@@ -2,13 +2,11 @@
 
 (defwindow bar
   :stacking "fg"
-  :exclusive false
-  :focusable false
 
   :monitor 0
   :geometry (geometry 
     :width "100%"
-    :height "50px"
+    :height 50
     :anchor "top center")
   (bar))
 
@@ -35,8 +33,7 @@
     (ram :icon ""
          :thicc 4)
     (disk :icon ""
-          :thicc 4)
-    (weather)))
+          :thicc 4)))
 
 (defwidget center []
   (box :orientation "h" :space-evenly false :halign "center"

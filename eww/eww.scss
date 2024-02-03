@@ -1,9 +1,7 @@
 * {
     font-family: "JetBrains Mono ExtraBold", "Symbols Nerd Font Mono", "Source Han Sans JP Heavy";
-    font-size: 15px;
-    text-shadow: 0 0 4px rgba(0, 0, 0, 1);
-}
-
+    font-size: 16px;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 1); }
 $bg-color: rgba(17, 22, 31, 1);
 $bd-color: rgba(55, 52, 65, 1);
 
@@ -11,15 +9,16 @@ button {
     all: unset;
 }
 
-calendar {
-    text-shadow: none;
-    background-color: $bg-color;
+combo-box-text {
+    background-color: #fff;
 }
 
 .cpu_info,
 .ram_info,
 .disk_info,
 .song_info,
+.volume_info,
+.brightness_info,
 .network_info,
 .battery_info {
     background-color: rgba(0, 0, 0, 0);
@@ -33,15 +32,16 @@ calendar {
 .widget-bar {
     background-color: $bg-color;
     border-radius: 15px;
-    margin: 15px;
-    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+    margin: 25px;
+    box-shadow: 0 0 5px 3px rgba(0, 0, 0, 1);
 }
 
 .info {
     background-color: $bg-color;
     border-radius: 15px;
     margin: 10px;
-    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+    padding: 5px;
+    box-shadow: 0 0 5px 3px rgba(10, 10, 10, 1);
 }
 
 .info-title {
@@ -57,17 +57,21 @@ calendar {
 }
 
 .arch-logo {
+    color: rgba(15, 148, 210, 1);
     font-size: 25px;
-    margin: 0 10px 0 15px;
+    margin: 11px 10px 11px 15px;
 }
 
 .power-event-box {
-    color: rgba(15, 148, 210, 1);
     transition: color 500ms;
 }
 
 .power-event-box:hover {
     color: rgba(65, 208, 255, 1);
+}
+
+.workspaces {
+    margin: 0 5px;
 }
 
 .workspace {
@@ -76,7 +80,7 @@ calendar {
 }
 
 .workspace:hover {
-    color: rgba(104, 163, 244, 0.5);
+    color: darkgray;
 }
 
 .workspace-label {
@@ -118,12 +122,13 @@ calendar {
 }
 
 .weather-icon {
-    font-size: 25px;
-    margin: 0 10px;
+    font-size: 70px;
 }
 
 .weather-temp {
-    font-size: 17px;
+    font-family: Dosis;
+    font-size: 50px;
+    font-weight: 600;
 }
 
 .language {
@@ -200,6 +205,7 @@ trough {
 
 .info-network {
     font-size: 70px;
+    padding: 10px;
 }
 
 .sound {
@@ -216,6 +222,17 @@ trough {
 	}
 }
 
+.volume_info,
+.brightness_info {
+    padding: 25px;
+    padding-top: 35px;
+}
+
+.volume-info-icon,
+.brightness-info-icon{
+    margin-bottom: 30px;
+}
+
 .battery {
     color: rgba(177, 227, 173, 1);
     font-size: 20px;
@@ -224,19 +241,25 @@ trough {
 
 .info-battery {
     font-size: 80px;
+    padding: 10px;
 }
 
 .clock {
+    font-family: Dosis;
     margin: 0 20px 0 10px;
 }
 
 .clock label {
-    font-size: 17px;
+    font-size: 19px;
+}
+
+calendar.view {
+    text-shadow: none;
+    background-color: $bg-color;
 }
 
 .calendar {
     background-color: rgba(0, 0, 0, 0);
-    text-shadow: none;
 }
 
 .calendar-padding {
@@ -246,7 +269,6 @@ trough {
     border-radius: 15px;
     box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
 }
-
 
 .cover-art {
     background-size: cover;
@@ -278,6 +300,7 @@ trough {
 
 .media-button-label {
     margin-left: 10px;
+
 }
 
 .media-button:hover {
@@ -288,4 +311,128 @@ trough {
     all: unset;
     margin-right: 13px;
     min-width: 150px;
+}
+
+.powermenu {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.goodbye-msg {
+    margin-top: 350px;
+    margin-bottom: 50px;
+    font-size: 80px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.power-button {
+    text-shadow: none;
+    padding: 50px;
+    font-size: 70px;
+}
+
+.power-button-event {
+    border-radius: 15px;
+    background-color: rgba(17, 22, 31, 0.75);
+    transition: background-color 200ms;
+}
+
+.power-button-margin {
+    padding: 50px;
+}
+
+.power-button-event:hover,
+.power-button-event-active {
+    background-color: rgba(34, 44, 61, 0.75);
+}
+
+.launcher {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.launcher-widget {
+    background-color: $bg-color;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1);
+    border-radius: 20px;
+    margin: 25px;
+    padding: 20px;
+}
+
+.search-icon {
+    background-color: $bg-color;
+    border-radius: 20px;
+    margin-right: 15px;
+    padding: 15px;
+}
+
+.search-box {
+    background-image: url('./launcher/hand.png');
+    background-position: center;
+    background-size: cover;
+    border-radius: 15px;
+}
+
+.search-bar {
+    padding: 40px;
+}
+
+.app-item-event {
+    background-color: $bd-color;
+    border-radius: 10px;
+    transition: background-color 200ms;
+}
+
+.app-item {
+    padding: 10px;
+}
+
+.app-item-event:hover, 
+.app-item-active {
+    background-color: rgba(75, 72, 85, 1);
+    border-radius: 10px;
+}
+
+.quote {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.fancy-date {
+    // background-color: rgba(255, 0, 0, 0.2);
+}
+
+.fancy-weekday {
+    font-family: "League Spartan";
+    font-weight: 900;
+    font-size: 100px;
+    text-shadow: 5px 5px 10px #000;
+    color: rgba(240, 97, 99, 1);
+    margin-left: 20px;
+    margin-bottom: 25px;
+}
+
+.fancy-day {
+    font-size: 80px;
+    text-shadow: 5px 5px 10px #000;
+    margin-top: 30px;
+}
+
+.fancy-suffix {
+    color: rgba(150, 150, 150, 1);
+    font-family: "Great Vibes";
+    font-size: 60px;
+    margin-top: 60px;
+    margin-left: 90px;
+}
+
+.fancy-time {
+    font-family: "Bebas Neue";
+    font-weight: 600;
+    font-size: 25px;
+    margin-top: 5px;
+}
+
+.quote-content {
+    font-family: "Great Vibes";
+    font-size: 40px;
 }

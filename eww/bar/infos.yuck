@@ -5,11 +5,13 @@
   :monitor 0
   :geometry (geometry 
     :x 140
-    :y 75
-    :width "320px"
-    :height "130px"
+    :y 80
+    :width 280
+    :height 130
     :anchor "top left")
   (box :class "info"
+       :space-evenly false
+       :spacing 10
     (cpu :icon ""
          :thicc 10
          :role "info-hardware")
@@ -31,11 +33,13 @@
   :monitor 0
   :geometry (geometry 
     :x 190
-    :y 75
+    :y 80
     :width "320px"
     :height "130px"
     :anchor "top left")
   (box :class "info"
+       :space-evenly false
+       :spacing 10
     (ram :icon "󰍛"
          :thicc 10
          :role "info-hardware")
@@ -59,11 +63,13 @@
   :monitor 0
   :geometry (geometry 
     :x 240
-    :y 75
+    :y 80
     :width "320px"
     :height "130px"
     :anchor "top left")
   (box :class "info"
+       :space-evenly false
+       :spacing 10
     (disk :icon ""
           :thicc 10
           :role "info-hardware")
@@ -80,18 +86,17 @@
       (label :text "Available: ${round(EWW_DISK["/"].free / (1024 * 1024 * 1024), 0)}GB"
              :xalign 0))))
 
-(defpoll artist :interval "1s"
-                :runwhile spotted
+(defpoll artist :interval "3600s"
+                :run-while {spotted != ""}
                 "playerctl -p spotify metadata artist")
-(defpoll song_color :initial "#A4DFFF"
-                    :interval "1s"
-                    :runwhile spotted
+(defpoll song_color :interval "3600s"
+                    :run-while {spotted != ""}
                     "dom-color.sh &")
-(defpoll song_length :interval "1s"
-                     :runwhile spotted
+(defpoll song_length :interval "3600s"
+                     :run-while {spotted != ""} 
                      "playerctl -p spotify metadata mpris:length")
 (defpoll song_pos :interval "1s"
-                  :runwhile spotted
+                  :run-while {spotted != ""}
                   "playerctl position")
 
 (defwindow song_info []
@@ -101,38 +106,36 @@
   :monitor 0
   :geometry (geometry 
     :x 10
-    :y 75
+    :y 80
     :width "320px"
     :height "150px"
     :anchor "top center")
-  (eventbox :onhover "eww update show_media_button=true"
-            :onhoverlost "eww update show_media_button=false; eww close song_info"
-    (box :class "info" 
+  (box :class "info" 
+       :space-evenly false
+    (box :class "cover-art-info" 
+         :style "background-image: url('${cover_art}');")
+    (box :orientation "vertical"
          :space-evenly false
-      (box :class "cover-art-info" 
-           :style "background-image: url('${cover_art}');")
-      (box :orientation "vertical"
-           :space-evenly false
-           :height 104
-           :class "song-dummy"
-        (label :class "info-title"
-               :wrap true
-               :text song_title
-               :limit-width 20
-               :xalign 0)
-        (label :text artist
-               :wrap true
-               :xalign 0)
-        (box :vexpand true
-          (scale :value song_pos
-                 :class "song-scale" 
-                 :css ".song-scale highlight { background-color: ${song_color}; }"
-                 :min 0
-                 :max { song_length / 1000000 }
-                 :onchange "playerctl -p spotify position {}"
-                 :orientation "horizontal"))))))
+         :height 104
+         :class "song-dummy"
+      (label :class "info-title"
+             :wrap true
+             :text song_title
+             :limit-width 20
+             :xalign 0)
+      (label :text artist
+             :wrap true
+             :xalign 0)
+      (box :vexpand true
+        (scale :value song_pos
+               :class "song-scale" 
+               :css ".song-scale highlight { background-color: ${song_color}; }"
+               :min 0
+               :max { song_length / 1000000 }
+               :onchange "playerctl -p spotify position {}"
+               :orientation "horizontal")))))
 
-(defpoll network_name :interval "1s"
+(defpoll network_name :interval "3600s"
                       "nmcli -t -f active,ssid dev wifi | grep yes | cut -d':' -f2")
 
 (defwindow network_info []
@@ -142,11 +145,13 @@
   :monitor 0
   :geometry (geometry 
     :x 10
-    :y 75
-    :width "320px"
-    :height "130px"
+    :y 80
+    :width 300
+    :height 130
     :anchor "top right")
   (box :class "info"
+       :space-evenly false
+       :spacing 5
     (network :strength network_strength
              :role "info-network")
     (box :orientation "vertical"
@@ -167,11 +172,13 @@
   :monitor 0
   :geometry (geometry 
     :x 10
-    :y 75
-    :width "320px"
-    :height "130px"
+    :y 80
+    :width 320
+    :height 130
     :anchor "top right")
   (box :class "info"
+       :space-evenly false
+       :spacing 5
     (battery :status {EWW_BATTERY.BAT0.status} 
              :battery {EWW_BATTERY.BAT0.capacity}
              :role "info-battery")
@@ -193,9 +200,8 @@
   :monitor 0
   :geometry (geometry 
     :x 10
-    :y 75
+    :y 80
     :width "320px"
     :anchor "top right")
-  (eventbox :onhoverlost "eww close calendar"
-    (box :class "calendar-padding"
-      (calendar ))))
+  (box :class "calendar-padding"
+    (calendar :class "cal")))

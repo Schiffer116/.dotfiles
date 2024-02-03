@@ -1,49 +1,36 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-dir="$HOME/.config/rofi/powermenu/type-4"
-theme='style-2'
-
-uptime="$(uptime -p | sed -e 's/up //g')"
-
-shutdown=''
-reboot=''
-lock=''
-suspend=''
-
-rofi_cmd() {
-	rofi -dmenu \
-		-p "Goodbye ${USER}" \
-		-mesg "Uptime: $uptime" \
-		-theme "${dir}"/${theme}.rasi
+close() {
+    hyprctl dispatch submap reset
+    eww close powermenu
 }
 
-run_rofi() {
-	echo -e "$lock\n$suspend\n$reboot\n$shutdown" | rofi_cmd
-}
-
-run_cmd() {
-    if [[ $1 == '--shutdown' ]]; then
-        systemctl poweroff
-    elif [[ $1 == '--reboot' ]]; then
-        systemctl reboot
-    elif [[ $1 == '--suspend' ]]; then
-        # hacky way to do this
-        # brightness.sh --black-out
-        amixer set Master mute
-        systemctl suspend
-        # swaylock.sh 
-        # light -S 20
-    elif [[ $1 == '--lock' ]]; then
-        amixer set Master mute
-        playerctl pause
-        swaylock.sh
-    fi
-}
-
-chosen="$(run_rofi)"
-case ${chosen} in
-    "$shutdown") run_cmd --shutdown ;;
-    "$reboot") run_cmd --reboot ;;
-    "$lock") run_cmd --lock ;;
-    "$suspend") run_cmd --suspend ;;
+case $1 in
+    "--open")
+        eww update active_button=0
+        eww open powermenu
+        hyprctl dispatch submap powermenu ;;
+    "--close")
+        close ;;
+    "--next" | "--previous") 
+        active_button=$(eww get active_button)
+        case $1 in
+            "--next") new_active=$(( (active_button + 1) % 4 ));;
+            "--previous") new_active=$(( (active_button + 3) % 4 ));;
+        esac
+        eww update active_button="$new_active" ;;
+    "--action")
+        case $2 in
+            0) systemctl poweroff ;;
+            1) systemctl reboot ;;
+            2) 
+                close
+                systemctl suspend
+                wpctl set-mute @DEFAULT_AUDIO_SINK@ 1
+                ;;
+            3) 
+                close
+                swaylock.sh ;;
+        esac ;;
 esac
+

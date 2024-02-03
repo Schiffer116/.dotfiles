@@ -1,10 +1,8 @@
 #!/bin/sh
 
 swaylock  \
-    --image ~/.config/hypr/bg/flowers-2.png \
-    --effect-blur 5x2 \
+    --image ~/.config/hypr/bg/twilight.png \
     --clock \
-    --indicator-idle-visible \
 	--indicator-radius 147 \
 	--indicator-thickness 7 \
 	--ignore-empty-password \

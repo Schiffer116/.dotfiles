@@ -11,29 +11,20 @@ set_volume() {
     wpctl set-volume @DEFAULT_AUDIO_SINK@ 0."$2"
 }
 
-get_icon() {
-	current=$(get_volume)
-	if [ "$current" -eq 0 ]; then
-		echo "$iDIR/volume-mute.png"
-	elif [ "$current" -le 30 ]; then
-		echo "$iDIR/volume-low.png"
-	elif [ "$current" -le 60 ]; then
-		echo "$iDIR/volume-mid.png"
-	elif [ "$current" -le 100 ]; then
-		echo "$iDIR/volume-high.png"
-	fi
-}
-
 notify_user() {
-	notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume" "Volume at $(get_volume)%"
+    if [ "$(eww get show_sound_slider)" = "false" ]; then
+        eww update show_sound_slider=true
+    fi
+    pgrep volume.sh | grep -v $$ | xargs kill
+    sleep 2 && eww update show_sound_slider=false &
 }
 
-mutation() {
+muted() {
     wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED
 }
 
 inc_volume() {
-    if [ "$(mutation)" = "MUTED" ]; then
+    if [ "$(muted)" = "MUTED" ]; then
         toggle_mute
         return 0
     fi
@@ -49,7 +40,7 @@ inc_volume() {
 }
 
 dec_volume() {
-    if [ "$(mutation)" = "MUTED" ]; then
+    if [ "$(muted)" = "MUTED" ]; then
         toggle_mute
         return 0
     fi
@@ -62,24 +53,20 @@ dec_volume() {
 }
 
 toggle_mute() {
-    if [ "$(mutation)" = "MUTED" ]; then
-        notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Volume" "Volume Unmuted"
+    if [ "$(muted)" = "MUTED" ]; then
         eww update muted=false
     else
-        notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$iDIR/volume-mute.png" "Volume" "Volume Muted"
         eww update muted=true
     fi
     wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle 
+    notify_user
 }
 
-# Toggle Mic
 toggle_mic() {
 	if [ "$(pamixer --source 66 --get-mute)" = "false" ]; then
-		pamixer -m --source 66 && 
-            notify-send -u low -i "$iDIR/microphone-mute.png" "Microphone Switched OFF"
+		pamixer -m --source 66 
 	elif [ "$(pamixer --source 66 --get-mute)" = "true" ]; then
-		pamixer -u --source 66 && 
-            notify-send -u low -i "$iDIR/microphone.png" "Microphone Switched ON"
+		pamixer -u --source 66
 	fi
 }
 
@@ -87,7 +74,7 @@ toggle_mic() {
 case $1 in
     "--get") get_volume ;;
     "--get-mute") 
-        if [ "$(mutation)" = "MUTED" ]; then
+        if [ "$(muted)" = "MUTED" ]; then
             echo true
         else 
             echo false

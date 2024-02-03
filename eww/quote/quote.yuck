@@ -1,0 +1,51 @@
+(defwindow quote
+  :stacking "bg"
+
+  :monitor 0
+  :geometry (geometry 
+    :x 50
+    :y 40
+    :width "20%"
+    :height "30%"
+    :anchor "bottom left")
+  (quote))
+
+(defpoll weather_info :interval "600s"
+                      "weather.sh")
+
+(defwidget quote []
+  (box :space-evenly false
+       :halign "start"
+       :valign "end"
+       :orientation "v"
+    (box :space-evenly false
+         :class "fancy-date"
+         :orientation "v"
+      (overlay :vexpand true
+        (label :class "fancy-weekday"
+               :xalign 0
+               :yalign 0
+               :text {formattime(EWW_TIME, "%A")})
+        (label :class "fancy-day"
+               :xalign 0
+               :yalign 0
+               :text {formattime(EWW_TIME, "%d")})
+        (label :class "fancy-suffix" 
+               :xalign 0
+               :yalign 0
+               :text {substring(formattime(EWW_TIME, "%d"), 1, 1) == "1" ? "st" : 
+                        substring(formattime(EWW_TIME, "%d"), 1, 1) == "2" ? "nd" : "rd"}))
+      (label :class "fancy-time" 
+             :xalign 0
+             :text '────────────  ${formattime(EWW_TIME, "%I:%M %p")}'))
+
+      (box :space-evenly false
+        (label :class "weather-icon" 
+               :text {replace(jq(weather_info, '.icon'), '"', '')})
+        (label :class "weather-temp" 
+               :text `${replace(jq(weather_info, '.temp'), '"', '')}°C `)
+        (label :class "weather-temp" 
+               :text `${replace(jq(weather_info, '.condition'), '"', '')}`))
+      (label :class "quote-content"
+             :xalign 1
+             :text "Have a nice day!")))

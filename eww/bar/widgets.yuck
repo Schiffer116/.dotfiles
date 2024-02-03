@@ -1,40 +1,24 @@
-(include "./infos.yuck")
+(include "./bar/infos.yuck")
 
 (defwidget power []
   (eventbox :class "power-event-box"
             :cursor "pointer"
-            :onclick "powermenu.sh"
+            :onclick "powermenu.sh --open"
     (label :class "arch-logo" :text "")))
 
 (defvar ws_cur 1)
-(defvar ws_prv 2)
+(defvar ws_prv 1)
 
 (defwidget workspace [number]
   (eventbox :class "workspace"
             :cursor "pointer"
             :onclick "workspaces.sh ${number}" 
     (box :space-evenly false
-      (revealer :transition "none"
-                :reveal {number == ws_cur}
-                :duration "0ms"
-          (label :text ""
-                 :class "workspace-label-active"))
-      (revealer :transition "none"
-                :reveal {number == ws_prv}
-                :duration "0ms"
-          (label :text ""
-               :class "workspace-label-active"))
-      (revealer :transition "none"
-                :reveal {number != ws_cur && number != ws_prv}
-                :duration "0ms"
-          (label :text ""
-               :class "workspace-label")))))
+      (label :text {number == ws_cur ? '' : ''}
+             :class "workspace-label${number == ws_cur || number == ws_prv ? '-active' : ''}"))))
 
 (defwidget workspaces []
   (box :class "workspaces"
-       :orientation "h"
-       :space-evenly false
-       :halign "start"
     (workspace :number 1)
     (workspace :number 2)
     (workspace :number 3)
@@ -43,8 +27,8 @@
 
 (defwidget cpu [icon thicc ?role]
   (eventbox :class "cpu" 
-            :onhover "eww open cpu_info${role}"
-            :onhoverlost "eww close cpu_info${role}"
+            :onhover {role == '' ? 'eww open cpu_info' : ''}
+            :onhoverlost {role == '' ? 'eww close cpu_info' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_CPU.avg}
                        :start-at 75
@@ -54,8 +38,8 @@
 
 (defwidget ram [icon thicc ?role]
   (eventbox :class "ram" 
-            :onhover "eww open ram_info${role}"
-            :onhoverlost "eww close ram_info${role}"
+            :onhover {role == '' ? 'eww open ram_info' : ''}
+            :onhoverlost {role == '' ? 'eww close ram_info' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_RAM.used_mem_perc}
                        :start-at 75
@@ -65,8 +49,8 @@
 
 (defwidget disk [icon thicc ?role]
   (eventbox :class "disk"
-            :onhover "eww open disk_info${role}"
-            :onhoverlost "eww close disk_info${role}"
+            :onhover {role == '' ? 'eww open disk_info' : ''}
+            :onhoverlost {role == '' ? 'eww close disk_info' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_DISK["/"].used_perc}
                        :start-at 75
@@ -74,41 +58,19 @@
         (label :class "circ-icon ${role}"
                :text {icon}))))
 
-(defpoll weather_info :interval 600
-                      "weather.sh")
-
-(defwidget weather []
-  (revealer :reveal {substring(weather_info, 1, 4) != ""}
-    (box :space-evenly false
-      (sep)
-      (label :class "weather-icon" 
-             :text {substring(weather_info, 0, 1)}
-             :css ".weather-icon {
-                      color: rgba(175 + max(0, 200 / 15 * (${substring(weather_info, 1, 4)} - 20))
-                                , 230 - max(10, 255 / 18 * (${substring(weather_info, 1, 4)} - 20))
-                                , 255 - max(10, 255 / 20 * (${substring(weather_info, 1, 4)} - 20)));
-                   }")
-      (label :class "weather-temp" 
-             :text "${substring(weather_info, 1, 4)}C"
-             :css ".weather-temp {
-                      color: rgba(175 + max(0, 200 / 15 * (${substring(weather_info, 1, 4)} - 20))
-                                , 230 - max(10, 255 / 18 * (${substring(weather_info, 1, 4)} - 20))
-                                , 255 - max(10, 255 / 20 * (${substring(weather_info, 1, 4)} - 20)));
-                   }"))))
-
 (defvar full_time false)
 
 (defwidget clock []
   (eventbox :onhover "eww update full_time=true"
             :onhoverlost "eww update full_time=false"
-            :onclick "eww open calendar"
+            :onclick "eww open --toggle calendar"
             :cursor "pointer"
     (box :class "clock"
          :space-evenly false 
       (revealer :transition "slideleft"
                 :reveal full_time
                 :duration "300ms"
-        (label :text {formattime(EWW_TIME, "%a, %b %d, %Y, ")}))
+        (label :text {formattime(EWW_TIME, "%a, %b %d, ")}))
       (label :text {formattime(EWW_TIME, "%H:%M")})
       (revealer :transition "slideright"
                 :reveal full_time
@@ -116,8 +78,8 @@
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
 (defwidget battery [battery status ?role]
-  (eventbox :onhover "eww open battery_info${role}"
-            :onhoverlost "eww close battery_info${role}"
+  (eventbox :onhover {role == "" ? "eww open battery_info" : ""}
+            :onhoverlost {role == "" ? "eww close battery_info" : ""}
     (label :class "battery ${role}" :text {status == 'Charging' ? "󱐌" :
       battery < 21 ? "" :
         battery < 41 ? "" :
@@ -125,17 +87,18 @@
             battery < 81 ? "" : ""})))
 
 (defvar show_sound_slider false)
-(defpoll volume :interval "1000s"
-               :run-while false
-               "volume.sh --get")
-(defpoll muted :interval "1s"
+(defpoll volume :interval "3600s"
+                :run-while false
+                "volume.sh --get")
+(defpoll muted :interval "3600s"
+                :run-while false
                "volume.sh --get-mute")
 
 (defwidget sound [volume]
   (eventbox :onhover "eww update show_sound_slider=true"
             :onhoverlost "eww update show_sound_slider=false"
-            :onclick "pavucontrol&"
-            :onrightclick "blueman-manager&"
+            :onclick "pavucontrol &"
+            :onrightclick "blueman-manager &"
             :cursor "pointer"
     (box :space-evenly false 
       (label :class "sound" :text {muted ? "󰝟" :
@@ -151,21 +114,21 @@
                :orientation "h"
                :onchange 'volume.sh --set {}')))))
 
-(defpoll network_strength :interval "1s"
+(defpoll network_strength :interval "10s"
                           :initial `N/A`
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{if($2=="yes")print$1}'`)
 
 (defwidget network [strength ?role]
-  (eventbox :onhover "eww open network_info${role}"
-            :onhoverlost "eww close network_info${role}"
+  (eventbox :onhover {role == "" ? "eww open network_info" : ""}
+            :onhoverlost {role == "" ? "eww close network_info" : ""}
     (label :class "network ${role}" :text {strength == "" ? "󰤮" :
       strength < 26 ? "󰤟" :
         strength < 51 ? "󰤢" :
           strength < 76 ? "󰤥" : "󰤨"})))
 
-(defpoll brightness :interval "1000s"
-                   :run-while false
-                   "brightness.sh --get")
+(defpoll brightness :interval "3600s"
+                    :run-while false
+                    "brightness.sh --get")
 (defvar show_light_slider false)
 (defwidget backlight [brightness]
   (eventbox :onhover "eww update show_light_slider=true"
@@ -206,40 +169,28 @@
                :orientation "h"
                :onchange 'pkill gammastep; eww update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K&')))))
 
-(defvar all_lang false)
+(defvar show_all_lang false)
+(defvar all_lang '["E","J","V"]')
 (defvar cur_lang "E")
 (defwidget language []
-  (eventbox :onhover "eww update all_lang=true"
-            :onhoverlost "eww update all_lang=false"
+  (eventbox :onhover "eww update show_all_lang=true"
+            :onhoverlost "eww update show_all_lang=false"
     (box :space-evenly false
-      (revealer :transition "crossfade"
-                :reveal {!all_lang}
-                :duration "300ms"
-        (label :class "language"
-               :text cur_lang))
-      (revealer :transition "slideleft"
-                :reveal all_lang
-                :duration "300ms"
-        (box
-          (button :class "lang-button"
-                :onclick "language.sh --en; eww update cur_lang=E"
-            (label :class "language" 
-                   :text "E"))
-          (button :class "lang-button"
-                  :onclick "language.sh --jp; eww update cur_lang=J"
-            (label :class "language" 
-                   :text "J"))
-          (button :class "lang-button"
-                  :onclick "language.sh --vn; eww update cur_lang=V"
-            (label :class "language" 
-                   :text "V")))))))
+      (for language in all_lang
+        (revealer :transition "slideleft"
+                  :reveal {cur_lang == language || show_all_lang}
+                  :duration "300ms"
+            (button :class "lang-button"
+                    :onclick "language.sh --set ${language}"
+              (label :class "language" 
+                     :text {language})))))))
 
 (defpoll spotted :interval "10s" 
                  "pidof -s spotify &")
-(defpoll song_title :interval "1s" 
+(defpoll song_title :interval "10s" 
                     :run-while {spotted != ""}
                     "playerctl -p spotify metadata title")
-(deflisten cover_art "coverart.sh")
+(deflisten cover_art "cover-art.sh")
 (defvar show_media_button false)
 
 (defwidget media_player [] 
@@ -248,7 +199,7 @@
             :duration "0ms"
       (eventbox :onhover "eww update show_media_button=true"
                 :onhoverlost "eww update show_media_button=false"
-                :onclick "eww open song_info"
+                :onclick "eww open --toggle song_info"
                 :cursor "pointer"
         (box :space-evenly false
           (box :class "cover-art circle" 

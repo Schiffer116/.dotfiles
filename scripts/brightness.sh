@@ -1,30 +1,17 @@
 #!/usr/bin/sh
 
-iDIR="$HOME/.config/mako/icons"
-
 get_brightness() {
     decimal=$(light)
     cur_light=${decimal%%.*}
 	echo "${cur_light}"
 }
 
-get_icon() {
-	current=$(get_brightness)
-	if [ "$current" -le 20 ]; then
-		echo "$iDIR/brightness-20.png"
-	elif [ "$current" -le 40 ]; then
-		echo "$iDIR/brightness-40.png"
-	elif [ "$current" -le 60 ]; then
-		echo "$iDIR/brightness-60.png"
-	elif [ "$current" -le 80 ]; then
-		echo "$iDIR/brightness-80.png"
-	elif [ "$current" -le 100 ]; then
-		echo "$iDIR/brightness-100.png"
-	fi
-}
-
 notify_user() {
-	notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "$(get_icon)" "Brightness" "Brightness at $(get_brightness)%"
+    if [ "$(eww get show_light_slider)" = "false" ]; then
+        eww update show_light_slider=true
+    fi
+    pgrep brightness.sh | grep -v $$ | xargs kill
+    sleep 2 && eww update show_light_slider=false &
 }
 
 set_brightness() {
@@ -53,16 +40,12 @@ black_out() {
     light -S 0
 }
 
-if [ "$1" = "--get" ]; then
-    get_brightness
-elif [ "$1" = "--set" ]; then
-    set_brightness "$@"
-elif [ "$1" = "--inc" ]; then
-	inc_brightness
-elif [ "$1" = "--dec" ]; then
-	dec_brightness
-elif [ "$1" = "--black-out" ]; then
-    black_out
-fi
+case $1 in
+    "--get") get_brightness ;;
+    "--set") set_brightness "$@" ;;
+    "--inc") inc_brightness ;;
+    "--dec") dec_brightness ;;
+    "--black-out") black_out ;;
+esac
 
 eww update brightness="$(get_brightness)"

@@ -1,0 +1,41 @@
+(defwindow powermenu
+  :stacking "fg"
+  :namespace "powermenu"
+  :focusable true
+
+  :monitor 0
+  :geometry (geometry 
+    :width "100%"
+    :height "100%"
+    :anchor "center")
+  (menu))
+
+(defvar active_button 0)
+
+(defwidget power_button [index icon color]
+  (eventbox :class "power-button-event ${active_button == index ? 'power-button-event-active' : ''}"
+            :onclick "powermenu.sh --action ${index}"
+    (label :class "power-button" 
+           :text icon
+           :style "color: ${color}; text-shadow: 0 0 4px ${color};")))
+
+(defwidget menu []
+  (box :space-evenly false
+       :orientation "v"
+    (label :class "goodbye-msg"
+           :text "Goodbye Schiffer")
+    (box :space-evenly false
+         :halign "center"
+         :spacing 70
+      (power_button :index 0
+                    :icon "" 
+                    :color "rgba(255, 133, 133, 1)")
+      (power_button :index 1                
+                    :icon "󰜉" 
+                    :color "cyan")
+      (power_button :index 2
+                    :icon "" 
+                    :color "yellow")
+      (power_button :index 3
+                    :icon "" 
+                    :color "white"))))

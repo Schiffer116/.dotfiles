@@ -45,7 +45,7 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-bindkey -s "^f" 'tmux-session.sh^M'
+bindkey -s "^f" 'vim-session.sh^M'
 bindkey -s "^r" 'ranger^M'
 bindkey -s "^v" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,1^M'
 bindkey -s "^h" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,0^M'
