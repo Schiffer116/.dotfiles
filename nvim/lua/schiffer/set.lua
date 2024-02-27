@@ -15,7 +15,7 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = os.getenv("XDG_STATE_HOME") .. "/nvim/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
@@ -27,14 +27,13 @@ vim.opt.scrolloff = 8
 
 vim.opt.updatetime = 50
 
-
 vim.opt.smartindent = true
 
 vim.cmd([[hi WinSeparator guifg=#89B4FA guibg=None]])
 
-vim.cmd[[
+vim.cmd([[
     augroup highlight_yank
     autocmd!
     au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=50})
     augroup END
-]]
+]])

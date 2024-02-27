@@ -13,7 +13,7 @@ case $1 in
     "--next")
         length=$(eww get app_json | jq 'length')
         index=$(eww get selected_app_index)
-        if [ "$index" = "$length" ]; then
+        if [ "$index" = "$(( length - 1 ))" ]; then
             eww update selected_app_index=0
         else 
             eww update selected_app_index=$(( index + 1 ))

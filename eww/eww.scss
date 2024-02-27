@@ -1,7 +1,9 @@
 * {
     font-family: "JetBrains Mono ExtraBold", "Symbols Nerd Font Mono", "Source Han Sans JP Heavy";
     font-size: 16px;
-    text-shadow: 0 0 4px rgba(0, 0, 0, 1); }
+    text-shadow: 0 0 4px rgba(0, 0, 0, 1); 
+}
+
 $bg-color: rgba(17, 22, 31, 1);
 $bd-color: rgba(55, 52, 65, 1);
 
@@ -57,12 +59,12 @@ combo-box-text {
 }
 
 .arch-logo {
-    color: rgba(15, 148, 210, 1);
     font-size: 25px;
     margin: 11px 10px 11px 15px;
 }
 
 .power-event-box {
+    color: rgba(15, 148, 210, 1);
     transition: color 500ms;
 }
 
@@ -129,6 +131,7 @@ combo-box-text {
     font-family: Dosis;
     font-size: 50px;
     font-weight: 600;
+    margin-left: 10px;
 }
 
 .language {
@@ -395,10 +398,6 @@ calendar.view {
 
 .quote {
     background-color: rgba(0, 0, 0, 0);
-}
-
-.fancy-date {
-    // background-color: rgba(255, 0, 0, 0.2);
 }
 
 .fancy-weekday {

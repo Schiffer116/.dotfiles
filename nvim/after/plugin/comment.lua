@@ -1,1 +1,0 @@
-comment = require('Comment').setup()

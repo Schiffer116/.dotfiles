@@ -1,19 +1,34 @@
 #!/bin/sh
 
-session_dir="$HOME/Documents/vim-sessions"
+session_dir="$XDG_CACHE_HOME/nvim/sessions"
 
-selected=$(
-    find ~/Documents ~/Downloads ~/.dotfiles -type d | \
-    fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
-        --preview="exa --tree --icons -L2 --color=always {}"
-)
+dir_list=$(find ~/Documents ~/Downloads ~/.dotfiles -type d)
+
+case $1 in 
+    "--list-only")
+        echo "$dir_list"
+        exit 0
+        ;;
+    "--create-only")
+        selected=$2
+        ;;
+    *) 
+        selected=$(
+            echo "$dir_list" | \
+            fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
+                --preview="exa --tree --icons -L2 --color=always {}"
+        )
+esac
+
 [ -z "$selected" ] && exit 0
 
-selected_name=$(basename "$selected" | tr . -)
+selected_name=$(basename "$selected")
 
-if [ -z "$(cat "$session_dir/$selected_name.vim" 2> /dev/null )" ]; then 
+if ! [ -e "$session_dir/$selected_name.vim" ]; then 
     cd "$session_dir" || exit
     nvim -c "cd $selected" -c "te" -c "mks $session_dir/$selected_name.vim" -c "q"
 fi
 
-nvim -S "$session_dir/$selected_name.vim"
+if [ "$1" != "--create-only" ]; then
+    nvim -S "$session_dir/$selected_name.vim"
+fi

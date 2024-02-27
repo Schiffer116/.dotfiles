@@ -3,16 +3,17 @@
 (defwidget power []
   (eventbox :class "power-event-box"
             :cursor "pointer"
-            :onclick "powermenu.sh --open"
-    (label :class "arch-logo" :text "")))
+            :onclick "powermenu.sh --open &"
+    (label :class "arch-logo" 
+           :text "")))
 
 (defvar ws_cur 1)
 (defvar ws_prv 1)
 
 (defwidget workspace [number]
-  (eventbox :class "workspace"
+    (eventbox :class "workspace"
             :cursor "pointer"
-            :onclick "workspaces.sh ${number}" 
+            :onclick "workspaces.sh --change ${number}" 
     (box :space-evenly false
       (label :text {number == ws_cur ? '' : ''}
              :class "workspace-label${number == ws_cur || number == ws_prv ? '-active' : ''}"))))
@@ -27,8 +28,8 @@
 
 (defwidget cpu [icon thicc ?role]
   (eventbox :class "cpu" 
-            :onhover {role == '' ? 'eww open cpu_info' : ''}
-            :onhoverlost {role == '' ? 'eww close cpu_info' : ''}
+            :onhover {role == '' ? 'eww open cpu_info &' : ''}
+            :onhoverlost {role == '' ? 'eww close cpu_info &' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_CPU.avg}
                        :start-at 75
@@ -38,8 +39,8 @@
 
 (defwidget ram [icon thicc ?role]
   (eventbox :class "ram" 
-            :onhover {role == '' ? 'eww open ram_info' : ''}
-            :onhoverlost {role == '' ? 'eww close ram_info' : ''}
+            :onhover {role == '' ? 'eww open ram_info &' : ''}
+            :onhoverlost {role == '' ? 'eww close ram_info &' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_RAM.used_mem_perc}
                        :start-at 75
@@ -49,8 +50,8 @@
 
 (defwidget disk [icon thicc ?role]
   (eventbox :class "disk"
-            :onhover {role == '' ? 'eww open disk_info' : ''}
-            :onhoverlost {role == '' ? 'eww close disk_info' : ''}
+            :onhover {role == '' ? 'eww open disk_info &' : ''}
+            :onhoverlost {role == '' ? 'eww close disk_info &' : ''}
     (circular-progress :class "circle ${role}" 
                        :value {EWW_DISK["/"].used_perc}
                        :start-at 75
@@ -61,9 +62,9 @@
 (defvar full_time false)
 
 (defwidget clock []
-  (eventbox :onhover "eww update full_time=true"
+  (eventbox :onclick 'if eww active-windows | grep "calendar"; then eww close calendar; else eww open calendar; fi'
+            :onhover "eww update full_time=true"
             :onhoverlost "eww update full_time=false"
-            :onclick "eww open --toggle calendar"
             :cursor "pointer"
     (box :class "clock"
          :space-evenly false 
@@ -78,8 +79,8 @@
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
 (defwidget battery [battery status ?role]
-  (eventbox :onhover {role == "" ? "eww open battery_info" : ""}
-            :onhoverlost {role == "" ? "eww close battery_info" : ""}
+  (eventbox :onhover {role == "" ? "eww open battery_info &" : ""}
+            :onhoverlost {role == "" ? "eww close battery_info &" : ""}
     (label :class "battery ${role}" :text {status == 'Charging' ? "󱐌" :
       battery < 21 ? "" :
         battery < 41 ? "" :
@@ -119,8 +120,8 @@
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{if($2=="yes")print$1}'`)
 
 (defwidget network [strength ?role]
-  (eventbox :onhover {role == "" ? "eww open network_info" : ""}
-            :onhoverlost {role == "" ? "eww close network_info" : ""}
+  (eventbox :onhover {role == "" ? "eww open network_info &" : ""}
+            :onhoverlost {role == "" ? "eww close network_info &" : ""}
     (label :class "network ${role}" :text {strength == "" ? "󰤮" :
       strength < 26 ? "󰤟" :
         strength < 51 ? "󰤢" :
@@ -173,7 +174,8 @@
 (defvar all_lang '["E","J","V"]')
 (defvar cur_lang "E")
 (defwidget language []
-  (eventbox :onhover "eww update show_all_lang=true"
+  (eventbox :cursor "pointer"
+            :onhover "eww update show_all_lang=true"
             :onhoverlost "eww update show_all_lang=false"
     (box :space-evenly false
       (for language in all_lang
@@ -181,7 +183,7 @@
                   :reveal {cur_lang == language || show_all_lang}
                   :duration "300ms"
             (button :class "lang-button"
-                    :onclick "language.sh --set ${language}"
+                    :onclick "language.sh --set ${language}; eww update show_all_lang=false"
               (label :class "language" 
                      :text {language})))))))
 

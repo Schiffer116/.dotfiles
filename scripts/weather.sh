@@ -39,7 +39,9 @@ case $(echo "$condition" | tr '[:upper:]' '[:lower:]') in
     icon=""
     ;;
 *)
-    icon=""
+    printf "{}"
+    return 0
+    # icon=""
     ;;
 esac
 

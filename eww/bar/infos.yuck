@@ -34,8 +34,8 @@
   :geometry (geometry 
     :x 190
     :y 80
-    :width "320px"
-    :height "130px"
+    :width 320
+    :height 130
     :anchor "top left")
   (box :class "info"
        :space-evenly false
@@ -64,8 +64,8 @@
   :geometry (geometry 
     :x 240
     :y 80
-    :width "320px"
-    :height "130px"
+    :width 320
+    :height 130
     :anchor "top left")
   (box :class "info"
        :space-evenly false
@@ -107,8 +107,8 @@
   :geometry (geometry 
     :x 10
     :y 80
-    :width "320px"
-    :height "150px"
+    :width 320
+    :height 150
     :anchor "top center")
   (box :class "info" 
        :space-evenly false
@@ -196,12 +196,12 @@
 (defwindow calendar []
   :stacking "fg"
   :exclusive false
-  :focusable false
+  :focusable true
   :monitor 0
   :geometry (geometry 
     :x 10
     :y 80
-    :width "320px"
+    :width 320
     :anchor "top right")
   (box :class "calendar-padding"
     (calendar :class "cal")))
