@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 weather=$(curl -s 'wttr.in/daklak?T' | head --lines=4 | tail --lines=2)
 condition=$(echo "$weather" | head --lines=1 | grep -Eo '[A-Za-z]+( [A-Za-z]+)*')

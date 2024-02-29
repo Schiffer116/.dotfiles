@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 cur_song=""
 while true; do

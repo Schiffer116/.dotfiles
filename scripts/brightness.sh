@@ -1,9 +1,7 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
 get_brightness() {
-    decimal=$(light)
-    cur_light=${decimal%%.*}
-	echo "${cur_light}"
+    echo "$(brightnessctl i | grep -Eo '[0-9]{1,2}%' | tr -d '%')"
 }
 
 notify_user() {
@@ -15,7 +13,7 @@ notify_user() {
 }
 
 set_brightness() {
-    light -S "$2"
+    brightnessctl set "$1%"
     notify_user
 }
 
@@ -23,7 +21,7 @@ inc_brightness() {
     cur_light=$(get_brightness)
     if [ "$cur_light" -le 100 ]; then
         after=$(( cur_light / 5 * 5 + 5 ))
-        light -S $after
+        set_brightness "$after"
     fi
     notify_user
 }
@@ -32,12 +30,12 @@ dec_brightness() {
     cur_light=$(get_brightness)
     after=$(( cur_light / 5 * 5 - 5 ))
     after=$(( after > 0 ? after : 1 ))
-    light -S $after &&
-        notify_user
+    set_brightness "$after"
+    notify_user
 }
 
 black_out() {
-    light -S 0
+    brightnessctl set 0%
 }
 
 case $1 in

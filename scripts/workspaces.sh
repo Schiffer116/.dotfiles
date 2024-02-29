@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/usr/bin/env sh 
 
 before=$(hyprctl activeworkspace -j | jq '.id')
 case $1 in

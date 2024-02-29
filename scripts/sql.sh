@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 query=$(cat)
 echo "$query

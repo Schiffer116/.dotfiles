@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 languages='[
     {"symbol":"E","ime":"keyboard-us"},

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 case $1 in
     "--open")
@@ -30,8 +30,8 @@ case $1 in
         ;;
     "--fuzzy")
         app_names=$(
-            grep -EL '^(Terminal=true|NoDisplay=true)' /usr/share/applications/* | \
-            xargs grep -h '^Name=' | sed -Ee 's/^Name=/"/' -e 's/$/"/' | fzf -f "$2"
+            grep -EL '^(Terminal=true|NoDisplay=true)' /nix/store/*/share/applications/*.desktop | \
+            xargs grep -h '^Name=' | sed -Ee 's/^Name=/"/' -e 's/$/"/' | sort | uniq | fzf -f "$2"
         )
         content=$(echo $app_names | sed 's/" "/","/g')
         json=$(printf "[%s]" "$content")
@@ -51,9 +51,8 @@ case $1 in
         fi
 
         command=$(
-            grep -l "^Name=$launch_app" /usr/share/applications/* | \
-            xargs grep -hm 1 "^Exec=" | \
-            sed -e 's/^Exec=//' -Ee 's/ .+//'
+            grep -l "^Name=$launch_app" /nix/store/*/share/applications/*.desktop | \
+            xargs grep -hm 1 "^Exec=" | sort | uniq | sed -e 's/^Exec=//' -Ee 's/ .+//'
         )
         hyprctl dispatch submap reset &
         eww close launcher &

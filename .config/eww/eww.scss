@@ -1,0 +1,451 @@
+* {
+    font-family: "JetBrains Mono ExtraBold", "Symbols Nerd Font Mono", "Source Han Sans JP Heavy";
+    font-size: 16px;
+}
+
+$bg-color: rgba(17, 22, 31, 1);
+$bd-color: rgba(55, 52, 65, 1);
+
+button {
+    all: unset;
+}
+
+combo-box-text {
+    background-color: #fff;
+}
+
+.cpu_info,
+.ram_info,
+.disk_info,
+.song_info,
+.volume_info,
+.brightness_info,
+.network_info,
+.battery_info {
+    background-color: rgba(0, 0, 0, 0);
+    color: white
+}
+
+.bar {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 15px;
+}
+
+.widget-bar {
+    background-color: $bg-color;
+    border-radius: 15px;
+    margin: 25px;
+    box-shadow: 0 0 5px 3px rgba(0, 0, 0, 1);
+}
+
+.info {
+    background-color: $bg-color;
+    border-radius: 15px;
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 0 0 5px 3px rgba(10, 10, 10, 1);
+}
+
+.info-title {
+    margin-bottom: 5px;
+    margin-right: 10px;
+    font-size: 18;
+}
+
+.sep {
+    color: $bd-color;
+    font-size: 20px;
+    text-shadow: none;
+}
+
+.arch-logo {
+    font-size: 25px;
+    margin: 11px 10px 11px 15px;
+}
+
+.power-event-box {
+    color: rgba(15, 148, 210, 1);
+    transition: color 500ms;
+}
+
+.power-event-box:hover {
+    color: rgba(65, 208, 255, 1);
+}
+
+.workspaces {
+    margin: 0 5px;
+}
+
+.workspace {
+    color: $bd-color;
+    transition: color 500ms;
+}
+
+.workspace:hover {
+    color: darkgray;
+}
+
+.workspace-label {
+    margin: 0 5px;
+    font-size: 18px;
+}
+
+.workspace-label-active {
+    margin: 0 5px;
+    font-size: 18px;
+    color: rgba(164, 223, 255, 1);
+}
+
+.circle {
+	background-color: $bd-color;
+    margin: 0 10px;
+}
+
+.circ-icon {
+    margin: 10px;
+    font-size: 7px;
+}
+
+.cpu {
+    color: rgba(164, 185, 239, 1);
+}
+
+.info-hardware {
+    font-size: 30px;
+    margin: 20px;
+}
+
+.ram {
+    color: rgba(177, 227, 173, 1);
+}
+
+.disk {
+    color: rgba(214, 133, 133, 1);
+}
+
+.language {
+    color: rgba(164,185,239,255);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.lang-button {
+    transition: background-color 500ms;
+}
+
+.lang-button:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+
+revealer {
+    background-color: #fff;
+}
+
+slider {
+    all: unset;
+}
+
+scale trough {
+    border-radius: 16px;
+    border: 2px solid #000;
+    min-height: 6px;
+    background-color: $bd-color;
+}
+
+highlight {
+    border: none;
+}
+
+trough {
+    background-color: $bg-color;
+}
+
+.backlight {
+    color: rgba(238, 212, 159, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.backlight-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: rgba(238, 212, 159, 1);
+	}
+}
+
+.color-temp {
+    color: red;
+    font-size: 22px;
+    margin: 0 10px;
+}
+
+.temp-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: red;
+	}
+}
+
+.network {
+    color: rgba(190, 228, 237, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.info-network {
+    font-size: 70px;
+    padding: 10px;
+}
+
+.sound {
+    color: rgba(229, 180, 226, 1);
+    font-size: 22px;
+    margin: 0 10px;
+}
+
+.volume-scale {
+    all: unset;
+    min-width: 100px;
+	highlight {
+        background-color: rgba(229, 180, 226, 1);
+	}
+}
+
+.volume_info,
+.brightness_info {
+    padding: 25px;
+    padding-top: 35px;
+}
+
+.volume-info-icon,
+.brightness-info-icon{
+    margin-bottom: 30px;
+}
+
+.battery {
+    color: rgba(177, 227, 173, 1);
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.info-battery {
+    font-size: 80px;
+    padding: 10px;
+}
+
+.clock {
+    color: white;
+    font-family: Dosis;
+    margin: 0 20px 0 10px;
+}
+
+.clock label {
+    font-size: 19px;
+}
+
+calendar.view {
+    text-shadow: none;
+    background-color: $bg-color;
+}
+
+.calendar {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.calendar-padding {
+    margin: 10px;
+    padding: 8px;
+    background-color: $bg-color;
+    border-radius: 15px;
+    box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+}
+
+.cover-art {
+    background-size: cover;
+    background-position: center;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 9px;
+    margin-right: 15px;
+    border-radius: 100px;
+}
+
+.cover-art-info {
+    background-size: cover;
+    background-position: center;
+    margin: 15px;
+    min-width: 104px;
+}
+
+.song-dummy > .info-title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.media-button {
+    margin: 4px;
+    font-weight: 900;
+    color: rgba(210, 210, 210, 1);
+}
+
+.media-button-label {
+    margin-left: 10px;
+
+}
+
+.media-button:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.song-scale {
+    all: unset;
+    margin-right: 13px;
+    min-width: 150px;
+}
+
+.powermenu {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.goodbye-msg {
+    color: white;
+    margin-top: 350px;
+    margin-bottom: 50px;
+    font-size: 80px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.power-button {
+    text-shadow: none;
+    padding: 50px;
+    font-size: 70px;
+}
+
+.power-button-event {
+    border-radius: 15px;
+    background-color: rgba(17, 22, 31, 0.75);
+    transition: background-color 200ms;
+}
+
+.power-button-margin {
+    padding: 50px;
+}
+
+.power-button-event:hover,
+.power-button-event-active {
+    background-color: rgba(34, 44, 61, 0.75);
+}
+
+.launcher {
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.launcher-widget {
+    background-color: $bg-color;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1);
+    border-radius: 20px;
+    margin: 25px;
+    padding: 20px;
+}
+
+.search-icon {
+    background-color: $bg-color;
+    border-radius: 20px;
+    margin-right: 15px;
+    padding: 15px;
+}
+
+.search-box {
+    background-image: url('./launcher/hand.png');
+    background-position: center;
+    background-size: cover;
+    border-radius: 15px;
+}
+
+.search-input {
+    color: white;
+    background-color: $bg-color;
+}
+
+.search-bar {
+    padding: 40px;
+}
+
+.app-item-event {
+    background-color: $bd-color;
+    border-radius: 10px;
+    transition: background-color 200ms;
+}
+
+.app-item {
+    padding: 10px;
+}
+
+.app-item-event:hover, 
+.app-item-active {
+    background-color: rgba(75, 72, 85, 1);
+    border-radius: 10px;
+}
+
+.quote {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.fancy-weekday {
+    font-family: "League Spartan";
+    font-weight: 900;
+    font-size: 100px;
+    text-shadow: 5px 5px 10px #000;
+    color: rgba(240, 97, 99, 1);
+    margin-left: 20px;
+    margin-bottom: 25px;
+}
+
+.fancy-day {
+    color: white;
+    font-size: 80px;
+    text-shadow: 5px 5px 10px #000;
+    margin-top: 30px;
+}
+
+.fancy-suffix {
+    color: rgba(150, 150, 150, 1);
+    font-family: "Great Vibes";
+    font-size: 60px;
+    margin-top: 60px;
+    margin-left: 90px;
+}
+
+.fancy-time {
+    color: white;
+    font-family: "Bebas Neue";
+    font-weight: 600;
+    font-size: 25px;
+    margin-top: 5px;
+}
+
+.weather-icon {
+    color: white;
+    font-size: 55px;
+}
+
+.weather-temp {
+    color: white;
+    font-family: Dosis;
+    font-size: 40px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.quote-content {
+    color: white;
+    font-family: "Great Vibes";
+    font-size: 40px;
+    margin-top: 10px;
+}

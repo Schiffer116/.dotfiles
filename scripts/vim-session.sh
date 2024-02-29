@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 session_dir="$XDG_CACHE_HOME/nvim/sessions"
 

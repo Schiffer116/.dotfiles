@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
 selected=$(find ~/Documents ~/Downloads ~/.dotfiles -type d \
             | fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
