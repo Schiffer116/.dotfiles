@@ -142,19 +142,16 @@ revealer {
     background-color: #fff;
 }
 
-slider {
+scale, trought, highlight, slider {
     all: unset;
+    border-radius: 16px;
 }
 
 scale trough {
     border-radius: 16px;
     border: 2px solid #000;
-    min-height: 6px;
+    min-height: 8px;
     background-color: $bd-color;
-}
-
-highlight {
-    border: none;
 }
 
 trough {
@@ -244,6 +241,10 @@ trough {
 
 .clock label {
     font-size: 19px;
+}
+
+calendar * {
+    border: none;
 }
 
 calendar.view {

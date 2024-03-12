@@ -10,16 +10,17 @@
   ];
 
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
     # ".screenrc".source = dotfiles/screenrc;
-
+    # ".config/hypr".source = ./hypr;
+    # ".config/nvim".source = ./nvim;
+    # ".config/starship.toml".source = ./starship.toml;
+    # ".config/home-manager".source = ./home-manager;
+    # ".config/nvim".source = ./nvim;
+    # ".config/nvim".source = ./nvim;
   };
 
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
+  # home.sessionVariables = {
+  # };
 
   programs.git = {
     enable = true;
@@ -29,14 +30,18 @@
 
   gtk = {
     enable = true;
-    cursorTheme.name = "Bibata-Modern-Ice";
+    cursorTheme = {
+        name = "Bibata-Modern-Ice";
+        package = pkgs.bibata-cursors;
+    };
     theme = {
-      name = "Catppuccin-Mocha";
+      name = "Catppuccin-Mocha-Standard-Blue-Dark";
       package = pkgs.catppuccin-gtk.override {
         variant = "mocha";
       };
     };
   };
+
 
   xdg.configFile = {
     "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";

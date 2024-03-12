@@ -52,7 +52,7 @@ case $1 in
 
         command=$(
             grep -l "^Name=$launch_app" /nix/store/*/share/applications/*.desktop | \
-            xargs grep -hm 1 "^Exec=" | sort | uniq | sed -e 's/^Exec=//' -Ee 's/ .+//'
+            xargs grep -hm 1 "^Exec=" | sed -e 's/^Exec=//' -Ee 's/ .+//' | sort | uniq 
         )
         hyprctl dispatch submap reset &
         eww close launcher &

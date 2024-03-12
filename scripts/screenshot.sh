@@ -3,7 +3,7 @@
 icon_dir="$HOME/.config/mako/icons"
 
 time=$(date +%Y-%m-%d-%H-%M-%S)
-dir="$(xdg-user-dir PICTURES)/Screenshots"
+dir="Pictures/Screenshots"
 file="screenshot_${time}.png"
 
 if [ ! -d "$dir" ]; then

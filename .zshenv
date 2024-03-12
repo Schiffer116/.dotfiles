@@ -2,6 +2,8 @@
 export EDITOR='nvim'
 export HISTCONTROL='ignoreboth:erasedups'
 export MANPAGER='nvim +Man!'
+export PYGAME_DETECT_AVX2=1;
+
 
 export VDPAU_DRIVER=va_gl
 export LIBVA_DRIVER_NAME=iHD

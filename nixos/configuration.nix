@@ -2,12 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -68,6 +69,7 @@
   nixpkgs.config.allowUnfree = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  programs.nix-ld.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -77,7 +79,6 @@
     kitty
     eww
     hyprpaper
-    swaybg
     starship
     firefox
     git
@@ -110,11 +111,19 @@
     home-manager
     nil
     mpv
+    texliveFull
+    zathura
+    tlp
+    chromium
+    btop
+    xdg-utils
+    playerctl
   ];
 
   fonts.packages = with pkgs; [
     jetbrains-mono
     nerdfonts
+    noto-fonts-cjk-sans
   ];
 
   programs.zsh = {
@@ -127,17 +136,32 @@
 
   users.defaultUserShell = pkgs.zsh;
 
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      schiffer = import ../.config/home-manager/home.nix;
+    };
+  };
+
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+  };
+
+  xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+          xdg-desktop-portal-hyprland
+          xdg-desktop-portal-gtk
+      ];
   };
 
   programs.tmux = {
     enable = true;
     plugins = with pkgs.tmuxPlugins; [
       nord
-      continuum
       resurrect
+      continuum
       sensible
     ];
   };
@@ -168,6 +192,7 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+  services.tlp.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -9,6 +9,7 @@ return {
         vim.keymap.set('n', '<leader>f', builtin.find_files, {})
         vim.keymap.set('n', '<leader>gf', builtin.git_files, {})
         vim.keymap.set('n', '<leader>gr', builtin.live_grep, {})
+        vim.keymap.set('n', '<leader>gh', builtin.help_tags, {})
 
         require('telescope').setup({
             defaults = {

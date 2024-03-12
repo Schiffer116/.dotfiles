@@ -5,14 +5,14 @@ return {
         'williamboman/mason.nvim',
     },
 
-    config = function ()
+    config = function()
         require('mason').setup()
         require('mason-lspconfig').setup()
 
         vim.api.nvim_create_autocmd('LspAttach', {
             desc = 'LSP actions',
             callback = function(event)
-                local opts = {buffer = bufnr, remap = false}
+                local opts = { buffer = bufnr, remap = false }
 
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
@@ -25,6 +25,8 @@ return {
                 vim.keymap.set("n", "<leader>rr", vim.lsp.buf.references, opts)
                 vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
                 vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+                vim.keymap.set('n', '<leader>t', vim.lsp.buf.type_definition, opts)
+                vim.lsp.buf.format { async = true }
             end
         })
 
@@ -39,19 +41,27 @@ return {
         })
 
         local _border = "rounded"
-        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-            border = _border,
-        })
+        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+            vim.lsp.handlers.hover,
+            {
+                border = _border,
+            }
+        )
 
         vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-            vim.lsp.handlers.signature_help, {
+            vim.lsp.handlers.signature_help,
+            {
                 border = _border
             }
         )
 
-        vim.diagnostic.config{
-            float={ border= _border }
-        }
+        vim.diagnostic.config({
+            float = { border = _border }
+        })
+
+        lspconfig.nil_ls.setup({})
+
+        lspconfig.rust_analyzer.setup({})
 
         lspconfig.lua_ls.setup {
             settings = {
@@ -62,6 +72,35 @@ return {
                 },
             },
         }
-        require'lspconfig'.nil_ls.setup{}
+
+        lspconfig.pyright.setup({
+            settings = {
+                pyright = {},
+                python = {
+                    analysis = {
+                        autoImportCompletions = true,
+                        autoSearchPaths = true,
+                        diagnosticMode = 'workspace',
+                        typeCheckingMode = 'off'
+                    }
+                }
+            }
+        })
+
+        lspconfig.texlab.setup({
+            settings = {
+                texlab = {
+                    build = {
+                        executable = 'texi2pdf',
+                        args = { '%f' },
+                        onSave = true,
+                    },
+                    chktex = {
+                        onOpenAndSave = true,
+                        onEdit = true,
+                    },
+                },
+            },
+        })
     end
 }

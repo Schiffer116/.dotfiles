@@ -42,8 +42,8 @@ return {
                         ['ac'] = '@call.outer',
                         ['aa'] = '@assignment.inner',
                         ['ia'] = '@assignment.outer',
-                        ['la'] = '@assignment.lhs',
-                        ['ra'] = '@assignment.rhs',
+                        ['ah'] = '@assignment.lhs',
+                        ['am'] = '@assignment.rhs',
                     },
                     -- You can choose the select mode (default is charwise 'v')
                     --
@@ -53,9 +53,14 @@ return {
                     -- and should return the mode ('v', 'V', or '<c-v>') or a table
                     -- mapping query_strings to modes.
                     selection_modes = {
-                        ['@parameter.outer'] = 'v', -- charwise
-                        ['@function.outer'] = 'V', -- linewise
-                        -- ['@class.outer'] = '<c-v>', -- blockwise
+                        ['@function.inner'] = 'V',
+                        ['@function.outer'] = 'V',
+                        ['@class.inner'] = 'V',
+                        ['@class.outer'] = 'V',
+                        ['@conditional.inner'] = 'V',
+                        ['@conditional.outer'] = 'V',
+                        ['@loop.inner'] = 'V',
+                        ['@loop.outer'] = 'V',
                     },
                     -- If you set this to `true` (default is `false`) then any textobject is
                     -- extended to include preceding or succeeding whitespace. Succeeding

@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 
 get_brightness() {
-    echo "$(brightnessctl i | grep -Eo '[0-9]{1,2}%' | tr -d '%')"
+    brightnessctl i | grep -Eo '[0-9]{1,3}%' | tr -d '%'
 }
 
 notify_user() {
     if [ "$(eww get show_light_slider)" = "false" ]; then
         eww update show_light_slider=true
     fi
-    pgrep brightness.sh | grep -v $$ | xargs kill
+    pgrep brightness.sh | grep -v $$ | xargs kill 2> /dev/null
     sleep 2 && eww update show_light_slider=false &
 }
 
@@ -19,7 +19,7 @@ set_brightness() {
 
 inc_brightness() {
     cur_light=$(get_brightness)
-    if [ "$cur_light" -le 100 ]; then
+    if [ "$cur_light" -lt 100 ]; then
         after=$(( cur_light / 5 * 5 + 5 ))
         set_brightness "$after"
     fi
@@ -40,7 +40,7 @@ black_out() {
 
 case $1 in
     "--get") get_brightness ;;
-    "--set") set_brightness "$@" ;;
+    "--set") set_brightness "$2" ;;
     "--inc") inc_brightness ;;
     "--dec") dec_brightness ;;
     "--black-out") black_out ;;
