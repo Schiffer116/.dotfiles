@@ -26,7 +26,8 @@
           (label :class "search-icon"
                  :text "")
           (input :class "search-input"
-                 :onchange 'eww update app_json="$(launcher.sh --fuzzy {})"'
+                 :onchange `eww update app_json="$(launcher.sh --fuzzy {})"`
+                 :timeout "2000ms"
                  :onaccept "launcher.sh --launch"
                  :hexpand true)))
           (scroll :vexpand true

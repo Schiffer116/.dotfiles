@@ -5,15 +5,15 @@ get_brightness() {
 }
 
 notify_user() {
-    if [ "$(eww get show_light_slider)" = "false" ]; then
-        eww update show_light_slider=true
-    fi
-    pgrep brightness.sh | grep -v $$ | xargs kill 2> /dev/null
-    sleep 2 && eww update show_light_slider=false &
+    eww update show_light_slider=true
+    sleep 2 &&
+    ! pgrep -f "$0" | grep -v $$ &&
+    eww update show_light_slider=false
 }
 
 set_brightness() {
     brightnessctl set "$1%"
+    eww update brightness="$(get_brightness)"
     notify_user
 }
 
@@ -23,7 +23,6 @@ inc_brightness() {
         after=$(( cur_light / 5 * 5 + 5 ))
         set_brightness "$after"
     fi
-    notify_user
 }
 
 dec_brightness() {
@@ -31,7 +30,6 @@ dec_brightness() {
     after=$(( cur_light / 5 * 5 - 5 ))
     after=$(( after > 0 ? after : 1 ))
     set_brightness "$after"
-    notify_user
 }
 
 black_out() {
@@ -45,5 +43,3 @@ case $1 in
     "--dec") dec_brightness ;;
     "--black-out") black_out ;;
 esac
-
-eww update brightness="$(get_brightness)"

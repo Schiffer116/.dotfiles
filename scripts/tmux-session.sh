@@ -2,12 +2,12 @@
 
 selected=$(find ~/Documents ~/Downloads ~/.dotfiles ~/.config -type d \
             | fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
-                    --preview="exa --tree --icons -L2 {}")
+                    --preview="eza --tree --icons -L2 {}")
 [ -z "$selected" ] && exit 0
 
 selected_name=$(basename "$selected" | tr . _ | cut -c 1-7)
 
-if ! tmux has-session -t="$selected_name" 2> /dev/null; then 
+if ! tmux has-session -t="$selected_name" 2> /dev/null; then
     tmux new-session -ds "$selected_name" -c "$selected"
 fi
 

@@ -47,8 +47,6 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 bindkey -s "^f" 'tmux-session.sh^M'
 bindkey -s "^r" 'rebuild.sh^M'
-# bindkey -s "^v" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,1^M'
-# bindkey -s "^h" 'hyprctl keyword monitor eDP-1,preferred,auto,1,transform,0^M'
 
 alias wallpaper='swaybg -m fill -i'
 
@@ -76,5 +74,4 @@ alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settin
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
 eval "$(starship init zsh)"
-
-# source "$XDG_DATA_HOME/cargo/env"
+eval "$(direnv hook zsh)"
