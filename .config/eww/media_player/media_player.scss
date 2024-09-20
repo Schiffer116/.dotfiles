@@ -1,0 +1,45 @@
+@import "../color.scss";
+
+.song_info {
+  margin: 10px;
+  padding: 10px;
+  background-color: transparent;
+}
+
+.song-info-container {
+  background-color: $bg-color;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.cover-art {
+  background-size: cover;
+  background-position: center;
+  min-height: 30px;
+  min-width: 30px;
+  margin: 9px;
+  border-radius: 100px;
+}
+
+.cover-art-info {
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  min-height: 100px;
+  min-width: 100px;
+}
+
+.media-button {
+  font-weight: 900;
+  color: rgba(210, 210, 210, 1);
+}
+
+.media-button:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* .song-scale { */
+/*   all: unset; */
+/*   margin-right: 13px; */
+/*   min-width: 150px; */
+/* } */

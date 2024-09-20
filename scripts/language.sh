@@ -1,32 +1,37 @@
 #!/usr/bin/env sh
 
 languages='[
-    {"symbol":"E","ime":"keyboard-us"},
-    {"symbol":"J","ime":"mozc"},
-    {"symbol":"V","ime":"unikey"}
+  {
+    "symbol": "E",
+    "ime": "keyboard-us"
+  },
+  {
+    "symbol": "J",
+    "ime": "mozc"
+  },
+  {
+    "symbol": "V",
+    "ime": "unikey"
+  }
 ]'
 
 get_symbol() {
     cur_lang="$(fcitx5-remote -n)"
-    index=$(echo "$languages" | jq "map(.ime == \"$cur_lang\") | index(true)")
-    echo "$languages" | jq -r ".[$index].symbol"
+    echo "$languages" | jq -r '.[] | select(.ime == "'"$cur_lang"'") | .symbol'
 }
 
-set_lang() {
-    fcitx5-remote -s $1
-    eww update cur_lang=$(get_symbol $1)
+get_languages()  {
+    echo "$languages" | jq '[ .[] | .symbol ]'
 }
 
-case $1 in
-    "--get") get_symbol ;;
-    "--next") cycle_lang ;;
-    "--set") 
-        case $2 in
-            "E") set_lang "keyboard-us" ;;
-            "J") set_lang "mozc" ;;
-            "V") set_lang "unikey" ;;
-        esac
-        ;;
-esac
+symbol_to_ime() {
+    echo "$languages" | jq -r '.[] | select(.symbol == "'"$1"'") | .ime'
+}
 
+set_language() {
+    fcitx5-remote -s "$1"
+}
+
+ime="$(symbol_to_ime "$2")"
+set_language "$ime"
 eww update cur_lang="$(get_symbol)"

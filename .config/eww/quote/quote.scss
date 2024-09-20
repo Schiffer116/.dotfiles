@@ -1,0 +1,56 @@
+.quote {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.fancy-weekday {
+  font-family: "League Spartan";
+  font-weight: 900;
+  font-size: 100px;
+  text-shadow: 5px 5px 10px #000;
+  color: rgba(240, 97, 99, 1);
+  margin-left: 20px;
+  margin-bottom: 25px;
+}
+
+.fancy-day {
+  color: white;
+  font-size: 80px;
+  text-shadow: 5px 5px 10px #000;
+  margin-top: 30px;
+}
+
+.fancy-suffix {
+  color: rgba(150, 150, 150, 1);
+  font-family: "Great Vibes";
+  font-size: 60px;
+  margin-top: 60px;
+  margin-left: 90px;
+}
+
+.fancy-time {
+  color: white;
+  font-family: "Bebas Neue";
+  font-weight: 600;
+  font-size: 25px;
+  margin-top: 5px;
+}
+
+.weather-icon {
+  color: white;
+  font-size: 55px;
+}
+
+.weather-temp {
+  color: white;
+  font-family: Dosis;
+  font-size: 40px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.quote-content {
+  color: white;
+  font-family: "Great Vibes";
+  font-size: 40px;
+  margin-top: 10px;
+}

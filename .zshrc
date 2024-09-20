@@ -48,7 +48,7 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 bindkey -s "^f" 'tmux-session.sh^M'
 bindkey -s "^r" 'rebuild.sh^M'
 
-alias wallpaper='swaybg -m fill -i'
+alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
 
 # nvim-dap
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
@@ -74,4 +74,4 @@ alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settin
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
 eval "$(starship init zsh)"
-eval "$(direnv hook zsh)"
+eval "$(direnv hook $SHELL)"

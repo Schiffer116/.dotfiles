@@ -1,0 +1,3 @@
+pane	nixos	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/nixos	1	sh	:sh /home/schiffer/scripts/rebuild.sh
+window	nixos	1	:sh	1	:*	c2dd,210x46,0,0,0	:
+state	nixos	

@@ -1,0 +1,14 @@
+@import "../color.scss";
+
+.bar {
+  background-color: transparent;
+  background-color: $bg-color;
+  border-bottom: 4px solid $bd-color;
+  border-radius: 0;
+}
+
+.sep {
+  color: $bd-color;
+  font-size: 20px;
+  text-shadow: none;
+}

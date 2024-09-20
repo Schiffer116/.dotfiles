@@ -1,4 +1,5 @@
 (include "./bar/bar.yuck")
+(include "./media_player/media_player.yuck")
 (include "./powermenu/powermenu.yuck")
 (include "./launcher/launcher.yuck")
 (include "./quote/quote.yuck")

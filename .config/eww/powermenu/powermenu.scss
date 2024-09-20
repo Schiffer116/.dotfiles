@@ -1,0 +1,32 @@
+.powermenu {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.goodbye-msg {
+  color: white;
+  margin-top: 350px;
+  margin-bottom: 50px;
+  font-size: 80px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.power-button {
+  border-radius: 20px;
+  background-color: rgba(34, 44, 61, 0.75);
+  padding: 50px;
+  font-size: 70px;
+}
+
+.power-button-event {
+  border-radius: 20px;
+  transition: background-color 300ms;
+}
+
+.power-button-margin {
+  padding: 50px;
+}
+
+.power-button-event:hover,
+.power-button-event-active {
+  background-color: rgba(255, 255, 255, 0.3);
+}

@@ -1,0 +1,53 @@
+.launcher {
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.launcher-widget {
+  background-color: $bg-color;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1);
+  border-radius: 20px;
+  margin: 25px;
+  padding: 20px;
+}
+
+.search-icon {
+  background-color: $bg-color;
+  border-radius: 20px;
+  margin-right: 15px;
+  padding: 15px;
+}
+
+.search-box {
+  background-image: url('./launcher/hand.png');
+  background-position: center;
+  background-size: cover;
+  border-radius: 15px;
+}
+
+.search-input {
+  color: white;
+  background-color: $bg-color;
+}
+
+.search-bar {
+  padding: 40px;
+}
+
+.app-item-event {
+  background-color: $bd-color;
+  border-radius: 10px;
+  transition: background-color 200ms;
+}
+
+.app-item {
+  padding: 10px;
+}
+
+.app-item-event:hover,
+.app-item-active {
+  background-color: rgba(75, 72, 85, 1);
+  border-radius: 10px;
+}

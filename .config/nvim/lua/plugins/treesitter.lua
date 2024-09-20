@@ -1,9 +1,9 @@
 return {
-    "nvim-treesitter/nvim-treesitter-context",
+    -- "nvim-treesitter/nvim-treesitter-context",
+    "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        "nvim-treesitter/nvim-treesitter-textobjects",
     },
 
     config = function ()
@@ -40,10 +40,10 @@ return {
                         ['al'] = '@loop.outer',
                         ['ic'] = '@call.inner',
                         ['ac'] = '@call.outer',
-                        ['aa'] = '@assignment.inner',
-                        ['ia'] = '@assignment.outer',
-                        ['ah'] = '@assignment.lhs',
-                        ['am'] = '@assignment.rhs',
+                        -- ['aa'] = '@assignment.inner',
+                        -- ['ia'] = '@assignment.outer',
+                        ['la'] = '@assignment.lhs',
+                        ['ra'] = '@assignment.rhs',
                     },
                     -- You can choose the select mode (default is charwise 'v')
                     --
@@ -71,7 +71,7 @@ return {
                     -- * query_string: eg '@function.inner'
                     -- * selection_mode: eg 'v'
                     -- and should return true of false
-                    include_surrounding_whitespace = true,
+                    include_surrounding_whitespace = false,
                 },
             },
         }

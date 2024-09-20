@@ -1,18 +1,61 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { inputs, config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
+  imports = [ ./hardware-configuration.nix ];
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
     ];
+  };
+
+  environment.sessionVariables = {
+      LIBVA_DRIVER_NAME = "iHD";
+  };
+
+ #  services.xserver.videoDrivers = [ "nvidia" ];
+	#
+ #  hardware.nvidia = {
+ #    modesetting.enable = true;
+ #    powerManagement.enable = false;
+ #    powerManagement.finegrained = false;
+ #    open = false;
+ #    nvidiaSettings = true;
+ #    package = config.boot.kernelPackages.nvidiaPackages.stable;
+	#
+ #    prime = {
+ #        sync.enable = true;
+	# 	intelBusId = "PCI:0:2:0";
+	# 	nvidiaBusId = "PCI:1:0:0";
+	# };
+ #  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.tmp.cleanOnBoot = true;
+
+  # disable nvidia
+  boot.extraModprobeConfig = ''
+    blacklist nouveau
+    options nouveau modeset=0
+  '';
+
+  services.udev.extraRules = ''
+    # Remove NVIDIA USB xHCI Host Controller devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA USB Type-C UCSI devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA Audio devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA VGA/3D controller devices
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+  '';
+  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+
+
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -21,13 +64,10 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -51,53 +91,39 @@
     ];
   };
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.groups.pipewire = {};
+
   users.users.schiffer = {
     isNormalUser = true;
     description = "Vo Dinh Khanh";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "pipewire" ];
     # packages = with pkgs; [];
   };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
-  };
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
-  environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; };
+  nix.optimise.automatic = true;
+  nix.optimise.dates = [ "05:00" ];
+  nix.settings.auto-optimise-store = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    stdenv.cc.cc.lib
+    # stdenv.cc.cc.lib
   ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     neovim
     lua
     kitty
-    eww
     hyprpaper
+    hyprpicker
     starship
-    firefox
     git
     gcc
     gnumake
@@ -105,7 +131,6 @@
     eza
     tldr
     ripgrep
-    anki-bin
     python3
     nodejs
     fzf
@@ -116,16 +141,14 @@
     pavucontrol
     grim
     slurp
-    neofetch
     spotify
     gammastep
-    cargo
     rustup
+    go
     stow
     libnotify
     mako
     discord
-    home-manager
     nil
     mpv
     texliveFull
@@ -135,6 +158,22 @@
     btop
     xdg-utils
     playerctl
+    clang-tools
+    rar
+    # sof-firmware
+    parallel
+    obs-studio
+    postgresql
+    glxinfo
+    socat
+    hyprland
+    firefox
+    eww
+    anki
+    linux-firmware
+    intel-gpu-tools
+    libva-utils
+    alsa-utils
   ];
 
   fonts.packages = with pkgs; [
@@ -153,20 +192,18 @@
 
   users.defaultUserShell = pkgs.zsh;
 
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      schiffer = import ../.config/home-manager/home.nix;
-    };
-  };
-
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
 
+
   xdg.portal = {
       enable = true;
+      config.common.default = [
+        "hyprland"
+        "gtk"
+      ];
       extraPortals = with pkgs; [
           xdg-desktop-portal-hyprland
           xdg-desktop-portal-gtk
@@ -195,7 +232,12 @@
     };
   };
 
-  sound.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
+
+  sound.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -208,6 +250,7 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+  hardware.enableAllFirmware = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

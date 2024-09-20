@@ -85,7 +85,7 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 #urlbar-container:not(:hover) .urlbar-history-dropmarker{ margin-inline-start: -28px; }
 
 /* Fix customization view */
-#customization-panelWrapper > .panel-arrowbox > .panel-arrow{ margin-inline-end: initial !important; } 
+#customization-panelWrapper > .panel-arrowbox > .panel-arrow{ margin-inline-end: initial !important; }
 
 /* Simplifying interface */
 
@@ -123,3 +123,5 @@ urlbar_popup_full_width.css is VERY MUCH recommended for Firefox 71+ because of 
 > .tabbrowser-tab[first-visible-unpinned-tab] {
     margin-inline-start: 0 !important;
 }
+
+@media not print { img.decoded { background: none!important; } }

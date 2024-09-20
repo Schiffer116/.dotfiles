@@ -1,0 +1,66 @@
+(deflisten song_title "playerctl metadata title --follow")
+(deflisten cover_art "playerctl metadata mpris:artUrl --follow")
+(deflisten media_status "playerctl metadata --format '{{ status }}' --follow")
+(deflisten artist "playerctl metadata artist --follow")
+
+(defpoll song_color :interval "3600s"
+                    :run-while false
+                    "dom-color.sh &")
+
+(defpoll song_length :interval "3600s"
+                     :run-while false
+                     "playerctl -p spotify metadata mpris:length")
+
+(defpoll song_pos :interval "1s"
+                  :run-while false
+                  "playerctl position")
+
+(defwidget media_player []
+  (eventbox :onrightclick "eww open --toggle song_info"
+            :cursor "pointer"
+    (box :space-evenly false
+      (eventbox :onclick "playerctl previous"
+                :class "media-button"
+        (label :text ""))
+      (overlay
+        (button :class "cover-art"
+                :style "background-image: url('${cover_art}');")
+        (revealer :reveal { media_status == "Paused" }
+          (label :text ""))
+        (button :onclick "playerctl play-pause"))
+      (eventbox :onclick "playerctl next"
+                :class "media-button"
+        (label :text "")))))
+
+
+(defwindow song_info
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :monitor 0
+  :geometry (geometry
+    :width 450
+    :height 140
+    :anchor "top center")
+  (box :class "song-info-container"
+       :space-evenly false
+       :spacing 15
+    (box :class "cover-art-info"
+         :style "background-image: url('${cover_art}');")
+    (box :orientation "vertical"
+         :space-evenly false
+      (label :wrap true
+             :markup song_title
+             :xalign 0)
+      (label :markup "<i>${artist}</i>"
+             :wrap true
+             :xalign 0)
+      (box :vexpand true
+        ;; (scale :value song_pos
+        ;;        :class "song-scale"
+        ;;        :css ".song-scale highlight { background-color: ${song_color}; }"
+        ;;        :min 0
+        ;;        :max { song_length / 1000000 }
+        ;;        :onchange "playerctl position {}"
+        ;;        :orientation "horizontal")
+        ))))

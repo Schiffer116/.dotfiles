@@ -13,9 +13,10 @@ set_volume() {
 
 notify_user() {
     eww update show_sound_slider=true
-    sleep 2 &&
-    ! pgrep -f "$0" | grep -v $$ &&
-    eww update show_sound_slider=false
+    sleep 2
+    if ! pgrep -f "$0" | grep -v $$; then
+        eww update show_sound_slider=false
+    fi
 }
 
 is_muted() {
@@ -51,15 +52,20 @@ dec_volume() {
 toggle_mute() {
     wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
     eww update muted="$(is_muted)"
-    notify_user
 }
 
+mute() {
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 1
+    eww update muted="$(is_muted)"
+}
+
+
 case $1 in
-    "--get") get_volume ;;
-    "--get-mute") is_muted ;;
-    "--set") set_volume "$2" ;;
-    "--inc") inc_volume ;;
-    "--dec") dec_volume ;;
-    "--toggle") toggle_mute ;;
-    # "--toggle-mic") toggle_mic ;;
+    --get) get_volume ;;
+    --get-mute) is_muted ;;
+    --set) set_volume "$2" ;;
+    --inc) inc_volume ;;
+    --dec) dec_volume ;;
+    --toggle) toggle_mute ;;
+    mute) mute ;;
 esac

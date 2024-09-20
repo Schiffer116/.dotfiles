@@ -3,8 +3,8 @@
 (defwidget power []
   (eventbox :class "power-event-box"
             :cursor "pointer"
-            :onclick "powermenu.sh --open &"
-    (label :class "arch-logo" 
+            :onclick "powermenu.sh open"
+    (label :class "os-logo"
            :text "")))
 
 (defvar ws_cur 1)
@@ -12,10 +12,10 @@
 
 (defwidget workspace [number]
     (eventbox :class "workspace"
-            :cursor "pointer"
-            :onclick "workspaces.sh --change ${number}" 
+              :cursor "pointer"
+              :onclick "hyprctl dispatch workspace ${number}"
     (box :space-evenly false
-      (label :text {number == ws_cur ? '' : ''}
+      (label :text {number == ws_cur ? "" : ""}
              :class "workspace-label${number == ws_cur || number == ws_prv ? '-active' : ''}"))))
 
 (defwidget workspaces []
@@ -26,48 +26,48 @@
     (workspace :number 4)
     (workspace :number 5)))
 
-(defwidget cpu [icon thicc ?role]
-  (eventbox :class "cpu" 
-            :onhover {role == '' ? 'eww open cpu_info &' : ''}
-            :onhoverlost {role == '' ? 'eww close cpu_info &' : ''}
-    (circular-progress :class "circle ${role}" 
-                       :value {EWW_CPU.avg}
+(defwidget hardware [value icon thickness position css_class info_window]
+  (eventbox :class {css_class}
+    (circular-progress :class "circle ${position}"
+                       :value value
                        :start-at 75
-                       :thickness thicc
-        (label :class "circ-icon ${role}"
+                       :thickness {thickness}
+        (label :class "circ-icon ${position}"
                :text {icon}))))
 
-(defwidget ram [icon thicc ?role]
-  (eventbox :class "ram" 
-            :onhover {role == '' ? 'eww open ram_info &' : ''}
-            :onhoverlost {role == '' ? 'eww close ram_info &' : ''}
-    (circular-progress :class "circle ${role}" 
-                       :value {EWW_RAM.used_mem_perc}
-                       :start-at 75
-                       :thickness thicc
-        (label :class "circ-icon ${role}"
-               :text {icon}))))
+(defwidget cpu [icon thickness ?role]
+    (hardware :value {EWW_CPU.avg}
+              :icon icon
+              :thickness thickness
+              :position role
+              :css_class "cpu"
+              :info_window "cpu_info"))
 
-(defwidget disk [icon thicc ?role]
-  (eventbox :class "disk"
-            :onhover {role == '' ? 'eww open disk_info &' : ''}
-            :onhoverlost {role == '' ? 'eww close disk_info &' : ''}
-    (circular-progress :class "circle ${role}" 
-                       :value {EWW_DISK["/"].used_perc}
-                       :start-at 75
-                       :thickness thicc
-        (label :class "circ-icon ${role}"
-               :text {icon}))))
+(defwidget ram [icon thickness ?role]
+    (hardware :value {EWW_RAM.used_mem_perc}
+              :icon icon
+              :thickness thickness
+              :position role
+              :css_class "ram"
+              :info_window "ram_info"))
+
+(defwidget disk [icon thickness ?role]
+    (hardware :value {EWW_DISK["/"].used_perc}
+              :icon icon
+              :thickness thickness
+              :position role
+              :css_class "disk"
+              :info_window "disk_info"))
 
 (defvar full_time false)
 
 (defwidget clock []
-  (eventbox :onclick 'if eww active-windows | grep "calendar"; then eww close calendar; else eww open calendar; fi'
+  (eventbox :onclick "eww open --toggle calendar"
             :onhover "eww update full_time=true"
             :onhoverlost "eww update full_time=false"
             :cursor "pointer"
     (box :class "clock"
-         :space-evenly false 
+         :space-evenly false
       (revealer :transition "slideleft"
                 :reveal full_time
                 :duration "300ms"
@@ -78,97 +78,92 @@
                 :duration "300ms"
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
-(defwidget battery [battery status ?role]
-  (eventbox :onhover {role == "" ? "eww open battery_info &" : ""}
-            :onhoverlost {role == "" ? "eww close battery_info &" : ""}
-    (label :class "battery ${role}" :text {status == 'Charging' ? "󱐌" :
-      battery < 21 ? "" :
-        battery < 41 ? "" :
-          battery < 61 ? "":
-            battery < 81 ? "" : ""})))
+(defwidget battery [?role]
+  (label :class "battery ${role}"
+         :text { EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
+                 EWW_BATTERY.BAT0.capacity <= 20 ? "" :
+                 EWW_BATTERY.BAT0.capacity <= 40 ? "" :
+                 EWW_BATTERY.BAT0.capacity <= 60 ? "":
+                 EWW_BATTERY.BAT0.capacity <= 80 ? "" : "" }))
 
 (defvar show_sound_slider false)
 (defpoll volume :interval "3600s"
-                :run-while false
                 "volume.sh --get")
 (defpoll muted :interval "3600s"
-                :run-while false
                "volume.sh --get-mute")
 
 (defwidget sound [volume]
   (eventbox :onhover "eww update show_sound_slider=true"
             :onhoverlost "eww update show_sound_slider=false"
-            :onclick "pavucontrol &"
-            :onrightclick "blueman-manager &"
+            :onclick "pavucontrol"
+            :onrightclick "blueman-manager"
             :cursor "pointer"
-    (box :space-evenly false 
+    (box :space-evenly false
       (label :class "sound" :text {muted ? "󰝟" :
         volume < 34 ? "" :
           volume < 67 ? "" : ""})
       (revealer :transition "slideleft"
                 :reveal show_sound_slider
                 :duration "300ms"
-        (scale :class "volume-scale" 
+        (scale :class "volume-scale"
                :min 0
                :max 101
                :value volume
                :orientation "h"
-               :onchange 'volume.sh --set {}')))))
+               :onchange "volume.sh --set {}")))))
 
-(defpoll network_strength :interval "10s"
-                          :initial `N/A`
-                          `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{if($2=="yes")print$1}'`)
+(defpoll network_strength :interval "5s"
+                          :initial "N/A"
+                          `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
 
-(defwidget network [strength ?role]
-  (eventbox :onhover {role == "" ? "eww open network_info &" : ""}
-            :onhoverlost {role == "" ? "eww close network_info &" : ""}
-    (label :class "network ${role}" :text {strength == "" ? "󰤮" :
-      strength < 26 ? "󰤟" :
-        strength < 51 ? "󰤢" :
-          strength < 76 ? "󰤥" : "󰤨"})))
+(defwidget network [?role]
+  (label :class "network ${role}" :text {network_strength == "" ? "󰤮" :
+    network_strength < 26 ? "󰤟" :
+      network_strength < 51 ? "󰤢" :
+        network_strength < 76 ? "󰤥" : "󰤨"}))
 
 (defpoll brightness :interval "3600s"
-                    :run-while false
-                    "brightness.sh --get")
+                    "brightness.sh get")
 (defvar show_light_slider false)
 (defwidget backlight [brightness]
   (eventbox :onhover "eww update show_light_slider=true"
             :cursor "pointer"
             :onhoverlost "eww update show_light_slider=false"
     (box :space-evenly false
-      (label :class "backlight" :text {brightness < 26 ? "󰃞" :
-          brightness < 51 ? "󰃝" :
-            brightness < 76 ? "󰃟" : "󰃠"})
+      (label :class "backlight"
+             :text { brightness < 26 ? "󰃞" :
+                     brightness < 51 ? "󰃝" :
+                     brightness < 76 ? "󰃟" : "󰃠" })
       (revealer :transition "slideleft"
                 :reveal show_light_slider
                 :duration "300ms"
-        (scale :class "backlight-scale" 
+        (scale :class "backlight-scale"
                :min 1
                :max 101
                :value brightness
                :orientation "h"
-               :onchange 'brightness.sh --set {}')))))
+               :onchange "brightness.sh set {}")))))
 
 (defvar color_temp 1000)
 (defvar show_temp_slider false)
-(defwidget temp [temp]
+(defwidget temp []
   (eventbox :onhover "eww update show_temp_slider=true"
-            :cursor "pointer"
             :onhoverlost "eww update show_temp_slider=false"
     (box :space-evenly false
-      (label :class "color-temp" :text {temp < 2000 ? "" :
-        temp < 3000 ? "" :
-          temp < 4000 ? "" : 
-            temp < 5000 ? "" : ""})
+      (label :class "color-temp"
+             :text { color_temp < 2000 ? "" :
+                     color_temp < 3000 ? "" :
+                     color_temp < 4000 ? "" :
+                     color_temp < 5000 ? "" : "" })
       (revealer :transition "slideleft"
                 :reveal show_temp_slider
                 :duration "300ms"
-        (scale :class "temp-scale" 
+        (scale :class "temp-scale"
                :min 1000
                :max 6500
-               :value temp
+               :value color_temp
                :orientation "h"
-               :onchange 'pkill gammastep; eww update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K&')))))
+               :onchange "pkill gammastep; eww update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K &")))))
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')
@@ -183,43 +178,6 @@
                   :reveal {cur_lang == language || show_all_lang}
                   :duration "300ms"
             (button :class "lang-button"
-                    :onclick "language.sh --set ${language}; eww update show_all_lang=false"
-              (label :class "language" 
+                    :onclick "language.sh set ${language}; eww update show_all_lang=false"
+              (label :class "language"
                      :text {language})))))))
-
-(defpoll spotted :interval "10s" 
-                 "pidof -s spotify &")
-(defpoll song_title :interval "10s" 
-                    :run-while {spotted != ""}
-                    "playerctl -p spotify metadata title")
-(deflisten cover_art "cover-art.sh")
-(defvar show_media_button false)
-
-(defwidget media_player [] 
-  (revealer :reveal {spotted != ""}
-            :transition "none"
-            :duration "0ms"
-      (eventbox :onhover "eww update show_media_button=true"
-                :onhoverlost "eww update show_media_button=false"
-                :onclick "eww open --toggle song_info"
-                :cursor "pointer"
-        (box :space-evenly false
-          (box :class "cover-art circle" 
-               :style "background-image: url('${cover_art}');")
-          (label :text song_title)
-          (revealer :reveal show_media_button
-                    :transition "slideright"
-                    :duration "300ms"
-            (box :space-evenly false
-              (eventbox :onclick "playerctl -p spotify previous"
-                        :class "media-button first-media-button" 
-                (label :class "media-button-label" 
-                       :text ""))
-              (eventbox :onclick "playerctl -p spotify play-pause"
-                        :class "media-button" 
-                (label :class "media-button-label" 
-                       :text ""))
-              (eventbox :onclick "playerctl -p spotify next"
-                        :class "media-button" 
-                (label :class "media-button-label" 
-                       :text ""))))))))

@@ -6,29 +6,29 @@ close() {
 }
 
 case $1 in
-    "--open")
+    open)
         eww update active_button=0
         eww open powermenu
         hyprctl dispatch submap powermenu ;;
-    "--close")
+    close)
         close ;;
-    "--next" | "--previous") 
+    next | previous)
         active_button=$(eww get active_button)
         case $1 in
-            "--next") new_active=$(( (active_button + 1) % 4 ));;
-            "--previous") new_active=$(( (active_button + 3) % 4 ));;
+            next) new_active=$(( (active_button + 1) % 4 ));;
+            previous) new_active=$(( (active_button + 3) % 4 ));;
         esac
         eww update active_button="$new_active" ;;
-    "--action")
+    action)
         case $2 in
             0) systemctl poweroff ;;
             1) systemctl reboot ;;
-            2) 
+            2)
                 close
+                volume.sh mute
                 systemctl suspend
-                wpctl set-mute @DEFAULT_AUDIO_SINK@ 1
                 ;;
-            3) 
+            3)
                 close
                 swaylock.sh ;;
         esac ;;

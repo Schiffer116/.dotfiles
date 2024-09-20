@@ -1,0 +1,3 @@
+pane	eww	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/.config/eww	1	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/w722q6hh7w7cqqma32f5w1lnr366558q-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/w722q6hh7w7cqqma32f5w1lnr366558q-neovim-0.9.5/bin/nvim-ruby'
+window	eww	1	:nvim	1	:*	c2dd,210x46,0,0,0	:
+state	eww	

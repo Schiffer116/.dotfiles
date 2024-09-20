@@ -1,29 +1,30 @@
 local kind_icons = {
-  Text = "",
-  Method = "󰆧",
-  Function = "󰊕",
-  Constructor = "",
-  Field = "󰇽",
-  Variable = "󰂡",
-  Class = "󰠱",
-  Interface = "",
-  Module = "",
-  Property = "󰜢",
-  Unit = "",
-  Value = "󰎠",
-  Enum = "",
-  Keyword = "󰌋",
-  Snippet = "",
-  Color = "󰏘",
-  File = "󰈙",
-  Reference = "",
-  Folder = "󰉋",
-  EnumMember = "",
-  Constant = "󰏿",
-  Struct = "",
-  Event = "",
-  Operator = "󰆕",
-  TypeParameter = "󰅲",
+    Text = "",
+    Method = "󰆧",
+    Function = "󰊕",
+    Constructor = "",
+    Field = "󰇽",
+    Variable = "󰂡",
+    Class = "󰠱",
+    Interface = "",
+    Module = "",
+    Property = "󰜢",
+    Unit = "",
+    Value = "󰎠",
+    Enum = "",
+    Keyword = "󰌋",
+    Snippet = "",
+    Color = "󰏘",
+    File = "󰈙",
+    Reference = "",
+    Folder = "󰉋",
+    EnumMember = "",
+    Constant = "󰏿",
+    Struct = "",
+    Event = "",
+    Operator = "󰆕",
+    TypeParameter = "󰅲",
+    Codeium = "",
 }
 
 return {
@@ -40,7 +41,7 @@ return {
         },
     },
 
-    config = function ()
+    config = function()
         local cmp = require('cmp')
         local cmp_select_opts = { behavior = cmp.SelectBehavior.Select }
 
@@ -50,12 +51,14 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'buffer' },
                 { name = 'nvim_lua' },
+                { name = "codeium" },
+                { name = 'vim-dadbod-completion' },
             }),
             mapping = cmp.mapping.preset.insert({
-                ['<C-y>'] = cmp.mapping.confirm({select = true}),
+                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
                 ['<C-e>'] = cmp.mapping.abort(),
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+                ['<C-d>'] = cmp.mapping.scroll_docs(4),
                 ['<C-p>'] = cmp.mapping(function()
                     if cmp.visible() then
                         cmp.select_prev_item(cmp_select_opts)
@@ -84,6 +87,7 @@ return {
                 format = function(entry, vim_item)
                     vim.o.pumheight = 20
                     vim.o.pumwidth = 50
+
                     vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
                     vim_item.menu = ({
                         nvim_lsp = "[LSP]",
@@ -92,10 +96,13 @@ return {
                         nvim_lua = "[Lua]",
                         luasnip = "[LuaSnip]",
                         latex_symbols = "[LaTeX]",
+                        codeium = "[Codeium]",
                     })[entry.source.name]
+
                     return vim_item
                 end
             },
+            experimental = { ghost_text = true },
         })
 
         cmp.setup.cmdline({ '/', '?' }, {

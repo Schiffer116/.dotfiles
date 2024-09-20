@@ -1,45 +1,59 @@
 #!/usr/bin/env sh
 
+open() {
+    hyprctl dispatch submap launcher &
+    eww open launcher
+}
+
+close() {
+    hyprctl dispatch submap reset &
+    eww close launcher &
+    refresh_app
+}
+
+refresh_app() {
+    eww set app_json="$(all_apps | to_json)"
+}
+
+all_apps() {
+    grep -EL '^(Terminal=true|NoDisplay=true)' /nix/store/*/share/applications/*.desktop | \
+        xargs grep -h '^Name=' | \
+        sed -Ee 's/^Name=//' | \
+        sort | uniq
+}
+
+to_json() {
+    printf '[%s]' "$(sed 's/^\|$/"/g')" | tr '\n' ','
+}
+
 case $1 in
-    "--open")
-        eww update selected_app_index=0 &
-        eww open launcher &
-        hyprctl dispatch submap launcher
-        ;;
-    "--close")
-        hyprctl dispatch submap reset &
-        eww close launcher
-        ;;
-    "--next")
+    open) open ;;
+    close) close ;;
+    # cache) eww set all_apps="$(all_apps | to_json)" ;;
+    # reset) eww set app_json="$(eww get all_apps)" ;;
+    next)
         length=$(eww get app_json | jq 'length')
         index=$(eww get selected_app_index)
         if [ "$index" = "$(( length - 1 ))" ]; then
             eww update selected_app_index=0
-        else 
+        else
             eww update selected_app_index=$(( index + 1 ))
         fi
         ;;
-    "--previous")
+    previous)
         index=$(eww get selected_app_index)
         if [ "$index" = 0 ]; then
             length=$(eww get app_json | jq 'length')
             eww update selected_app_index=$(( length - 1))
-        else 
+        else
             eww update selected_app_index=$(( index - 1 ))
         fi
         ;;
-    "--fuzzy")
-        app_names=$(
-            grep -EL '^(Terminal=true|NoDisplay=true)' /nix/store/*/share/applications/*.desktop | \
-            xargs grep -h '^Name=' | sed -Ee 's/^Name=/"/' -e 's/$/"/' | sort | uniq | fzf -f "$2"
-        )
-        content=$(echo $app_names | sed 's/" "/","/g')
-        json=$(printf "[%s]" "$content")
-        echo "$json"
-        ;;
-    "--launch")
-        if [ -z "$2" ]; then
-            apps_json=$(eww get app_json) 
+    fuzzy) all_apps | fzf -f "$2" | to_json ;;
+    launch)
+        clicked=$2
+        if [ -z "$clicked" ]; then
+            apps_json=$(eww get app_json)
             app_index=$(eww get selected_app_index)
             launch_app=$(
                 echo "$apps_json" | \
@@ -47,15 +61,14 @@ case $1 in
                 tr -d '"'
             )
         else
-            launch_app=$2
+            launch_app=$clicked
         fi
 
         command=$(
             grep -l "^Name=$launch_app" /nix/store/*/share/applications/*.desktop | \
-            xargs grep -hm 1 "^Exec=" | sed -e 's/^Exec=//' -Ee 's/ .+//' | sort | uniq 
+            xargs grep -hm 1 "^Exec=" | sed -e 's/^Exec=//' -Ee 's/ .+//' | sort | uniq
         )
-        hyprctl dispatch submap reset &
-        eww close launcher &
+        close &
         $command
         ;;
 esac

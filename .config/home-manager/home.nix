@@ -11,16 +11,7 @@
 
   home.file = {
     # ".screenrc".source = dotfiles/screenrc;
-    # ".config/hypr".source = ./hypr;
-    # ".config/nvim".source = ./nvim;
-    # ".config/starship.toml".source = ./starship.toml;
-    # ".config/home-manager".source = ./home-manager;
-    # ".config/nvim".source = ./nvim;
-    # ".config/nvim".source = ./nvim;
   };
-
-  # home.sessionVariables = {
-  # };
 
   programs.git = {
     enable = true;
@@ -41,7 +32,6 @@
       };
     };
   };
-
 
   xdg.configFile = {
     "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";

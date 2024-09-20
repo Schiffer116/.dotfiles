@@ -6,9 +6,10 @@ get_brightness() {
 
 notify_user() {
     eww update show_light_slider=true
-    sleep 2 &&
-    ! pgrep -f "$0" | grep -v $$ &&
-    eww update show_light_slider=false
+    sleep 2
+    if ! pgrep -f "$0" | grep -v $$; then
+        eww update show_light_slider=false
+    fi
 }
 
 set_brightness() {
@@ -32,14 +33,14 @@ dec_brightness() {
     set_brightness "$after"
 }
 
-black_out() {
+blackout() {
     brightnessctl set 0%
 }
 
 case $1 in
-    "--get") get_brightness ;;
-    "--set") set_brightness "$2" ;;
-    "--inc") inc_brightness ;;
-    "--dec") dec_brightness ;;
-    "--black-out") black_out ;;
+    get) get_brightness ;;
+    set) set_brightness "$2" ;;
+    increase) inc_brightness ;;
+    decrease) dec_brightness ;;
+    blackout) blackout ;;
 esac

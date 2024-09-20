@@ -3,6 +3,8 @@ return {
     dependencies = {
         'neovim/nvim-lspconfig',
         'williamboman/mason.nvim',
+
+        'nanotee/sqls.nvim'
     },
 
     config = function()
@@ -26,7 +28,7 @@ return {
                 vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
                 vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
                 vim.keymap.set('n', '<leader>t', vim.lsp.buf.type_definition, opts)
-                vim.lsp.buf.format { async = true }
+                -- vim.lsp.buf.format { async = true }
             end
         })
 
@@ -102,5 +104,41 @@ return {
                 },
             },
         })
+
+        lspconfig.clangd.setup({
+            root_dir = function(fname)
+                return require("lspconfig.util").root_pattern(
+                    "Makefile",
+                    "configure.ac",
+                    "configure.in",
+                    "config.h.in",
+                    "build.ninja"
+                )(fname) or require("lspconfig.util").root_pattern(
+                    "compile_commands.json",
+                    "compile_flags.txt"
+                )(fname) or require("lspconfig.util").find_git_ancestor(fname)
+            end,
+            cmd = {
+                "clangd",
+                "--background-index",
+                "--clang-tidy",
+                "--function-arg-placeholders",
+                "--fallback-style=llvm",
+                "--header-insertion=iwyu",
+                -- "--query-driver=/usr/lib/llvm-13/bin/clang++-15",
+                "--all-scopes-completion",
+                "--completion-style=detailed",
+            },
+            init_options = {
+                usePlaceholders = true,
+                completeUnimported = true,
+                clangdFileStatus = true,
+            },
+        })
+        require'lspconfig'.sqls.setup{
+            on_attach = function(client, bufnr)
+                require('sqls').on_attach(client, bufnr) -- require sqls.nvim
+            end,
+        }
     end
 }

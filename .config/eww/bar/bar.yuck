@@ -1,10 +1,11 @@
 (include "./bar/widgets.yuck")
 
 (defwindow bar
-  :stacking "fg"
+  :stacking "bg"
+  :exclusive true
 
   :monitor 0
-  :geometry (geometry 
+  :geometry (geometry
     :width "100%"
     :height 50
     :anchor "top center")
@@ -12,28 +13,33 @@
 
 (defwidget bar []
   (centerbox :orientation "h"
-             :class "widget-bar"
     (left)
     (center)
     (right)))
 
-(defwidget sep [] 
+(defwidget sep []
   (label :class "sep" :text "|"))
 
 (defwidget left []
-  (box :orientation "h" 
-       :space-evenly false 
+  (box :orientation "h"
+       :space-evenly false
        :halign "start"
     (power)
     (sep)
     (workspaces)
     (sep)
-    (cpu :icon ""
-         :thicc 4)
-    (ram :icon ""
-         :thicc 4)
-    (disk :icon ""
-          :thicc 4)))
+    (tooltip
+      (cpu_tooltip)
+      (cpu :icon ""
+           :thickness 4))
+    (tooltip
+      (ram_tooltip)
+      (ram :icon ""
+           :thickness 4))
+    (tooltip
+      (disk_tooltip)
+      (disk :icon ""
+            :thickness 4))))
 
 (defwidget center []
   (box :orientation "h" :space-evenly false :halign "center"
@@ -46,8 +52,11 @@
     (temp :temp color_temp)
     (backlight :brightness brightness)
     (sound :volume volume)
-    (network :strength network_strength)
-    (battery :status {EWW_BATTERY.BAT0.status} 
-             :battery {EWW_BATTERY.BAT0.capacity})
+    (tooltip
+      (network_tooltip)
+      (network))
+    (tooltip
+      (battery_tooltip)
+      (battery))
     (sep)
     (clock)))
