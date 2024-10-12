@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ config, pkgs, upkgs, ... }:
 
 {
   imports = [ ./hardware-configuration.nix ];
@@ -16,53 +16,39 @@
       LIBVA_DRIVER_NAME = "iHD";
   };
 
- #  services.xserver.videoDrivers = [ "nvidia" ];
-	#
- #  hardware.nvidia = {
- #    modesetting.enable = true;
- #    powerManagement.enable = false;
- #    powerManagement.finegrained = false;
- #    open = false;
- #    nvidiaSettings = true;
- #    package = config.boot.kernelPackages.nvidiaPackages.stable;
-	#
- #    prime = {
- #        sync.enable = true;
-	# 	intelBusId = "PCI:0:2:0";
-	# 	nvidiaBusId = "PCI:1:0:0";
-	# };
- #  };
+  # services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    prime = {
+        sync.enable = true;
+		intelBusId = "PCI:0:2:0";
+		nvidiaBusId = "PCI:1:0:0";
+	};
+  };
+
+  fileSystems."/home/schiffer/Documents/mnt" = {
+    device = "/dev/disk/by-uuid/a2c43ddf-ede7-4127-aea9-43350329e82e";
+    fsType = "ext4";
+    options = [ "users" "nofail" "exec" ];
+  };
+
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.tmp.cleanOnBoot = true;
 
-  # disable nvidia
-  boot.extraModprobeConfig = ''
-    blacklist nouveau
-    options nouveau modeset=0
-  '';
+  networking.hostName = "nixos";
 
-  services.udev.extraRules = ''
-    # Remove NVIDIA USB xHCI Host Controller devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA USB Type-C UCSI devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA Audio devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA VGA/3D controller devices
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-  '';
-  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
-
-
-
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.dhcpcd.enable = false;
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   networking.networkmanager.enable = true;
 
@@ -112,10 +98,9 @@
   nix.settings.auto-optimise-store = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    # stdenv.cc.cc.lib
-  ];
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = with pkgs; [
+  # ];
 
   environment.systemPackages = with pkgs; [
     neovim
@@ -127,11 +112,13 @@
     git
     gcc
     gnumake
+    # stdenv.cc.cc.lib
     brightnessctl
+    wget
     eza
     tldr
     ripgrep
-    python3
+    python312
     nodejs
     fzf
     wl-clipboard
@@ -148,33 +135,34 @@
     stow
     libnotify
     mako
-    discord
+    # discord
     nil
     mpv
-    texliveFull
+    # texliveFull
     zathura
     tlp
     chromium
     btop
     xdg-utils
     playerctl
-    clang-tools
     rar
-    # sof-firmware
     parallel
     obs-studio
-    postgresql
-    glxinfo
     socat
     hyprland
     firefox
     eww
     anki
-    linux-firmware
-    intel-gpu-tools
-    libva-utils
-    alsa-utils
-  ];
+    vscodium
+    unixtools.xxd
+    cudaPackages_11.cudatoolkit
+
+    hcxdumptool
+    hcxtools
+    hashcat
+  ] ++ (with upkgs; [
+    discord
+  ]);
 
   fonts.packages = with pkgs; [
     jetbrains-mono
@@ -248,7 +236,7 @@
   };
 
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.powerOnBoot = false;
   services.blueman.enable = true;
   hardware.enableAllFirmware = true;
 
@@ -262,8 +250,21 @@
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  # services.openvpn.servers = {
+  #   officeVPN  = { config = '' config /home/schiffer/.config/uit-student.ovpn ''; };
+  # };
+
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      PasswordAuthentication = true;
+      AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+      UseDns = true;
+      X11Forwarding = false;
+      PermitRootLogin = "no"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+    };
+  };
   services.tlp.enable = true;
 
   # Open ports in the firewall.

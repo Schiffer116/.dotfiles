@@ -13,6 +13,7 @@ export DISABLE_QT5_COMPAT=1
 
 export PATH=$PATH:$XDG_DATA_HOME/cargo/bin
 export PATH=$PATH:$HOME/scripts
+export PATH=$PATH:$XDG_DATA_HOME/go/bin
 
 export DIRENV_LOG_FORMAT=""
 

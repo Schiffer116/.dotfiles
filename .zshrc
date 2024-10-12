@@ -49,6 +49,7 @@ bindkey -s "^f" 'tmux-session.sh^M'
 bindkey -s "^r" 'rebuild.sh^M'
 
 alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
+alias code='codium'
 
 # nvim-dap
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'

@@ -62,9 +62,9 @@
 (defvar full_time false)
 
 (defwidget clock []
-  (eventbox :onclick "eww open --toggle calendar"
-            :onhover "eww update full_time=true"
-            :onhoverlost "eww update full_time=false"
+  (eventbox :onclick "${EWW_CMD} open --toggle calendar"
+            :onhover "${EWW_CMD} update full_time=true"
+            :onhoverlost "${EWW_CMD} update full_time=false"
             :cursor "pointer"
     (box :class "clock"
          :space-evenly false
@@ -93,15 +93,16 @@
                "volume.sh --get-mute")
 
 (defwidget sound [volume]
-  (eventbox :onhover "eww update show_sound_slider=true"
-            :onhoverlost "eww update show_sound_slider=false"
+  (eventbox :onhover "${EWW_CMD} update show_sound_slider=true"
+            :onhoverlost "${EWW_CMD} update show_sound_slider=false"
             :onclick "pavucontrol"
             :onrightclick "blueman-manager"
             :cursor "pointer"
     (box :space-evenly false
-      (label :class "sound" :text {muted ? "󰝟" :
-        volume < 34 ? "" :
-          volume < 67 ? "" : ""})
+      (label :class "sound"
+             :text { muted ? "󰝟" :
+                     volume < 34 ? "" :
+                     volume < 67 ? "" : "" })
       (revealer :transition "slideleft"
                 :reveal show_sound_slider
                 :duration "300ms"
@@ -117,18 +118,19 @@
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
 
 (defwidget network [?role]
-  (label :class "network ${role}" :text {network_strength == "" ? "󰤮" :
-    network_strength < 26 ? "󰤟" :
-      network_strength < 51 ? "󰤢" :
-        network_strength < 76 ? "󰤥" : "󰤨"}))
+  (label :class "network ${role}"
+         :text { network_strength == "" ? "󰤮" :
+                 network_strength < 26 ? "󰤟" :
+                 network_strength < 51 ? "󰤢" :
+                 network_strength < 76 ? "󰤥" : "󰤨" }))
 
 (defpoll brightness :interval "3600s"
                     "brightness.sh get")
 (defvar show_light_slider false)
 (defwidget backlight [brightness]
-  (eventbox :onhover "eww update show_light_slider=true"
+  (eventbox :onhover "${EWW_CMD} update show_light_slider=true"
             :cursor "pointer"
-            :onhoverlost "eww update show_light_slider=false"
+            :onhoverlost "${EWW_CMD} update show_light_slider=false"
     (box :space-evenly false
       (label :class "backlight"
              :text { brightness < 26 ? "󰃞" :
@@ -147,8 +149,8 @@
 (defvar color_temp 1000)
 (defvar show_temp_slider false)
 (defwidget temp []
-  (eventbox :onhover "eww update show_temp_slider=true"
-            :onhoverlost "eww update show_temp_slider=false"
+  (eventbox :onhover "${EWW_CMD} update show_temp_slider=true"
+            :onhoverlost "${EWW_CMD} update show_temp_slider=false"
     (box :space-evenly false
       (label :class "color-temp"
              :text { color_temp < 2000 ? "" :
@@ -163,21 +165,21 @@
                :max 6500
                :value color_temp
                :orientation "h"
-               :onchange "pkill gammastep; eww update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K &")))))
+               :onchange "pkill gammastep; ${EWW_CMD} update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K &")))))
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')
 (defvar cur_lang "E")
 (defwidget language []
   (eventbox :cursor "pointer"
-            :onhover "eww update show_all_lang=true"
-            :onhoverlost "eww update show_all_lang=false"
+            :onhover "${EWW_CMD} update show_all_lang=true"
+            :onhoverlost "${EWW_CMD} update show_all_lang=false"
     (box :space-evenly false
       (for language in all_lang
         (revealer :transition "slideleft"
                   :reveal {cur_lang == language || show_all_lang}
                   :duration "300ms"
             (button :class "lang-button"
-                    :onclick "language.sh set ${language}; eww update show_all_lang=false"
+                    :onclick "language.sh set ${language}; ${EWW_CMD} update show_all_lang=false"
               (label :class "language"
                      :text {language})))))))

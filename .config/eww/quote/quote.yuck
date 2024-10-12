@@ -2,7 +2,7 @@
   :stacking "bg"
 
   :monitor 0
-  :geometry (geometry 
+  :geometry (geometry
     :x 50
     :y 40
     :width "20%"
@@ -13,6 +13,8 @@
 (defpoll weather_info :interval "600s"
                       "weather.sh")
 
+(defvar wallpaper_color "")
+
 (defwidget quote []
   (box :space-evenly false
        :halign "start"
@@ -22,6 +24,7 @@
          :orientation "v"
       (overlay :vexpand true
         (label :class "fancy-weekday"
+               :style "color: ${wallpaper_color}"
                :xalign 0
                :yalign 0
                :text {formattime(EWW_TIME, "%A")})
@@ -29,22 +32,22 @@
                :xalign 0
                :yalign 0
                :text {formattime(EWW_TIME, "%d")})
-        (label :class "fancy-suffix" 
+        (label :class "fancy-suffix"
                :xalign 0
                :yalign 0
-               :text {substring(formattime(EWW_TIME, "%d"), 1, 1) == "1" ? "st" : 
+               :text {substring(formattime(EWW_TIME, "%d"), 1, 1) == "1" ? "st" :
                         substring(formattime(EWW_TIME, "%d"), 1, 1) == "2" ? "nd" :
                           substring(formattime(EWW_TIME, "%d"), 1, 1) == "3" ? "rd" : "th"}))
-      (label :class "fancy-time" 
+      (label :class "fancy-time"
              :xalign 0
              :text '────────────  ${formattime(EWW_TIME, "%I:%M %p")}'))
       ;; (revealer :reveal {weather_info != ""}
       ;;           :transition "slideup"
       ;;           :duration "300ms"
       ;;     (box :space-evenly false
-      ;;       (label :class "weather-icon" 
+      ;;       (label :class "weather-icon"
       ;;              :text {replace(jq(weather_info, '.icon'), '"', '')})
-      ;;       (label :class "weather-temp" 
+      ;;       (label :class "weather-temp"
       ;;              :text `${replace(jq(weather_info, '.temp'), '"', '')}°C ${replace(jq(weather_info, '.condition'), '"', '')}`)))
       (label :class "quote-content"
              :xalign 1

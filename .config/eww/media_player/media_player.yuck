@@ -1,37 +1,46 @@
 (deflisten song_title "playerctl metadata title --follow")
 (deflisten cover_art "playerctl metadata mpris:artUrl --follow")
-(deflisten media_status "playerctl metadata --format '{{ status }}' --follow")
+(deflisten player_status "playerctl status --follow")
 (deflisten artist "playerctl metadata artist --follow")
 
-(defpoll song_color :interval "3600s"
-                    :run-while false
-                    "dom-color.sh &")
+(defvar show_media_buttons false)
 
-(defpoll song_length :interval "3600s"
-                     :run-while false
-                     "playerctl -p spotify metadata mpris:length")
-
-(defpoll song_pos :interval "1s"
-                  :run-while false
-                  "playerctl position")
+;; (defpoll song_color :interval "3600s"
+;;                     :run-while false
+;;                     "dom-color.sh &")
+;; (defpoll song_length :interval "3600s"
+;;                      :run-while false
+;;                      "playerctl metadata mpris:length")
+;; (defpoll song_pos :interval "1s"
+;;                   :run-while false
+;;                   "playerctl position")
 
 (defwidget media_player []
-  (eventbox :onrightclick "eww open --toggle song_info"
-            :cursor "pointer"
-    (box :space-evenly false
-      (eventbox :onclick "playerctl previous"
-                :class "media-button"
-        (label :text ""))
-      (overlay
-        (button :class "cover-art"
-                :style "background-image: url('${cover_art}');")
-        (revealer :reveal { media_status == "Paused" }
-          (label :text ""))
-        (button :onclick "playerctl play-pause"))
-      (eventbox :onclick "playerctl next"
-                :class "media-button"
-        (label :text "")))))
-
+  (revealer :reveal { player_status == "Playing" || player_status == "Paused" }
+    (eventbox :onrightclick "${EWW_CMD} open --toggle song_info"
+              :onhover "${EWW_CMD} update show_media_buttons=true"
+              :onhoverlost "${EWW_CMD} update show_media_buttons=false"
+              :cursor "pointer"
+      (box :space-evenly false
+        (revealer :reveal show_media_buttons
+                  :transition "slideleft"
+          (eventbox :onclick "playerctl previous"
+                    :class "media-button"
+                    ""))
+        (overlay
+          (button :class "cover-art"
+                  :style "background-image: url('${cover_art}');")
+          (revealer :reveal { player_status == "Paused" }
+            (box :class "cover-art"
+                 :style "background-color: rgba(0, 0, 0, 0.3);"))
+          (revealer :reveal { player_status == "Paused" }
+            (label :text ""))
+          (button :onclick "playerctl play-pause"))
+        (revealer :reveal show_media_buttons
+                  :transition "slideright"
+          (eventbox :onclick "playerctl next"
+                    :class "media-button"
+                    ""))))))
 
 (defwindow song_info
   :stacking "fg"
