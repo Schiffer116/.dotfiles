@@ -1,14 +1,7 @@
 #!/usr/bin/env sh
 
 get_volume() {
-	volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d " " -f2 | tr -d '.' | sed 's/^0\{1,2\}//')
-	echo "$volume"
-}
-
-set_volume() {
-    wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1%"
-    eww update volume="$(get_volume)"
-    notify_user
+	wpctl get-volume @DEFAULT_SINK@ | sed -E 's/[^0-9]//g'
 }
 
 notify_user() {
@@ -19,53 +12,28 @@ notify_user() {
     fi
 }
 
+set_volume() {
+    toggle_mute 0
+    wpctl set-volume @DEFAULT_SINK@ "$1" --limit=1.0
+    eww update volume="$(get_volume)"
+    notify_user
+}
+
 is_muted() {
-    muted=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED)
-    if [ "$muted" = "MUTED" ]; then
-        echo true
-    else
-        echo false
-    fi
-}
-
-inc_volume() {
-    if [ "$(is_muted)" = "true" ]; then
-        toggle_mute
-    fi
-    cur_volume="$(get_volume)"
-    new_volume="$(( cur_volume / 5 * 5 + 5 ))"
-    if [ "$new_volume" -gt 100 ]; then
-        new_volume=100
-    fi
-    set_volume $new_volume
-}
-
-dec_volume() {
-    if [ "$(is_muted)" = "true" ]; then
-        toggle_mute
-    fi
-    cur_volume="$(get_volume)"
-    new_volume="$(( cur_volume / 5 * 5 - 5 ))"
-    set_volume $new_volume
+    wpctl get-volume @DEFAULT_SINK@ | sed -Ee 's/.*]$/true/' -e 's/.*[0-9]$/false/'
 }
 
 toggle_mute() {
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ "$1"
     eww update muted="$(is_muted)"
 }
-
-mute() {
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ 1
-    eww update muted="$(is_muted)"
-}
-
 
 case $1 in
-    --get) get_volume ;;
-    --get-mute) is_muted ;;
-    --set) set_volume "$2" ;;
-    --inc) inc_volume ;;
-    --dec) dec_volume ;;
-    --toggle) toggle_mute ;;
-    mute) mute ;;
+    get) get_volume ;;
+    set) set_volume "$2%" ;;
+    inc) set_volume 5%+ ;;
+    dec) set_volume 5%- ;;
+    is-muted) is_muted ;;
+    toggle) toggle_mute toggle ;;
+    mute) toggle_mute 1 ;;
 esac

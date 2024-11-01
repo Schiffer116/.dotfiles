@@ -1,6 +1,0 @@
-pane	eww	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/.config/eww	1	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-ruby'
-pane	scripts	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/scripts	0	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-ruby'
-pane	scripts	1	1	:*	1	nixos	:/home/schiffer/.dotfiles/scripts	1	zsh	:
-window	eww	1	:nvim	1	:*	c2dd,210x46,0,0,0	:
-window	scripts	1	:zsh	1	:*	b76e,210x46,0,0[210x33,0,0,2,210x12,0,34,4]	:
-state	eww	scripts

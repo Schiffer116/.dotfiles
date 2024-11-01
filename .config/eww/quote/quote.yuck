@@ -10,11 +10,6 @@
     :anchor "bottom left")
   (quote))
 
-(defpoll weather_info :interval "600s"
-                      "weather.sh")
-
-(defvar wallpaper_color "")
-
 (defwidget quote []
   (box :space-evenly false
        :halign "start"
@@ -24,7 +19,6 @@
          :orientation "v"
       (overlay :vexpand true
         (label :class "fancy-weekday"
-               :style "color: ${wallpaper_color}"
                :xalign 0
                :yalign 0
                :text {formattime(EWW_TIME, "%A")})
@@ -41,14 +35,6 @@
       (label :class "fancy-time"
              :xalign 0
              :text '────────────  ${formattime(EWW_TIME, "%I:%M %p")}'))
-      ;; (revealer :reveal {weather_info != ""}
-      ;;           :transition "slideup"
-      ;;           :duration "300ms"
-      ;;     (box :space-evenly false
-      ;;       (label :class "weather-icon"
-      ;;              :text {replace(jq(weather_info, '.icon'), '"', '')})
-      ;;       (label :class "weather-temp"
-      ;;              :text `${replace(jq(weather_info, '.temp'), '"', '')}°C ${replace(jq(weather_info, '.condition'), '"', '')}`)))
       (label :class "quote-content"
              :xalign 1
              :text "Have a nice day!")))

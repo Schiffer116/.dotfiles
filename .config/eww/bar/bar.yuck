@@ -1,8 +1,9 @@
 (include "./bar/widgets.yuck")
 
-(defwindow bar
+(defwindow bar ;; [focused]
   :stacking "bg"
   :exclusive true
+  ;; :focusable focused
 
   :monitor 0
   :geometry (geometry

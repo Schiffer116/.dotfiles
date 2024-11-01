@@ -70,7 +70,12 @@
       (label :text {network_name}
              :xalign 0)
       (label :text "Strength: ${network_strength}  "
-             :xalign 0))))
+             :xalign 0)
+      (label :text "down: ${EWW_NET["wlp3s0"].NET_DOWN}  "
+             :xalign 0)
+      (label :text "Up: ${EWW_NET["wlp3s0"].NET_UP}  "
+             :xalign 0)
+      )))
 
 (defwidget battery_tooltip []
   (box :space-evenly false

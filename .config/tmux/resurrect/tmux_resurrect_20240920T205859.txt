@@ -1,8 +1,0 @@
-pane	eww	1	1	:*Z	0	nixos	:/home/schiffer/.dotfiles/.config/eww	1	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-ruby'
-pane	eww	1	1	:*Z	1	nixos	:/home/schiffer/.dotfiles/.config/eww	0	zsh	:
-pane	hypr	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/.config/hypr	1	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-ruby'
-pane	scripts	1	1	:*	0	nixos	:/home/schiffer/.dotfiles/scripts	1	nvim	:/run/current-system/sw/bin/nvim --cmd lua vim.g.loaded_node_provider=0;vim.g.loaded_perl_provider=0;vim.g.loaded_python_provider=0;vim.g.python3_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-python3';vim.g.ruby_host_prog='/nix/store/cbyxfcpvwx8r11xdnanhq5wiyjjflkks-neovim-0.9.5/bin/nvim-ruby'
-window	eww	1	:nvim	1	:*Z	5e6a,210x46,0,0[210x34,0,0,0,210x11,0,35,3]	:
-window	hypr	1	:nvim	1	:*	c2e2,210x46,0,0,5	:
-window	scripts	1	:nvim	1	:*	c2df,210x46,0,0,2	:
-state	eww	hypr

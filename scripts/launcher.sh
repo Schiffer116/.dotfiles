@@ -2,12 +2,10 @@
 
 open() {
     hyprctl dispatch submap launcher &
-    eww open launcher
 }
 
 close() {
     hyprctl dispatch submap reset &
-    eww close launcher &
     refresh_app
 }
 
@@ -16,7 +14,8 @@ refresh_app() {
 }
 
 all_apps() {
-    grep -EL '^(Terminal=true|NoDisplay=true)' /nix/store/*/share/applications/*.desktop | \
+    # grep -EL '^(Terminal=true|NoDisplay=true)' /nix/store/*/share/applications/*.desktop | \
+    grep -EL '^(Terminal=true|NoDisplay=true)' /run/current-system/sw/share/applications | \
         xargs grep -h '^Name=' | \
         sed -Ee 's/^Name=//' | \
         sort | uniq
@@ -29,8 +28,6 @@ to_json() {
 case $1 in
     open) open ;;
     close) close ;;
-    # cache) eww set all_apps="$(all_apps | to_json)" ;;
-    # reset) eww set app_json="$(eww get all_apps)" ;;
     next)
         length=$(eww get app_json | jq 'length')
         index=$(eww get selected_app_index)
@@ -49,7 +46,7 @@ case $1 in
             eww update selected_app_index=$(( index - 1 ))
         fi
         ;;
-    fuzzy) all_apps | fzf -f "$2" | to_json ;;
+    fuzzy) all_apps | fzf -f "$2" | to_json;;
     launch)
         clicked=$2
         if [ -z "$clicked" ]; then

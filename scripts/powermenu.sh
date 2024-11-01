@@ -26,6 +26,7 @@ case $1 in
             2)
                 close
                 volume.sh mute
+                playerctl pause
                 systemctl suspend
                 ;;
             3)

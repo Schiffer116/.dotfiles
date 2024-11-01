@@ -7,8 +7,8 @@
     (label :class "os-logo"
            :text "")))
 
-(defvar ws_cur 1)
-(defvar ws_prv 1)
+(deflisten ws_cur "hyprctl activeworkspace -j | jq '.id'")
+(deflisten ws_prv "hyprctl activeworkspace -j | jq '.id'")
 
 (defwidget workspace [number]
     (eventbox :class "workspace"
@@ -87,16 +87,14 @@
                  EWW_BATTERY.BAT0.capacity <= 80 ? "" : "" }))
 
 (defvar show_sound_slider false)
-(defpoll volume :interval "3600s"
-                "volume.sh --get")
-(defpoll muted :interval "3600s"
-               "volume.sh --get-mute")
+(deflisten volume "volume.sh get")
+(deflisten muted "volume.sh is-muted")
 
 (defwidget sound [volume]
   (eventbox :onhover "${EWW_CMD} update show_sound_slider=true"
             :onhoverlost "${EWW_CMD} update show_sound_slider=false"
-            :onclick "pavucontrol"
-            :onrightclick "blueman-manager"
+            :onclick "pavucontrol &"
+            :onrightclick "blueman-manager &"
             :cursor "pointer"
     (box :space-evenly false
       (label :class "sound"
@@ -111,7 +109,7 @@
                :max 101
                :value volume
                :orientation "h"
-               :onchange "volume.sh --set {}")))))
+               :onchange "volume.sh set {}")))))
 
 (defpoll network_strength :interval "5s"
                           :initial "N/A"
@@ -124,8 +122,7 @@
                  network_strength < 51 ? "󰤢" :
                  network_strength < 76 ? "󰤥" : "󰤨" }))
 
-(defpoll brightness :interval "3600s"
-                    "brightness.sh get")
+(deflisten brightness "brightness.sh get")
 (defvar show_light_slider false)
 (defwidget backlight [brightness]
   (eventbox :onhover "${EWW_CMD} update show_light_slider=true"
@@ -144,7 +141,7 @@
                :max 101
                :value brightness
                :orientation "h"
-               :onchange "brightness.sh set {}")))))
+               :onchange "brightness.sh set {}%")))))
 
 (defvar color_temp 1000)
 (defvar show_temp_slider false)

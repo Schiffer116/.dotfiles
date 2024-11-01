@@ -1,78 +1,124 @@
+zmodload zsh/complist
+
+# +---------+
+# | options |
+# +---------+
+
+HISTSIZE=100
+SAVEHIST=100
+HISTFILE=$HOME/.cache/zsh/history
+# HISTCONTROL='ignoreboth:erasedups'
+
 setopt HIST_IGNORE_ALL_DUPS
-unsetopt beep
-zstyle :compinstall filename '/home/schiffer/.zshrc'
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 
-# completion
-autoload -Uz compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+# +------------+
+# | completion |
+# +------------+
 
-# vi mode
+autoload -U compinit
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' menu select
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+compinit
+_comp_options+=(globdots)
+
+# +----+
+# | vi |
+# +----+
+
 bindkey -v
 export KEYTIMEOUT=1
 
-# colors
-autoload -U colors && colors
+# cursor shape
+cursor_mode() {
+    cursor_block='\e[2 q'
+    cursor_beam='\e[6 q'
 
-# History in cache directory:
-HISTSIZE=100
-SAVEHIST=100
-HISTFILE=~/.cache/zsh/history
+    function zle-keymap-select {
+        if [[ ${KEYMAP} == vicmd ]] ||
+            [[ $1 = 'block' ]]; then
+            echo -ne $cursor_block
+        elif [[ ${KEYMAP} == main ]] ||
+            [[ ${KEYMAP} == viins ]] ||
+            [[ ${KEYMAP} = '' ]] ||
+            [[ $1 = 'beam' ]]; then
+            echo -ne $cursor_beam
+        fi
+    }
 
-# Basic auto/tab complete:
-autoload -U compinit
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots)		# Include hidden files.
+    zle-line-init() {
+        echo -ne $cursor_beam
+    }
 
-# Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
+    zle -N zle-keymap-select
+    zle -N zle-line-init
 }
-zle -N zle-keymap-select
-zle-line-init() {
-    echo -ne "\e[5 q"
-}
-zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+cursor_mode
 
-bindkey -s "^f" 'tmux-session.sh^M'
-bindkey -s "^r" 'rebuild.sh^M'
+# menu selection
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+# text objects
+autoload -Uz select-bracketed select-quoted
+zle -N select-quoted
+zle -N select-bracketed
+for km in viopp visual; do
+  bindkey -M $km -- '-' vi-up-line-or-history
+  for c in {a,i}${(s..)^:-\'\"\`\|,./:;=+@}; do
+    bindkey -M $km $c select-quoted
+  done
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $km $c select-bracketed
+  done
+done
+
+
+# +----------+
+# | keybinds |
+# +----------+
+
+bindkey -s '^f' 'tmux-session.sh^M'
+bindkey -s '^r' 'rebuild.sh^M'
+
+# +---------+
+# | aliases |
+# +---------+
 
 alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
 alias code='codium'
 
-# nvim-dap
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
-
-# camera
 alias camera='mpv /dev/video0 --profile=low-latency --untimed'
 
-# image preview
 alias icat='kitty +kitten icat'
 
 alias ls='exa --color=always --icons'
 alias tree='exa --tree --color=always --icons'
 
 alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
 alias du='du -h'
 alias df='df -h'
 
-alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
-
-#check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
+# +------------+
+# | shellhooks |
+# +------------+
 
 eval "$(starship init zsh)"
 eval "$(direnv hook $SHELL)"
+
+if [ -z $DISPLAY ]; then
+    Hyprland
+fi

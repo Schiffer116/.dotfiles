@@ -1,24 +1,23 @@
 (defwindow launcher
-  :stacking "overlay"
+  :stacking "fg"
   :focusable true
 
   :monitor 0
   :geometry (geometry
-    :width 470
-    :height 450
-    :anchor "center")
-  (launcher))
+    :width "100%"
+    :height 40
+    :anchor "top center")
+  (input_box))
 
 (defvar all_apps "")
-(defpoll app_json :interval "3600s"
-                  "launcher.sh fuzzy")
+(deflisten app_json "launcher.sh fuzzy")
 
 (defvar selected_app_index 0)
 
-(defwidget launcher []
+(defwidget input_box []
   (box :class "launcher-widget"
        :space-evenly false
-       :orientation "v"
+       :orientation "h"
        :spacing 15
       (box :class "search-box"
         (box :class "search-bar"
@@ -29,14 +28,18 @@
                  :onchange `eww update app_json="$(launcher.sh fuzzy {})"`
                  :timeout "2000ms"
                  :onaccept "launcher.sh launch"
-                 :hexpand true)))
-      (scroll :vexpand true
-        (box :spacing 10
-             :space-evenly false
-             :orientation "v"
-          (for entry in app_json
-            (eventbox :class "app-item-event"
-                      :onclick "launcher.sh launch '${entry}'"
-              (label :class "app-item ${app_json?.[selected_app_index] == entry ? 'app-item-active' : ''}"
-                     :xalign 0
-                     :text {entry})))))))
+                 :hexpand true)))))
+
+(defwidget candidate_list []
+  (box :hscroll true
+        :hexpand true
+        :space-evenly false
+  ;; (scroll :spacing 10
+  ;;         :space-evenly false
+  ;;         :orientation "h"
+    (for entry in app_json
+      (eventbox :class "app-item-event"
+                :onclick "launcher.sh launch '${entry}'"
+        (label :class "app-item ${app_json?.[selected_app_index] == entry ? 'app-item-active' : ''}"
+               :xalign 0
+               :text {entry})))))

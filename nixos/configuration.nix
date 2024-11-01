@@ -98,12 +98,15 @@
   nix.settings.auto-optimise-store = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = with pkgs; [
-  # ];
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    openssl
+  ];
 
   environment.systemPackages = with pkgs; [
     neovim
+    vim
     lua
     kitty
     hyprpaper
@@ -112,7 +115,6 @@
     git
     gcc
     gnumake
-    # stdenv.cc.cc.lib
     brightnessctl
     wget
     eza
@@ -149,19 +151,25 @@
     parallel
     obs-studio
     socat
-    hyprland
-    firefox
-    eww
     anki
     vscodium
     unixtools.xxd
     cudaPackages_11.cudatoolkit
+    openvpn
+    eww
+    powertop
+    obsidian
+    google-chrome
 
     hcxdumptool
     hcxtools
     hashcat
   ] ++ (with upkgs; [
     discord
+    firefox
+    (pkgs.hyprland.override {
+      legacyRenderer = false;
+    })
   ]);
 
   fonts.packages = with pkgs; [
@@ -250,9 +258,10 @@
 
   # List services that you want to enable:
 
-  # services.openvpn.servers = {
-  #   officeVPN  = { config = '' config /home/schiffer/.config/uit-student.ovpn ''; };
-  # };
+  # services.openvpn.enable
+  # # services.openvpn.servers = {
+  # #   uitVPN  = { config = '' config /home/schiffer/.config/uit-student.ovpn ''; };
+  # # };
 
   services.openssh = {
     enable = true;
