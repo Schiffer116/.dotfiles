@@ -53,9 +53,6 @@
       (label :text "Available: ${round(EWW_DISK["/"].free / (1024 * 1024 * 1024), 0)}GB  "
              :xalign 0))))
 
-(defpoll network_name :interval "10s"
-                      "nmcli -t -f active,ssid dev wifi | grep yes | cut -d':' -f2")
-
 (defwidget network_tooltip []
   (box :space-evenly false
        :spacing 5
@@ -97,7 +94,7 @@
 (defwindow calendar
   :stacking "fg"
   :exclusive false
-  :focusable true
+  ;; :focusable true
   :monitor 0
   :geometry (geometry
     :x 10

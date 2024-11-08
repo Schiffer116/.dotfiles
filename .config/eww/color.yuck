@@ -1,0 +1,8 @@
+(defvar nix-blue "rgba(15, 148, 210, 1)")
+(defvar bg-color "rgba(17, 17, 27, 1)")
+(defvar bd-color "rgba(24, 24, 37, 1)")
+(defvar bg-grad-1 "rgba(30, 30, 46,  1)")
+(defvar bg-grad-2 "rgba(49, 50, 68, 1)")
+(defvar bg-grad-3 "rgba(68, 87, 109, 1)")
+(defvar bg-grad-4 "rgba(118, 138, 150, 1)")
+(defvar bg-grad-5 "rgba(147, 153, 178, 1)")

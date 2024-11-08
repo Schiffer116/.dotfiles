@@ -34,7 +34,8 @@
                           substring(formattime(EWW_TIME, "%d"), 1, 1) == "3" ? "rd" : "th"}))
       (label :class "fancy-time"
              :xalign 0
-             :text '────────────  ${formattime(EWW_TIME, "%I:%M %p")}'))
-      (label :class "quote-content"
-             :xalign 1
-             :text "Have a nice day!")))
+             :text '${substring("─────────────────", 0, strlength(formattime(EWW_TIME, "%A")) * 2 - 2)}  ${formattime(EWW_TIME, "%I:%M %p")}'))
+      ;; (label :class "quote-content"
+      ;;        :xalign 1
+      ;;        :text "Have a nice day!")
+      ))

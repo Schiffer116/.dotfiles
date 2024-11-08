@@ -3,11 +3,23 @@
 .bar {
   background-color: transparent;
   background-color: $bg-color;
-  /* border-bottom: 4px solid $bd-color; */
+  border-bottom: 3px solid $bg-grad-2;
 }
 
 .sep {
-  color: $bd-color;
+  color: $bg-grad-1;
   font-size: 20px;
   text-shadow: none;
+}
+
+.left-triangle {
+    border-right: 20px solid $bd-color;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+}
+
+.right-triangle {
+    border-left: 20px solid $bd-color;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
 }

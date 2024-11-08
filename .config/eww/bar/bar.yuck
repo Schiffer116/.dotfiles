@@ -1,14 +1,14 @@
 (include "./bar/widgets.yuck")
+(include "./color.yuck")
 
-(defwindow bar ;; [focused]
+(defwindow bar
   :stacking "bg"
   :exclusive true
-  ;; :focusable focused
 
   :monitor 0
   :geometry (geometry
     :width "100%"
-    :height 50
+    :height 40
     :anchor "top center")
   (bar))
 
@@ -21,14 +21,24 @@
 (defwidget sep []
   (label :class "sep" :text "|"))
 
+(defwidget left_triangle [fg bg]
+  (box :class "left-triangle"
+       :style "background: ${bg}; border-right: 25px solid ${fg};"))
+
+(defwidget right_triangle [fg bg]
+  (box :class "right-triangle"
+       :style "background: ${bg}; border-left: 25px solid ${fg};"))
+
 (defwidget left []
   (box :orientation "h"
        :space-evenly false
        :halign "start"
     (power)
-    (sep)
+    (right_triangle :fg nix-blue
+                    :bg bd-color)
     (workspaces)
-    (sep)
+    (right_triangle :fg bd-color
+                    :bg bg-color)
     (tooltip
       (cpu_tooltip)
       (cpu :icon ""
@@ -40,7 +50,9 @@
     (tooltip
       (disk_tooltip)
       (disk :icon ""
-            :thickness 4))))
+            :thickness 4))
+    (sep)
+    (current_window)))
 
 (defwidget center []
   (box :orientation "h" :space-evenly false :halign "center"
@@ -50,14 +62,12 @@
   (box :orientation "h" :space-evenly false :halign "end"
     (language)
     (sep)
-    (temp :temp color_temp)
     (backlight :brightness brightness)
     (sound :volume volume)
     (tooltip
       (network_tooltip)
       (network))
-    (tooltip
-      (battery_tooltip)
-      (battery))
-    (sep)
+    (battery)
+    (right_triangle :fg bg-color
+                    :bg bg-grad-1)
     (clock)))

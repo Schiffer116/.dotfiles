@@ -28,6 +28,8 @@
                     :class "media-button"
                     ""))
         (overlay
+          (box :class "cover-art"
+               :style "background-color: rgba(255, 255, 255, 1);")
           (button :class "cover-art"
                   :style "background-image: url('${cover_art}');")
           (revealer :reveal { player_status == "Paused" }

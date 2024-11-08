@@ -26,6 +26,13 @@
     (workspace :number 4)
     (workspace :number 5)))
 
+(defvar cur_win "kitty")
+(defwidget current_window []
+    (label :text cur_win
+           :truncate true
+           :limit-width 35
+           :style "margin-left: 10px"))
+
 (defwidget hardware [value icon thickness position css_class info_window]
   (eventbox :class {css_class}
     (circular-progress :class "circle ${position}"
@@ -79,90 +86,82 @@
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
 (defwidget battery [?role]
-  (label :class "battery ${role}"
-         :text { EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
-                 EWW_BATTERY.BAT0.capacity <= 20 ? "" :
-                 EWW_BATTERY.BAT0.capacity <= 40 ? "" :
-                 EWW_BATTERY.BAT0.capacity <= 60 ? "":
-                 EWW_BATTERY.BAT0.capacity <= 80 ? "" : "" }))
+  (box :space-evenly false
+       :class "pill-wrapper"
+    (label :class "battery ${role}"
+           :text { EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
+                   EWW_BATTERY.BAT0.capacity <= 20 ? "" :
+                   EWW_BATTERY.BAT0.capacity <= 40 ? "" :
+                   EWW_BATTERY.BAT0.capacity <= 60 ? "":
+                   EWW_BATTERY.BAT0.capacity <= 80 ? "" : "" })
+    (label :class "battery"
+           :style "font-size: 15px; margin-left: 0"
+           :text "${EWW_BATTERY.BAT0.capacity}%")))
 
-(defvar show_sound_slider false)
 (deflisten volume "volume.sh get")
 (deflisten muted "volume.sh is-muted")
 
 (defwidget sound [volume]
-  (eventbox :onhover "${EWW_CMD} update show_sound_slider=true"
-            :onhoverlost "${EWW_CMD} update show_sound_slider=false"
+  (eventbox :onscroll "[ {} = 'up' ] && volume.sh increase || volume.sh decrease"
             :onclick "pavucontrol &"
             :onrightclick "blueman-manager &"
             :cursor "pointer"
     (box :space-evenly false
+         :class "pill-wrapper"
       (label :class "sound"
              :text { muted ? "󰝟" :
                      volume < 34 ? "" :
                      volume < 67 ? "" : "" })
-      (revealer :transition "slideleft"
-                :reveal show_sound_slider
-                :duration "300ms"
-        (scale :class "volume-scale"
-               :min 0
-               :max 101
-               :value volume
-               :orientation "h"
-               :onchange "volume.sh set {}")))))
+      (label :class "sound"
+             :style "font-size: 15px; margin-left: 0"
+             :text "${volume}%"))))
+
+(deflisten network_name "nmcli --terse --fields 'NAME' connection show --active | head -1;
+                         nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
 
 (defpoll network_strength :interval "5s"
                           :initial "N/A"
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
 
 (defwidget network [?role]
+  (box :space-evenly false
+       :class "pill-wrapper"
   (label :class "network ${role}"
          :text { network_strength == "" ? "󰤮" :
                  network_strength < 26 ? "󰤟" :
                  network_strength < 51 ? "󰤢" :
-                 network_strength < 76 ? "󰤥" : "󰤨" }))
+                 network_strength < 76 ? "󰤥" : "󰤨" })
+  (label :class "network"
+         :style "font-size: 15px; margin-left: 0"
+         :text network_name)))
 
 (deflisten brightness "brightness.sh get")
-(defvar show_light_slider false)
 (defwidget backlight [brightness]
-  (eventbox :onhover "${EWW_CMD} update show_light_slider=true"
-            :cursor "pointer"
-            :onhoverlost "${EWW_CMD} update show_light_slider=false"
+  (eventbox :onscroll "[ {} = 'up' ] && brightness.sh increase || brightness.sh decrease"
     (box :space-evenly false
+         :class "pill-wrapper"
       (label :class "backlight"
              :text { brightness < 26 ? "󰃞" :
                      brightness < 51 ? "󰃝" :
                      brightness < 76 ? "󰃟" : "󰃠" })
-      (revealer :transition "slideleft"
-                :reveal show_light_slider
-                :duration "300ms"
-        (scale :class "backlight-scale"
-               :min 1
-               :max 101
-               :value brightness
-               :orientation "h"
-               :onchange "brightness.sh set {}%")))))
+      (label :class "backlight"
+             :style "font-size: 15px; margin-left: 0"
+             :text "${brightness}%"))))
 
 (defvar color_temp 1000)
-(defvar show_temp_slider false)
 (defwidget temp []
   (eventbox :onhover "${EWW_CMD} update show_temp_slider=true"
             :onhoverlost "${EWW_CMD} update show_temp_slider=false"
     (box :space-evenly false
+         :class "pill-wrapper"
       (label :class "color-temp"
              :text { color_temp < 2000 ? "" :
                      color_temp < 3000 ? "" :
                      color_temp < 4000 ? "" :
                      color_temp < 5000 ? "" : "" })
-      (revealer :transition "slideleft"
-                :reveal show_temp_slider
-                :duration "300ms"
-        (scale :class "temp-scale"
-               :min 1000
-               :max 6500
-               :value color_temp
-               :orientation "h"
-               :onchange "pkill gammastep; ${EWW_CMD} update color_temp={}; gammastep -O $(( 6500 - {} + 1000 ))K &")))))
+      (label :class "color-temp"
+             :style "font-size: 15px; margin-left: 0"
+             :text "${color_temp}"))))
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')

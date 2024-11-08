@@ -26,11 +26,12 @@ tooltip {
 
 .os-logo {
   font-size: 25px;
-  margin: 11px 10px 11px 15px;
+  margin: 0 0 0 10px;
 }
 
 .power-event-box {
-  color: rgba(15, 148, 210, 1);
+  color: $bd-color;
+  background-color: rgba(15, 148, 210, 1);
   transition: color 500ms;
 }
 
@@ -39,11 +40,12 @@ tooltip {
 }
 
 .workspaces {
-  margin: 0 5px;
+  background-color: $bd-color;
+  padding: 5px;
 }
 
 .workspace {
-  color: $bd-color;
+  color: $bg-grad-3;
   transition: color 500ms;
 }
 
@@ -126,6 +128,14 @@ trough {
   background-color: $bg-color;
 }
 
+.pill-wrapper {
+    margin: 5px 6px;
+    padding: 0 5px;
+    background-color: rgba(9, 9, 14, 1);
+    /* background-color: $bd-color; */
+    border-radius: 20px;
+}
+
 .backlight {
   color: rgba(238, 212, 159, 1);
   font-size: 20px;
@@ -201,9 +211,9 @@ trough {
 }
 
 .clock {
-  color: white;
+  background-color: $bg-grad-1;
+  padding: 0 10px;
   font-family: Dosis;
-  margin: 0 20px 0 10px;
 }
 
 .clock label {

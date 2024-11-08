@@ -154,17 +154,20 @@
     anki
     vscodium
     unixtools.xxd
-    cudaPackages_11.cudatoolkit
+    # cudaPackages_11.cudatoolkit
+    # cudatoolkit
     openvpn
     eww
     powertop
     obsidian
-    google-chrome
+    yazi
 
-    hcxdumptool
-    hcxtools
-    hashcat
+
+    # hcxdumptool
+    # hcxtools
+    # hashcat
   ] ++ (with upkgs; [
+    # zed-editor
     discord
     firefox
     (pkgs.hyprland.override {

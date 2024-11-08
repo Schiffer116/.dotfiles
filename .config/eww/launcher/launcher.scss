@@ -2,36 +2,29 @@
 
 .launcher {
   color: white;
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 20px;
-  /* padding: 20px; */
+  background-color: $bg-color;
+  border-top: 4px solid $bg-grad-2;
 }
 
 .launcher-widget {
   background-color: $bg-color;
-  /* box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1); */
-  /* border-radius: 20px; */
-  /* margin: 25px; */
-  /* padding: 20px; */
 }
 
 .search-icon {
   background-color: $bg-color;
-  /* border-radius: 20px; */
-  margin-right: 15px;
-  padding: 15px;
+  padding: 0 15px;
 }
 
 .search-box {
-  /* background-image: url('./launcher/hand.png'); */
   background-position: center;
   background-size: cover;
-  border-radius: 15px;
+
 }
 
 .search-input {
   color: white;
   background-color: $bg-color;
+  border-radius: 0;
 }
 
 .search-bar {
@@ -39,17 +32,17 @@
 }
 
 .app-item-event {
-  background-color: $bd-color;
-  border-radius: 10px;
+  background-color: $bg-grad-1;
   transition: background-color 200ms;
+  border-left: 1px solid $bg-grad-3;
+  border-right: 1px solid $bg-grad-3;
 }
 
 .app-item {
-  padding: 10px;
+  padding: 0 8px;
 }
 
 .app-item-event:hover,
 .app-item-active {
-  background-color: rgba(75, 72, 85, 1);
-  border-radius: 10px;
+    border-bottom: 3px solid $pink;
 }
