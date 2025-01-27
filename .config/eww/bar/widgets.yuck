@@ -5,33 +5,34 @@
             :cursor "pointer"
             :onclick "powermenu.sh open"
     (label :class "os-logo"
-           :text "")))
+           :text "󰣇")))
 
 (deflisten ws_cur "hyprctl activeworkspace -j | jq '.id'")
 (deflisten ws_prv "hyprctl activeworkspace -j | jq '.id'")
 
-(defwidget workspace [number]
+(defwidget workspace [number icon]
     (eventbox :class "workspace"
               :cursor "pointer"
               :onclick "hyprctl dispatch workspace ${number}"
     (box :space-evenly false
-      (label :text {number == ws_cur ? "" : ""}
-             :class "workspace-label${number == ws_cur || number == ws_prv ? '-active' : ''}"))))
+      (label :text icon
+             :class "workspace-label workspace-label${number == ws_cur ? '-active' : number == ws_prv ? '-previous' : ''}"))))
 
 (defwidget workspaces []
   (box :class "workspaces"
-    (workspace :number 1)
-    (workspace :number 2)
-    (workspace :number 3)
-    (workspace :number 4)
-    (workspace :number 5)))
+       :spacing 5
+    (workspace :number 1 :icon "󰈹")
+    (workspace :number 2 :icon "")
+    (workspace :number 3 :icon "")
+    (workspace :number 4 :icon "")
+    (workspace :number 5 :icon "")))
 
 (defvar cur_win "kitty")
 (defwidget current_window []
     (label :text cur_win
            :truncate true
            :limit-width 35
-           :style "margin-left: 10px"))
+           :style "margin-left: 10px; color: white;"))
 
 (defwidget hardware [value icon thickness position css_class info_window]
   (eventbox :class {css_class}
@@ -148,10 +149,10 @@
              :style "font-size: 15px; margin-left: 0"
              :text "${brightness}%"))))
 
-(defvar color_temp 1000)
+
+(defvar color_temp 6500)
 (defwidget temp []
-  (eventbox :onhover "${EWW_CMD} update show_temp_slider=true"
-            :onhoverlost "${EWW_CMD} update show_temp_slider=false"
+  (eventbox :onscroll "[ {} = 'up' ] && gammastep.sh increase || gammstep.sh decrease"
     (box :space-evenly false
          :class "pill-wrapper"
       (label :class "color-temp"
@@ -161,7 +162,7 @@
                      color_temp < 5000 ? "" : "" })
       (label :class "color-temp"
              :style "font-size: 15px; margin-left: 0"
-             :text "${color_temp}"))))
+             :text "${color_temp}K"))))
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')

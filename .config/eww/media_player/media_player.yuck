@@ -36,7 +36,8 @@
             (box :class "cover-art"
                  :style "background-color: rgba(0, 0, 0, 0.3);"))
           (revealer :reveal { player_status == "Paused" }
-            (label :text ""))
+            (label :text ""
+                    :style "color: white"))
           (button :onclick "playerctl play-pause"))
         (revealer :reveal show_media_buttons
                   :transition "slideright"

@@ -97,6 +97,7 @@ bindkey -s '^r' 'rebuild.sh^M'
 
 alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
 alias code='codium'
+alias anki='anki --no-sandbox'
 
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
 alias camera='mpv /dev/video0 --profile=low-latency --untimed'
@@ -107,8 +108,15 @@ alias ls='exa --color=always --icons'
 alias tree='exa --tree --color=always --icons'
 
 alias grep='grep --color=auto'
+
 alias du='du -h'
 alias df='df -h'
+
+# history-substring
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# alias less='less --raw-control-chars --color=always'
 
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
@@ -122,3 +130,23 @@ eval "$(direnv hook $SHELL)"
 if [ -z $DISPLAY ]; then
     Hyprland
 fi
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/schiffer/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/schiffer/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/schiffer/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/schiffer/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<

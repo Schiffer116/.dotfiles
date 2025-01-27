@@ -25,6 +25,7 @@ case $1 in
             1) systemctl reboot ;;
             2)
                 close
+                # notify-send "still running experiment"
                 volume.sh mute
                 playerctl pause
                 systemctl suspend

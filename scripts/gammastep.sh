@@ -6,24 +6,30 @@ get_temp() {
 
 set_temp() {
     pkill gammastep
-    gammastep -O $(( 6500 - $1 + 1000 ))
+    gammastep -O "$1"
     eww update color_temp="$1"
     notify_user
 }
 
-notify_user() {
-    eww update show_temp_slider=true
-    sleep 2
-    if ! pgrep -f "$0" | grep -v $$; then
-        eww update show_temp_slider=false
+decrease_temp() {
+    cur_temmp=$(get_temp)
+    if [ "$cur_temmp" -lt 6500 ]; then
+        after=$(( cur_temmp - 100))
+        set_temp "$after"
     fi
 }
 
 increase_temp() {
-    cur_temmp=$(get_brightness)
-    if [ "$cur_temmp" -lt 6500 ]; then
-        after=$(( cur_temmp / 5 * 5 + 5 ))
-        set_brightness "$after"
+    cur_temmp=$(get_temp)
+    if [ "$cur_temmp" -gt 1000 ]; then
+        after=$(( cur_temmp + 100))
+        set_temp "$after"
     fi
 }
 
+case $1 in
+    get) get_tegmp ;;
+    set) set_temp "$2" ;;
+    increase) increase_temp ;;
+    decrease) decrease_temp ;;
+esac

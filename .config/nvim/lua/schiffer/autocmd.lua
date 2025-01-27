@@ -1,10 +1,10 @@
-vim.api.nvim_create_autocmd('BufWritePre', {
-    desc = 'automatically compile tex',
-    pattern = { "*.tex" },
-    callback = function(_)
-        vim.cmd("!vim-tex.sh " .. vim.fn.expand("%<"))
-    end,
-})
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--     desc = 'automatically compile tex',
+--     pattern = { "*.tex" },
+--     callback = function(_)
+--         vim.cmd("!vim-tex.sh " .. vim.fn.expand("%<"))
+--     end,
+-- })
 
 vim.api.nvim_create_autocmd('BufWritePre', {
     desc = 'delete trailing whitespaces',

@@ -1,1 +1,7 @@
 .config/tmux/resurrect
+
+.mozilla/*
+!.mozilla/firefox/schiffer/chrome/userChrome.css
+
+Pictures/*
+!Pictures/bg

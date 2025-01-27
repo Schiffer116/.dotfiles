@@ -7,7 +7,7 @@
 @import "./media_player/media_player.scss";
 
 * {
-  font-family: "JetBrains Mono ExtraBold", "Symbols Nerd Font Mono", "Source Han Sans JP Heavy";
+  font-family: "JetBrains Mono ExtraBold"; /* , "Symbols Nerd Font Mono", "Source Han Sans JP Heavy"; */
   font-size: 16px;
 }
 
@@ -25,8 +25,9 @@ tooltip {
 }
 
 .os-logo {
-  font-size: 25px;
+  font-size: 23px;
   margin: 0 0 0 10px;
+  text-shadow: 0 0 4px $bg-grad-3;
 }
 
 .power-event-box {
@@ -47,6 +48,7 @@ tooltip {
 .workspace {
   color: $bg-grad-3;
   transition: color 500ms;
+  text-shadow: 0 0 4px black;
 }
 
 .workspace:hover {
@@ -59,13 +61,18 @@ tooltip {
 }
 
 .workspace-label-active {
-  margin: 0 5px;
-  font-size: 18px;
   color: rgba(164, 223, 255, 1);
+  text-shadow: 0px 0px 3px rgba(164, 223, 255, 1);
 }
 
+.workspace-label-previous {
+  /* color: $bg-grad-5; */
+  border-bottom: 2px solid rgba(164, 223, 255, 1);
+}
+
+
 .circle {
-  background-color: $bd-color;
+  background-color: $bg-grad-1;
   margin: 0 10px;
 }
 
@@ -74,21 +81,24 @@ tooltip {
   font-size: 7px;
 }
 
-.cpu {
-  color: rgba(164, 185, 239, 1);
-}
-
 .info-hardware {
   font-size: 30px;
   margin: 20px;
 }
 
+.cpu {
+  color: rgba(164, 185, 239, 1);
+  text-shadow: 0 0 3px rgba(164, 185, 239, 1);
+}
+
 .ram {
   color: rgba(177, 227, 173, 1);
+  text-shadow: 0 0 3px rgba(177, 227, 173, 1);
 }
 
 .disk {
   color: rgba(214, 133, 133, 1);
+  text-shadow: 0 0 3px rgba(214, 133, 133, 1);
 }
 
 .language {
@@ -138,6 +148,7 @@ trough {
 
 .backlight {
   color: rgba(238, 212, 159, 1);
+  text-shadow: 0 0 2px rgba(238, 212, 159, 1);
   font-size: 20px;
   margin: 0 10px;
 }
@@ -168,12 +179,14 @@ trough {
 
 .network {
   color: rgba(190, 228, 237, 1);
+  text-shadow: 0 0 2px rgba(190, 228, 237, 1);
   font-size: 20px;
   margin: 0 10px;
 }
 
 .sound {
   color: rgba(229, 180, 226, 1);
+  text-shadow: 0 0 2px rgba(229, 180, 226, 1);
   font-size: 22px;
   margin: 0 10px;
 }
@@ -200,6 +213,7 @@ trough {
 
 .battery {
   color: rgba(177, 227, 173, 1);
+  text-shadow: 0 0 2px rgba(177, 227, 173, 1);
   font-size: 20px;
   margin: 0 10px;
 }
@@ -212,8 +226,10 @@ trough {
 
 .clock {
   background-color: $bg-grad-1;
-  padding: 0 10px;
+  padding: 0 15px;
   font-family: Dosis;
+  color: white;
+  text-shadow: 0 0 2 white;
 }
 
 .clock label {

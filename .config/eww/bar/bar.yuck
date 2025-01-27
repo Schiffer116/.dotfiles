@@ -39,18 +39,12 @@
     (workspaces)
     (right_triangle :fg bd-color
                     :bg bg-color)
-    (tooltip
-      (cpu_tooltip)
-      (cpu :icon ""
-           :thickness 4))
-    (tooltip
-      (ram_tooltip)
-      (ram :icon ""
-           :thickness 4))
-    (tooltip
-      (disk_tooltip)
-      (disk :icon ""
-            :thickness 4))
+    (cpu :icon ""
+         :thickness 4)
+    (ram :icon ""
+         :thickness 4)
+    (disk :icon ""
+          :thickness 4)
     (sep)
     (current_window)))
 
@@ -62,11 +56,10 @@
   (box :orientation "h" :space-evenly false :halign "end"
     (language)
     (sep)
+    ;; (temp)
     (backlight :brightness brightness)
     (sound :volume volume)
-    (tooltip
-      (network_tooltip)
-      (network))
+    (network)
     (battery)
     (right_triangle :fg bg-color
                     :bg bg-grad-1)

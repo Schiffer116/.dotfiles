@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+app_dir='/usr/share/applications/'
+
 open() {
     hyprctl dispatch submap launcher
     eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0
@@ -12,8 +14,8 @@ close() {
 }
 
 all_apps() {
-    rg --no-filename --no-line-number "^Name=" /run/current-system/sw/share/applications/* | \
-    sort | sed -Ee 's/^Name=//'
+    rg --no-filename --no-line-number "^Name=" $app_dir/* | \
+    sort | uniq | sed -Ee 's/^Name=//'
 }
 
 to_json() {
@@ -58,8 +60,8 @@ case $1 in
         fi
 
         command=$(
-            rg --files-with-matches "^Name=$launch_app" /run/current-system/sw/share/applications/* | \
-            xargs rg --no-line-number "^Exec="  | sed -E 's/^Exec=([^\s]+)(\s.*)?$/\1/'
+            rg --files-with-matches "^Name=$launch_app" $app_dir/* | \
+            xargs rg --no-line-number "^Exec=" | head -1 | sed -E 's/^Exec=([^ ]+)( .+)?$/\1/'
         )
         close
         $command

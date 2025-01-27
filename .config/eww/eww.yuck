@@ -3,3 +3,4 @@
 (include "./powermenu/powermenu.yuck")
 (include "./launcher/launcher.yuck")
 (include "./quote/quote.yuck")
+(include "./monitor/hardware.yuck")
