@@ -1,4 +1,5 @@
 .config/tmux/resurrect
+.config/zsh/.zcompdump
 
 .mozilla/*
 !.mozilla/firefox/schiffer/chrome/userChrome.css

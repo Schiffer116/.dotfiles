@@ -9,7 +9,6 @@
 
 (deflisten ws_cur "hyprctl activeworkspace -j | jq '.id'")
 (deflisten ws_prv "hyprctl activeworkspace -j | jq '.id'")
-
 (defwidget workspace [number icon]
     (eventbox :class "workspace"
               :cursor "pointer"
@@ -17,6 +16,7 @@
     (box :space-evenly false
       (label :text icon
              :class "workspace-label workspace-label${number == ws_cur ? '-active' : number == ws_prv ? '-previous' : ''}"))))
+
 
 (defwidget workspaces []
   (box :class "workspaces"
@@ -27,6 +27,7 @@
     (workspace :number 4 :icon "")
     (workspace :number 5 :icon "")))
 
+
 (defvar cur_win "kitty")
 (defwidget current_window []
     (label :text cur_win
@@ -34,41 +35,17 @@
            :limit-width 35
            :style "margin-left: 10px; color: white;"))
 
-(defwidget hardware [value icon thickness position css_class info_window]
-  (eventbox :class {css_class}
-    (circular-progress :class "circle ${position}"
+
+(defwidget monitor [value css_class]
+    (circular-progress :class "circle ${css_class}"
                        :value value
                        :start-at 75
-                       :thickness {thickness}
-        (label :class "circ-icon ${position}"
-               :text {icon}))))
+                       :thickness 4
+        (label :class "circ-icon"
+               :text "" )))
 
-(defwidget cpu [icon thickness ?role]
-    (hardware :value {EWW_CPU.avg}
-              :icon icon
-              :thickness thickness
-              :position role
-              :css_class "cpu"
-              :info_window "cpu_info"))
-
-(defwidget ram [icon thickness ?role]
-    (hardware :value {EWW_RAM.used_mem_perc}
-              :icon icon
-              :thickness thickness
-              :position role
-              :css_class "ram"
-              :info_window "ram_info"))
-
-(defwidget disk [icon thickness ?role]
-    (hardware :value {EWW_DISK["/"].used_perc}
-              :icon icon
-              :thickness thickness
-              :position role
-              :css_class "disk"
-              :info_window "disk_info"))
 
 (defvar full_time false)
-
 (defwidget clock []
   (eventbox :onclick "${EWW_CMD} open --toggle calendar"
             :onhover "${EWW_CMD} update full_time=true"
@@ -86,6 +63,7 @@
                 :duration "300ms"
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
+
 (defwidget battery [?role]
   (box :space-evenly false
        :class "pill-wrapper"
@@ -99,9 +77,9 @@
            :style "font-size: 15px; margin-left: 0"
            :text "${EWW_BATTERY.BAT0.capacity}%")))
 
+
 (deflisten volume "volume.sh get")
 (deflisten muted "volume.sh is-muted")
-
 (defwidget sound [volume]
   (eventbox :onscroll "[ {} = 'up' ] && volume.sh increase || volume.sh decrease"
             :onclick "pavucontrol &"
@@ -117,13 +95,12 @@
              :style "font-size: 15px; margin-left: 0"
              :text "${volume}%"))))
 
+
 (deflisten network_name "nmcli --terse --fields 'NAME' connection show --active | head -1;
                          nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
-
 (defpoll network_strength :interval "5s"
                           :initial "N/A"
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
-
 (defwidget network [?role]
   (box :space-evenly false
        :class "pill-wrapper"
@@ -135,6 +112,7 @@
   (label :class "network"
          :style "font-size: 15px; margin-left: 0"
          :text network_name)))
+
 
 (deflisten brightness "brightness.sh get")
 (defwidget backlight [brightness]
@@ -150,6 +128,7 @@
              :text "${brightness}%"))))
 
 
+
 (defvar color_temp 6500)
 (defwidget temp []
   (eventbox :onscroll "[ {} = 'up' ] && gammastep.sh increase || gammstep.sh decrease"
@@ -163,6 +142,7 @@
       (label :class "color-temp"
              :style "font-size: 15px; margin-left: 0"
              :text "${color_temp}K"))))
+
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')

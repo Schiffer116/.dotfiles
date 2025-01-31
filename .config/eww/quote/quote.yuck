@@ -8,9 +8,6 @@
     :width "20%"
     :height "30%"
     :anchor "bottom left")
-  (quote))
-
-(defwidget quote []
   (box :space-evenly false
        :halign "start"
        :valign "end"
@@ -37,5 +34,4 @@
              :text '${substring("─────────────────", 0, strlength(formattime(EWW_TIME, "%A")))}  ${formattime(EWW_TIME, "%I:%M %p")}'))
       (label :class "quote-content"
              :xalign 1
-             :text "Have a nice day!")
-      ))
+             :text "Have a nice day!")))
