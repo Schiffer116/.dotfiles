@@ -115,14 +115,27 @@
 
 
 (deflisten brightness "brightness.sh get")
+(deflisten nightlight "hyprshade off; echo false")
+
 (defwidget backlight [brightness]
   (eventbox :onscroll "[ {} = 'up' ] && brightness.sh increase || brightness.sh decrease"
+            :onclick "eww update nightlight=${ !nightlight }; hyprshade toggle blue-light-filter"
+            :cursor "pointer"
     (box :space-evenly false
          :class "pill-wrapper"
+         :style "
+           color: ${ nightlight ? 'lightgrey' : 'rgba(238, 212, 159, 1)' };
+           text-shadow: 0 0 2px ${ nightlight ? 'white' : 'rgba(238, 212, 159, 1)' };
+         "
       (label :class "backlight"
-             :text { brightness < 26 ? "󰃞" :
-                     brightness < 51 ? "󰃝" :
-                     brightness < 76 ? "󰃟" : "󰃠" })
+             :text { nightlight ?  (
+                         brightness < 26 ? "" :
+                         brightness < 51 ? "" :
+                         brightness < 76 ? "󰽦" : "󰽢"
+                    ) : (
+                         brightness < 26 ? "󰃞" :
+                         brightness < 51 ? "󰃝" :
+                         brightness < 76 ? "󰃟" : "󰃠")})
       (label :class "backlight"
              :style "font-size: 15px; margin-left: 0"
              :text "${brightness}%"))))
