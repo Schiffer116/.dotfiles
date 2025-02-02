@@ -8,17 +8,15 @@
 ;; (defpoll song_color :interval "3600s"
 ;;                     :run-while false
 ;;                     "dom-color.sh &")
-;; (defpoll song_length :interval "3600s"
-;;                      :run-while false
-;;                      "playerctl metadata mpris:length")
-;; (defpoll song_pos :interval "1s"
-;;                   :run-while false
-;;                   "playerctl position")
+
+(deflisten song_length "playerctl metadata --follow --format '{{ mpris:length / 1000000 }}'")
+(defpoll song_pos :interval "1s"
+                  :run-while true
+                  "playerctl position")
 
 (defwidget media_player []
   (revealer :reveal { player_status == "Playing" || player_status == "Paused" }
-    (eventbox :onrightclick "${EWW_CMD} open --toggle song_info"
-              :onhover "${EWW_CMD} update show_media_buttons=true"
+    (eventbox :onhover "${EWW_CMD} update show_media_buttons=true"
               :onhoverlost "${EWW_CMD} update show_media_buttons=false"
               :cursor "pointer"
       (box :space-evenly false
@@ -37,7 +35,7 @@
                  :style "background-color: rgba(0, 0, 0, 0.3);"))
           (revealer :reveal { player_status == "Paused" }
             (label :text ""
-                    :style "color: white"))
+                   :style "color: white"))
           (button :onclick "playerctl play-pause"))
         (revealer :reveal show_media_buttons
                   :transition "slideright"
@@ -46,33 +44,38 @@
                     ""))))))
 
 (defwindow song_info
-  :stacking "fg"
+  :stacking "bg"
   :exclusive false
   :focusable false
   :monitor 0
   :geometry (geometry
-    :width 450
+    :width 500
     :height 140
-    :anchor "top center")
-  (box :class "song-info-container"
-       :space-evenly false
+    :anchor "top right")
+  (box :space-evenly false
        :spacing 15
-    (box :class "cover-art-info"
-         :style "background-image: url('${cover_art}');")
     (box :orientation "vertical"
          :space-evenly false
+         :style "color: white;"
+         :hexpand true
       (label :wrap true
-             :markup song_title
+             :markup "<b>${song_title}</b>"
+             :style 'font-family: "JetBrains Mono";'
+             :xalign 0)
+      (label :text " "
              :xalign 0)
       (label :markup "<i>${artist}</i>"
-             :wrap true
              :xalign 0)
+      (box :vexpand true)
       (box :vexpand true
-        ;; (scale :value song_pos
-        ;;        :class "song-scale"
-        ;;        :css ".song-scale highlight { background-color: ${song_color}; }"
-        ;;        :min 0
-        ;;        :max { song_length / 1000000 }
-        ;;        :onchange "playerctl position {}"
-        ;;        :orientation "horizontal")
-        ))))
+        (scale :value song_pos
+               :class "song-scale"
+               :css ".song-scale highlight { background-color: green; }"
+               :min 0
+               :max song_length
+               :onchange "playerctl position {}"
+               :orientation "horizontal")))
+
+    (box :class "cover-art-info"
+         :style "background-image: url('${cover_art}');")
+    ))

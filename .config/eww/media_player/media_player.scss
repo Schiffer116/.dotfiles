@@ -1,45 +1,38 @@
 @import "../color.scss";
 
 .song_info {
-  margin: 10px;
-  padding: 10px;
   background-color: transparent;
-}
-
-.song-info-container {
-  background-color: $bg-color;
-  border-radius: 15px;
   padding: 20px;
 }
 
 .cover-art {
-  background-size: cover;
   background-position: center;
+  background-size: cover;
+  border-radius: 100px;
+  margin: 5 5px;
   min-height: 30px;
   min-width: 30px;
-  margin: 5 5px;
-  border-radius: 100px;
 }
 
 .cover-art-info {
-  background-size: cover;
   background-position: center;
+  background-size: cover;
   border-radius: 10px;
-  min-height: 100px;
-  min-width: 100px;
+  min-height: 150px;
+  min-width: 150px;
 }
 
 .media-button {
-  font-weight: 900;
   color: rgba(210, 210, 210, 1);
+  font-weight: 900;
 }
 
 .media-button:hover {
   color: rgba(255, 255, 255, 1);
 }
 
-/* .song-scale { */
-/*   all: unset; */
-/*   margin-right: 13px; */
-/*   min-width: 150px; */
-/* } */
+.song-scale {
+  all: unset;
+  margin-right: 13px;
+  min-width: 150px;
+}

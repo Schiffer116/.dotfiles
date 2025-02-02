@@ -6,7 +6,7 @@ zmodload zsh/complist
 
 HISTSIZE=100
 SAVEHIST=100
-HISTFILE=$HOME/.cache/zsh/history
+HISTFILE=$XDG_CACHE_HOME/zsh/history
 # HISTCONTROL='ignoreboth:erasedups'
 
 setopt HIST_IGNORE_ALL_DUPS
