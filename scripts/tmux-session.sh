@@ -1,8 +1,12 @@
 #!/usr/bin/env sh
 
-selected=$(find ~/Documents ~/Downloads ~/.dotfiles ~/.config -type d \
-            | fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
-                    --preview="eza --tree --icons -L2 {}")
+selected=$(
+    find ~/Documents ~/Downloads ~/.dotfiles ~/.config -type d \
+        -not -path "*/\.direnv/*" \
+        -not -path "*/\.git/*" | \
+    fzf --layout=reverse --border=rounded --pointer="->" --color='gutter:#11111B,bg+:#11111B' \
+        --preview="eza --tree --icons -L2 --color=always {}"
+)
 [ -z "$selected" ] && exit 0
 
 selected_name=$(basename "$selected" | tr . _ | cut -c 1-7)
