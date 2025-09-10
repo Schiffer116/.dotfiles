@@ -29,7 +29,13 @@ vim.opt.updatetime = 50
 
 vim.opt.smartindent = true
 
-vim.cmd([[hi WinSeparator guifg=#89B4FA guibg=None]])
+vim.o.winborder = 'rounded'
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#89B4FA", bg = "none" })
+  end,
+})
 
 vim.cmd([[
     augroup highlight_yank

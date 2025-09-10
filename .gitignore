@@ -1,4 +1,5 @@
 .config/tmux/resurrect
+.config/tmux/plugins/
 .config/zsh/.zcompdump
 
 .mozilla/*
@@ -6,3 +7,4 @@
 
 Pictures/*
 !Pictures/bg
+

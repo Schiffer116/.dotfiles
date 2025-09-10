@@ -4,12 +4,13 @@ app_dir='/usr/share/applications/'
 
 open() {
     hyprctl dispatch submap launcher
-    eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0
     eww open launcher
+    eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0 launcher_active=true
 }
 
 close() {
     hyprctl dispatch submap reset
+    eww update launcher_active=false
     eww close launcher
 }
 
