@@ -1,69 +1,57 @@
 #!/usr/bin/env sh
 
-app_dir='/usr/share/applications/'
-
-open() {
-    hyprctl dispatch submap launcher
-    eww open launcher
-    eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0 launcher_active=true
-}
+APP_DIR='/usr/share/applications/'
 
 close() {
     hyprctl dispatch submap reset
-    eww update launcher_active=false
+    eww update show_launcher=false
+    sleep 0.3
     eww close launcher
 }
 
-all_apps() {
-    rg --no-filename --no-line-number "^Name=" $app_dir/* | \
-    sort | uniq | sed -Ee 's/^Name=//'
-}
-
-to_json() {
-    jq -R -s 'split("\n")[:-1]'
-}
-
 case $1 in
-    open) open ;;
+    open)
+        eww update show_launcher=true
+        hyprctl dispatch submap launcher
+
+        eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0
+        eww open launcher
+        ;;
     close) close ;;
     next)
         length=$(eww get app_json | jq 'length')
         index=$(eww get selected_app_index)
-        if [ "$index" = "$(( length - 1 ))" ]; then
-            eww update selected_app_index=0
-        else
-            eww update selected_app_index=$(( index + 1 ))
-        fi
+        eww update selected_app_index=$(( ( index + 1 ) % length ))
         ;;
     previous)
-        index=$(eww get selected_app_index)
-        if [ "$index" = 0 ]; then
-            length=$(eww get app_json | jq 'length')
-        else
-            eww update selected_app_index=$(( index - 1 ))
-        fi
-        ;;
-    fuzzy)
-        all_apps | fzf -f "$2" | to_json
-
         length=$(eww get app_json | jq 'length')
         index=$(eww get selected_app_index)
-        if [ "$index" -ge "$length" ]; then
-            eww update selected_app_index=$(( length - 1 ))
-        fi
+        eww update selected_app_index=$(( (length + index - 1) % length ))
+        ;;
+    fuzzy)
+        awk -F= '
+            /^\[Desktop/ {
+                if (name && gui) print name
+                name=""; gui=1
+            }
+            /^Name=/ { name = $2 }
+            /^Terminal=/ && $2=="true" { gui = 0 }
+            END { if (name && gui) print name }
+        ' $APP_DIR/* | sort -u | fzf -f "$2" | jq -Rc -s 'split("\n")[:-1]'
+        eww update selected_app_index=0
         ;;
     launch)
-        clicked=$2
-        if [ -n "$clicked" ]; then
-            launch_app=$clicked
+        if [ -n "$2" ]; then
+            launch_app="$2"
         else
             launch_app=$(eww get app_json | jq -r ".[$(eww get selected_app_index)]")
         fi
 
         command=$(
-            rg --files-with-matches "^Name=$launch_app" $app_dir/* | \
+            rg --files-with-matches "^Name=$launch_app" $APP_DIR/* | \
             xargs rg --no-line-number "^Exec=" | head -1 | sed -E 's/^Exec=([^ ]+)( .+)?$/\1/'
         )
+
         close
         $command
         ;;

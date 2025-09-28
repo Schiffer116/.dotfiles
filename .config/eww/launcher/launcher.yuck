@@ -1,40 +1,33 @@
-(defvar launcher_active false)
+(defvar show_launcher true)
 (defwindow launcher
-  :stacking "fg"
+  :stacking "overlay"
   :focusable "exclusive"
+  :exclusive true
 
   :monitor 0
-  :geometry (geometry
-    :width "100%"
-    :anchor "bottom center")
-  (revealer :reveal launcher_active
-            :transition "slideup"
-            :duration "300ms"
-    (box :space-evenly false
-      (input_box)
-      (candidate_list))))
+  :geometry (geometry :width "100%"
+                      :anchor "bottom center")
+  (box
+    (revealer :reveal show_launcher
+              :transition "slideup"
+              :duration "300ms"
+      (box :space-evenly false
+        (input_box)
+        (candidate_list)))))
 
 (defvar all_apps "")
 (deflisten app_json "launcher.sh fuzzy")
-
 (defvar selected_app_index 0)
-(defvar launcher_input "")
 (defwidget input_box []
-  (box :class "launcher-widget"
-       :space-evenly false
-       :orientation "h"
-       :spacing 15
-      (box :class "search-box"
-        (box :class "search-bar"
-             :space-evenly false
-          (label :class "search-icon"
-                 :text "")
-          (input :class "search-input"
-                 :value launcher_input
-                 :onchange `eww update app_json="$(launcher.sh fuzzy {})"`
-                 :timeout "2000ms"
-                 :onaccept "launcher.sh launch"
-                 :hexpand true)))))
+  (box :class "search-box"
+         :space-evenly false
+      (label :class "search-icon"
+             :text "")
+      (input :class "search-input"
+             :onchange `eww update app_json="$(launcher.sh fuzzy \"{}\")"`
+             :timeout "2000ms"
+             :onaccept "launcher.sh launch"
+             :hexpand true)))
 
 (defwidget candidate_list []
   (scroll :hscroll true
@@ -42,7 +35,8 @@
     (box :space-evenly false
       (for entry in app_json
         (eventbox :class "app-item-event"
-                  :onclick "launcher.sh launch '${entry}'"
+                  :cursor "pointer"
+                  :onclick "launcher.sh launch '${entry}' &"
           (label :class "app-item ${app_json?.[selected_app_index] == entry ? 'app-item-active' : ''}"
                  :xalign 0.5
                  :text entry))))))

@@ -6,8 +6,9 @@
   border-top: 4px solid $bg-grad-2;
 }
 
-.launcher-widget {
-  background-color: $bg-color;
+.search-box {
+  background-position: center;
+  background-size: cover;
 }
 
 .search-icon {
@@ -15,20 +16,10 @@
   padding: 0 15px;
 }
 
-.search-box {
-  background-position: center;
-  background-size: cover;
-
-}
-
 .search-input {
   color: white;
   background-color: $bg-color;
   border-radius: 0;
-}
-
-.search-bar {
-  /* padding: 40px; */
 }
 
 .app-item-event {
@@ -39,10 +30,10 @@
 }
 
 .app-item {
-  padding: 0 8px;
+  padding: 0 0.5em;
 }
 
 .app-item-event:hover,
 .app-item-active {
-    border-bottom: 3px solid $pink;
+  border-bottom: 3px solid $pink;
 }

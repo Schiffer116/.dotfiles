@@ -31,7 +31,7 @@
     (workspace :number 5 :icon "")))
 
 
-(defvar cur_win "kitty")
+(defvar cur_win "")
 (defwidget current_window []
     (label :text cur_win
            :truncate true

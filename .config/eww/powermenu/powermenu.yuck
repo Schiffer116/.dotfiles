@@ -13,7 +13,7 @@
 
 (defwidget power_button [index icon color]
   (eventbox :class "power-button-event ${active_button == index ? 'power-button-event-active' : ''}"
-            :onclick "powermenu.sh action ${index}"
+            :onclick "powermenu.sh action ${index} &"
     (label :class "power-button"
            :text icon
            :style "color: ${color}; text-shadow: 0 0 4px ${color};")))
