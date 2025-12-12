@@ -100,7 +100,6 @@ alias code='codium'
 alias anki='anki --no-sandbox'
 
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
-alias camera='mpv /dev/video0 --profile=low-latency --untimed'
 
 alias icat='kitty +kitten icat'
 

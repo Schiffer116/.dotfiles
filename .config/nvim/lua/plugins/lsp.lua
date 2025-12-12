@@ -29,12 +29,12 @@ return {
       end
     })
 
-    local lspconfig = require('lspconfig')
+    -- local vim.lsp.config = require('lspconfig')
 
     local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
     require('mason-lspconfig').setup { handlers = {
       function(server_name)
-        lspconfig[server_name].setup({
+        vim.lsp.config[server_name].setup({
           capabilities = lsp_capabilities,
         })
       end,
@@ -50,7 +50,7 @@ return {
       },
     })
 
-    lspconfig.texlab.setup {
+    vim.lsp.config('texlab', {
       settings = {
         texlab = {
           build = {
@@ -65,8 +65,9 @@ return {
         },
       },
     }
+    )
 
-    lspconfig.clangd.setup {
+    vim.lsp.config('clangd', {
       root_dir = function(fname)
         return require("lspconfig.util").root_pattern(
           "Makefile",
@@ -96,5 +97,6 @@ return {
         clangdFileStatus = true,
       },
     }
+    )
   end
 }
