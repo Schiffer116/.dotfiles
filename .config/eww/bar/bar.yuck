@@ -53,7 +53,7 @@
   (box :orientation "h" :space-evenly false :halign "end"
     (language)
     (sep)
-    ;; (temp)
+    (temp)
     (backlight :brightness brightness)
     (sound :volume volume)
     (network)

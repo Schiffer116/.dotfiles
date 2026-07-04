@@ -3,16 +3,15 @@
 APP_DIR='/usr/share/applications/'
 
 close() {
-    hyprctl dispatch submap reset
+    hyprctl dispatch 'hl.dsp.submap("reset")'
     eww update show_launcher=false
-    sleep 0.3
     eww close launcher
 }
 
 case $1 in
     open)
         eww update show_launcher=true
-        hyprctl dispatch submap launcher
+        hyprctl dispatch 'hl.dsp.submap("launcher")'
 
         eww update app_json="$(launcher.sh fuzzy)" selected_app_index=0
         eww open launcher

@@ -89,7 +89,7 @@ done
 # +----------+
 
 bindkey -s '^f' 'tmux-session.sh^M'
-bindkey -s '^r' 'rebuild.sh^M'
+# bindkey -s '^r' 'rebuild.sh^M'
 
 # +---------+
 # | aliases |
@@ -127,7 +127,7 @@ eval "$(starship init zsh)"
 eval "$(direnv hook $SHELL)"
 
 if [ -z $DISPLAY ]; then
-    Hyprland
+    start-hyprland
 fi
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -149,3 +149,5 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+. "$HOME/.local/share/../bin/env"

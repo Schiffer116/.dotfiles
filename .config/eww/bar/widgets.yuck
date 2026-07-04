@@ -13,7 +13,7 @@
 (defwidget workspace [number icon]
     (eventbox :class "workspace"
               :cursor "pointer"
-              :onclick "hyprctl dispatch workspace ${number}"
+              :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = "${number}" })'`
     (box :space-evenly false
       (label :text icon
              :class "workspace-label
@@ -68,10 +68,14 @@
                 :duration "300ms"
         (label :text {formattime(EWW_TIME, ":%S")})))))
 
+(deflisten has_battery
+  :initial "false"
+  "[ -d /sys/class/power_supply/BAT0 ] && echo true || echo false")
 
 (defwidget battery [?role]
   (box :space-evenly false
        :class "pill-wrapper"
+       :visible has_battery
     (label :class "battery ${role}"
            :text { EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
                    EWW_BATTERY.BAT0.capacity <= 20 ? "" :
@@ -104,6 +108,8 @@
 
 (deflisten network_name "nmcli --terse --fields 'NAME' connection show --active | head -1;
                          nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
+(deflisten network_type "nmcli --terse --fields 'TYPE' connection show --active | head -1;
+                        nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
 (defpoll network_strength :interval "5s"
                           :initial "N/A"
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
@@ -113,7 +119,8 @@
     (box :space-evenly false
          :class "pill-wrapper"
     (label :class "network ${role}"
-           :text { network_strength == "" ? "󰤮" :
+           :text { matches(network_type, "ethernet") ? "󱎔" :
+                   network_strength == "" ? "󰤮" :
                    network_strength < 26 ? "󰤟" :
                    network_strength < 51 ? "󰤢" :
                    network_strength < 76 ? "󰤥" : "󰤨" })
@@ -121,9 +128,23 @@
            :style "font-size: 15px; margin-left: 0"
            :text network_name))))
 
+(defvar color_temp 1000)
+(defwidget temp []
+  (eventbox :onscroll "[ {} = 'up' ] && color-temp.sh increase || color-temp.sh decrease"
+    (box :space-evenly false
+         :class "pill-wrapper"
+      (label :class "color-temp"
+             :text { color_temp < 1375 ? "" :
+                     color_temp < 1750 ? "" :
+                     color_temp < 2125 ? "" :
+                     color_temp < 2500 ? "" : "" })
+      (label :class "color-temp"
+             :style "font-size: 15px; margin-left: 0"
+             :text "${color_temp}K"))))
+
 
 (deflisten brightness "brightness.sh get")
-(deflisten nightlight "brightness.sh is-nightlight")
+;; (deflisten nightlight "brightness.sh is-nightlight")
 (defwidget backlight [brightness]
   (eventbox :onscroll "[ {} = 'up' ] && brightness.sh increase || brightness.sh decrease"
             :onclick "brightness.sh toggle-nightlight &"
@@ -131,37 +152,16 @@
     (box :space-evenly false
          :class "pill-wrapper"
          :style "
-           color: ${ nightlight ? 'lightgrey' : 'rgba(238, 212, 159, 1)' };
-           text-shadow: 0 0 2px ${ nightlight ? 'white' : 'rgba(238, 212, 159, 1)' };
+           color: rgba(238, 212, 159, 1);
+           text-shadow: 0 0 2px rgba(238, 212, 159, 1);
          "
       (label :class "backlight"
-             :text { nightlight ?  (
-                     brightness < 26 ? "" :
-                     brightness < 51 ? "" :
-                     brightness < 76 ? "󰽦" : "󰽢"
-                   ) : (
-                     brightness < 26 ? "󰃞" :
+             :text { brightness < 26 ? "󰃞" :
                      brightness < 51 ? "󰃝" :
-                     brightness < 76 ? "󰃟" : "󰃠")})
+                     brightness < 76 ? "󰃟" : "󰃠"})
       (label :class "backlight"
              :style "font-size: 15px; margin-left: 0"
              :text "${brightness}%"))))
-
-
-
-(defvar color_temp 6500)
-(defwidget temp []
-  (eventbox :onscroll "[ {} = 'up' ] && gammastep.sh increase || gammstep.sh decrease"
-    (box :space-evenly false
-         :class "pill-wrapper"
-      (label :class "color-temp"
-             :text { color_temp < 2000 ? "" :
-                     color_temp < 3000 ? "" :
-                     color_temp < 4000 ? "" :
-                     color_temp < 5000 ? "" : "" })
-      (label :class "color-temp"
-             :style "font-size: 15px; margin-left: 0"
-             :text "${color_temp}K"))))
 
 
 (defvar show_all_lang false)

@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
 get_brightness() {
-    brightnessctl i --machine-readable --exponent=2 | awk -F',' '{ sub("%", ""); print $4 }'
+    brightnessctl i --machine-readable | awk -F',' '{ sub("%", ""); print $4 }'
 }
 
 set_brightness() {
-    brightnessctl set "$1" --exponent=2 --min-value=5
+    brightnessctl set "$1" --min-value=1
     eww update brightness="$(get_brightness)"
 }
 
