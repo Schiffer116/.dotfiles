@@ -1,4 +1,4 @@
-module volume
+module volume_controller
 
 go 1.24.5
 

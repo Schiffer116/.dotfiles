@@ -1,20 +1,20 @@
 (include "./bar/widgets.yuck")
 (include "./color.yuck")
 
-(defwindow bar
-  :stacking "bg"
+(defwindow bar [monitor_id]
+  :stacking "fg"
   :exclusive true
 
-  :monitor 0
+  :monitor monitor_id
   :geometry (geometry
     :width "100%"
     :height 40
     :anchor "top center")
-  (bar))
+  (bar :monitor_id monitor_id))
 
-(defwidget bar []
+(defwidget bar [monitor_id]
   (centerbox :orientation "h"
-    (left)
+    (left :monitor_id monitor_id)
     (center)
     (right)))
 
@@ -29,14 +29,14 @@
   (box :class "right-triangle"
        :style "background: ${bg}; border-left: 25px solid ${fg};"))
 
-(defwidget left []
+(defwidget left [monitor_id]
   (box :orientation "h"
        :space-evenly false
        :halign "start"
     (power)
     (right_triangle :fg nix-blue
                     :bg bd-color)
-    (workspaces)
+    (workspaces :monitor_id monitor_id)
     (right_triangle :fg bd-color
                     :bg bg-color)
     (monitor :css_class "cpu" :value {EWW_CPU.avg})

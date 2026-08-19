@@ -3,9 +3,9 @@
 set_temperature() {
     temp=$(hyprctl hyprsunset temperature)
     new_temp=$((temp + $1))
-    [ "$temp" -le 1000 ] && new_temp=1000
-    [ "$temp" -ge 2500 ] && new_temp=2500
-    hyprctl hyprsunset temperature "$1"
+    [ "$new_temp" -le 1000 ] && new_temp=1000
+    [ "$new_temp" -ge 6500 ] && new_temp=6500
+    hyprctl hyprsunset temperature "$new_temp"
     eww update color_temp=$new_temp
 }
 

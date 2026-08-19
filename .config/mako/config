@@ -8,13 +8,13 @@ on-button-right=dismiss-all
 on-touch=dismiss
 
 # STYLE OPTIONS
-font=JetBrains Mono
-width=300
-height=130
+font=JetBrains Mono 12
+width=600
+height=600
 margin=25
 padding=15, 15, 15, 20
-border-size=0
-border-radius=10
+border-size=3
+border-radius=5
 icons=1
 max-icon-size=80
 icon-location=left
@@ -28,17 +28,15 @@ max-visible=5
 layer=overlay
 anchor=top-right
 
-background-color=#11161F
+background-color=#11161FDD
 text-color=#d9e0ee
-border-color=#bee4ed
-progress-color=over #89b4fa
 
 [urgency=low]
-border-color=#bee4ed
+border-color=#b1e3bd
 default-timeout=2000
 
 [urgency=normal]
-border-color=#313244
+border-color=#eed49f
 default-timeout=5000
 
 [urgency=high]

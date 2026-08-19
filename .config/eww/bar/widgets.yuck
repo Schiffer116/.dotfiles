@@ -8,27 +8,40 @@
     (label :class "os-logo"
            :text "󰣇")))
 
-(deflisten ws_cur "hyprctl activeworkspace -j | jq '.id'")
-(deflisten ws_prv "hyprctl activeworkspace -j | jq '.id'")
-(defwidget workspace [number icon]
+(defvar monitors '[
+  {
+    "id": 0,
+    "name": "eDP-1",
+    "currentWorkspace": 1,
+    "previousWorkspace": 1
+  },
+  {
+    "id": 1,
+    "name": "HDMI-A-1",
+    "currentWorkspace": 11,
+    "previousWorkspace": 11
+  }
+]')
+
+(defwidget workspace [id monitor_id icon]
     (eventbox :class "workspace"
               :cursor "pointer"
-              :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = "${number}" })'`
+              :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = "${id}" })'`
     (box :space-evenly false
       (label :text icon
              :class "workspace-label
-                     workspace-label${number == ws_cur ? '-active ' : ' '}
-                     workspace-label${number == ws_prv ? '-previous ' : ' '}"))))
+                     workspace-label${id == jq(monitors, '.[] | select(.id == ${monitor_id}) | .currentWorkspace') ? '-active ' : ' '}
+                     workspace-label${id == jq(monitors, '.[] | select(.id == ${monitor_id}) | .previousWorkspace') ? '-previous ' : ' '}"))))
 
 
-(defwidget workspaces []
+(defwidget workspaces [monitor_id]
   (box :class "workspaces"
        :spacing 5
-    (workspace :number 1 :icon "󰈹")
-    (workspace :number 2 :icon "")
-    (workspace :number 3 :icon "")
-    (workspace :number 4 :icon "")
-    (workspace :number 5 :icon "")))
+    (workspace :id {monitor_id * 10 + 1} :monitor_id monitor_id :icon "󰈹")
+    (workspace :id {monitor_id * 10 + 2} :monitor_id monitor_id :icon "")
+    (workspace :id {monitor_id * 10 + 3} :monitor_id monitor_id :icon "")
+    (workspace :id {monitor_id * 10 + 4} :monitor_id monitor_id :icon "")
+    (workspace :id {monitor_id * 10 + 5} :monitor_id monitor_id :icon "")))
 
 
 (defvar cur_win "")
@@ -40,7 +53,7 @@
 
 
 (defwidget monitor [value css_class]
-  (eventbox :onclick "kitty --title btop -e btop &"
+  (eventbox :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e btop', { float = true, size = { 'monitor_w * 0.7', 'monitor_h * 0.7' } })"`
             :cursor "pointer"
     (circular-progress :class "circle ${css_class}"
                        :value value
@@ -90,10 +103,10 @@
 (deflisten volume "volume.sh get")
 (deflisten muted "volume.sh is-muted")
 (defwidget sound [volume]
-  (eventbox :onscroll "[ {} = 'up' ] && volume.sh set '1%+' || volume.sh set '1%-'"
-            :onclick "pavucontrol &"
+  (eventbox :onscroll "[ {} = 'up' ] && volume.sh increase || volume.sh decrease"
+            :onclick `hyprctl dispatch "hl.dsp.exec_cmd('pavucontrol', { float = true, size = { 'monitor_w * 0.5', 'monitor_h * 0.5' } })"`
             :onmiddleclick "volume.sh toggle-mute &"
-            :onrightclick "blueman-manager &"
+            :onrightclick `hyprctl dispatch "hl.dsp.exec_cmd('blueman-manager', { float = true, size = { 'monitor_w * 0.5', 'monitor_h * 0.5' } })"`
             :cursor "pointer"
     (box :space-evenly false
          :class "pill-wrapper"
@@ -114,7 +127,7 @@
                           :initial "N/A"
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
 (defwidget network [?role]
-  (eventbox :onclick "kitty --title nmtui -e nmtui &"
+  (eventbox :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e nmtui', { float = true, size = { 'monitor_w * 0.6', 'monitor_h * 0.6' } })"`
             :cursor "pointer"
     (box :space-evenly false
          :class "pill-wrapper"
@@ -147,8 +160,6 @@
 ;; (deflisten nightlight "brightness.sh is-nightlight")
 (defwidget backlight [brightness]
   (eventbox :onscroll "[ {} = 'up' ] && brightness.sh increase || brightness.sh decrease"
-            :onclick "brightness.sh toggle-nightlight &"
-            :cursor "pointer"
     (box :space-evenly false
          :class "pill-wrapper"
          :style "

@@ -4,7 +4,7 @@
   :focusable "exclusive"
   :exclusive true
 
-  :monitor 0
+  :monitor '[1, 0]'
   :geometry (geometry :width "100%"
                       :anchor "bottom center")
   (box

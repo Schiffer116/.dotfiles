@@ -9,7 +9,7 @@ set_volume() {
 }
 
 is_muted() {
-    wpctl get-volume @DEFAULT_SINK@ | grep -q '\[MUTED\]' && printf true || printf false
+    wpctl get-volume @DEFAULT_SINK@ | tail -n 1 | grep -q '\[MUTED\]' && printf true || printf false
 }
 
 toggle_mute() {
@@ -20,9 +20,9 @@ toggle_mute() {
 
 case $1 in
     get) get_volume ;;
-    set) set_volume "$2";;
-    increase) set_volume 1%+ ;;
-    decrease) set_volume 1%- ;;
+    set) set_volume "$2" ;;
+    increase) printf '+' | socat - UNIX-SENDTO:"$VOLUME_SERVER_SOCKET" ;;
+    decrease) printf '-' | socat - UNIX-SENDTO:"$VOLUME_SERVER_SOCKET" ;;
     is-muted) is_muted ;;
     toggle-mute) toggle_mute toggle ;;
     mute) toggle_mute 1 ;;

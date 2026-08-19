@@ -2,13 +2,15 @@
 
 close() {
     hyprctl dispatch 'hl.dsp.submap("reset")'
-    eww close powermenu
+    eww close laptop_powermenu
+    eww close eq270q_powermenu
 }
 
 case $1 in
     open)
         eww update active_button=0
-        eww open powermenu
+        eww open powermenu --screen 0 --id laptop_powermenu
+        eww open powermenu --screen 1 --id eq270q_powermenu
         hyprctl dispatch 'hl.dsp.submap("powermenu")'
         ;;
     close)
@@ -23,7 +25,11 @@ case $1 in
         eww update active_button="$new_active"
         ;;
     action)
-        action=$(eww get active_button)
+        action=$2
+        if [ -z "$action" ]; then
+            action=$(eww get active_button)
+        fi
+
         case $action in
             0)
                 systemctl poweroff

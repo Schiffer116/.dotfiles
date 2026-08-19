@@ -1,6 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# xargs -I {} notify-send "{}"
-# while read -r line; do
-#     notify-send "$line"
-# done
+content=$(cat)
+notify-send -- "Copied:" "$content"

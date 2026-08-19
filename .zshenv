@@ -40,3 +40,10 @@ export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export VCPKG_ROOT=$HOME/.local/share/vcpkg
 . "/home/schiffer/.local/share/cargo/env"
+
+export VOLUME_SERVER_SOCKET=$XDG_RUNTIME_DIR/volume_server.sock
+export BRIGHTNESS_PIPE=$XDG_RUNTIME_DIR/brightness.fifo
+
+export EWW_VOLUME_OUT=$XDG_RUNTIME_DIR/volume.out
+export EWW_BRIGHTNESS_0_OUT=$XDG_RUNTIME_DIR/brightness.0.out
+export EWW_BRIGHTNESS_1_OUT=$XDG_RUNTIME_DIR/brightness.1.out

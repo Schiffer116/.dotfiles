@@ -1,5 +1,5 @@
 (defwindow powermenu
-  :monitor 0
+  :monitor "[1, 0]"
   :stacking "overlay"
   :namespace "powermenu"
 
@@ -19,8 +19,10 @@
            :style "color: ${color}; text-shadow: 0 0 4px ${color};")))
 
 (defwidget menu []
-  (box :space-evenly false
+  (box :class "menu-wrapper"
+       :space-evenly false
        :orientation "v"
+       :valign "center"
     (label :class "goodbye-msg"
            :text "Goodbye Schiffer")
     (box :space-evenly false

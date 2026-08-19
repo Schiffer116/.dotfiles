@@ -16,22 +16,19 @@ local mainMod = 'SUPER' -- Sets 'Windows' key as main modifier
 ------------------
 
 hl.monitor({
-  output   = '',
-  mode     = 'preferred',
-  position = 'auto',
+  output   = 'eDP-1',
+  mode     = '1920x1080',
+  position = '0x665',
   scale    = '1',
 })
 
 hl.monitor({
   output   = 'HDMI-A-1',
-  mode     = 'preferred',
-  position = 'auto',
+  mode     = '2560x1440@144.01Hz',
+  position = '1920x0',
   scale    = '1',
-  mirror   = 'eDP-1'
+  -- cm       = "hdr"
 })
-
-
-
 
 ---------------------
 ---- MY PROGRAMS ----
@@ -40,8 +37,6 @@ hl.monitor({
 -- Set programs that you use
 local terminal = 'kitty'
 local browser  = 'brave'
-local menu     = 'hyprlauncher'
-
 
 -------------------
 ---- AUTOSTART ----
@@ -54,18 +49,22 @@ local menu     = 'hyprlauncher'
 --
 hl.on('hyprland.start', function()
   hl.exec_cmd('dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP')
+  hl.exec_cmd('wl-paste -w notify_copy.sh')
   hl.exec_cmd('hyprpaper')
   hl.exec_cmd('hyprsunset --temperature 1000')
   hl.exec_cmd('fcitx5 -d')
   hl.exec_cmd('mako')
-  hl.exec_cmd('hypr-ipc.sh')
-  hl.exec_cmd('eww open-many bar monitor')
+  hl.exec_cmd('hypr_ipc.sh')
+  hl.exec_cmd([[
+    eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 \
+                  bar:ew270q_bar --arg ew270q_bar:monitor_id=1 \
+                  monitor
+  ]])
   hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')
-  hl.exec_cmd('volume')
+  hl.exec_cmd('volume_controller')
   hl.exec_cmd('ollama serve')
   hl.exec_cmd('hyprctl setcursor Bibata-Modern-Ice 30')
-  hl.exec_cmd('brave', { workspace = "1" })
-  hl.exec_cmd('kitty', { workspace = "2" })
+  -- hl.exec_cmd('brave', { workspace = "1" })
   hl.exec_cmd('kitty', { workspace = "special:terminal" })
 end)
 
@@ -190,7 +189,7 @@ hl.config({
     },
 
     motion_blur = {
-      enabled = true,
+      -- enabled = true,
     },
 
     shadow = {
@@ -229,7 +228,7 @@ hl.curve('easy', { type = 'spring', mass = 1, stiffness = 71.2633, dampening = 1
 -- hl.animation({ leaf = 'global', enabled = true, speed = 10, bezier = 'default' })
 hl.animation({ leaf = 'border', enabled = true, speed = 2, bezier = 'default' })
 hl.animation({ leaf = 'windows', enabled = true, speed = 5, bezier = 'overshot', style = 'popin' })
-hl.animation({ leaf = 'fade', enabled = true, speed = 5, bezier = 'quick' })
+hl.animation({ leaf = 'fade', enabled = true, speed = 3, bezier = 'quick' })
 hl.animation({ leaf = 'layers', enabled = true, speed = 3.81, bezier = 'easeOutQuint' })
 hl.animation({ leaf = 'fadeLayersIn', enabled = true, speed = 1.79, bezier = 'almostLinear' })
 hl.animation({ leaf = 'fadeLayersOut', enabled = true, speed = 1.39, bezier = 'almostLinear' })
@@ -351,14 +350,11 @@ hl.bind(mainMod .. ' + B', hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. ' + W', hl.dsp.window.close())
 hl.bind(mainMod .. ' + SHIFT + M',
   hl.dsp.exec_cmd('command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch "hl.dsp.exit()"'))
-hl.bind(mainMod .. ' + V', hl.dsp.window.float({ action = 'toggle' }))
-hl.bind(mainMod .. ' + R', hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. ' + P', hl.dsp.window.pseudo())
 hl.bind(mainMod .. ' + O', hl.dsp.layout('togglesplit')) -- dwindle only
 
-hl.bind('ALT + E', hl.dsp.exec_cmd('anguage.sh set E'))
-hl.bind('ALT + N', hl.dsp.exec_cmd('anguage.sh set J'))
-hl.bind('ALT + V', hl.dsp.exec_cmd('anguage.sh set V'))
+hl.bind('ALT + E', hl.dsp.exec_cmd('language.sh set E'))
+hl.bind('ALT + N', hl.dsp.exec_cmd('language.sh set J'))
+hl.bind('ALT + V', hl.dsp.exec_cmd('language.sh set V'))
 
 hl.bind(mainMod .. ' + H', hl.dsp.focus({ direction = 'left' }))
 hl.bind(mainMod .. ' + L', hl.dsp.focus({ direction = 'right' }))
@@ -370,15 +366,66 @@ hl.bind(mainMod .. ' + SHIFT + L', hl.dsp.window.move({ direction = 'right', gro
 hl.bind(mainMod .. ' + SHIFT + K', hl.dsp.window.move({ direction = 'up', group_aware = true }))
 hl.bind(mainMod .. ' + SHIFT + J', hl.dsp.window.move({ direction = 'down', group_aware = true }))
 
-for i = 1, 10 do
-  local key = i % 10
-  hl.bind(mainMod .. ' + ' .. key, hl.dsp.focus({ workspace = i }))
-  hl.bind(mainMod .. ' + SHIFT + ' .. key, hl.dsp.window.move({ workspace = i }))
-  hl.bind(mainMod .. ' + CTRL + ' .. key, hl.dsp.window.move({ workspace = i, follow = false }))
+-- for i = 1, 10 do
+--   local key = i % 10
+--   hl.bind(mainMod .. ' + ' .. key, hl.dsp.focus({ workspace = i }))
+--   hl.bind(mainMod .. ' + SHIFT + ' .. key, hl.dsp.window.move({ workspace = i }))
+--   hl.bind(mainMod .. ' + CTRL + ' .. key, hl.dsp.window.move({ workspace = i, follow = false }))
+-- end
+
+local all_wallpapers = {
+  "bonaparte_before_the_sphinx.jpg",
+  "cityscape.png",
+  "hand.png",
+  "koi-fishes.png",
+  "lucylucy.jpg",
+  "minimal.png",
+  "moon.png",
+  "neko.png",
+  "nord-street.png",
+  "ronin.png",
+  "science_ball.png",
+  "snowhat.png",
+  "the_death_of_julius_caesar.jpg",
+  "the_fallen_angel.jpg",
+  "twilight.png"
+}
+
+local function dispatch_relative_workspace(callback, option)
+  local active_monitor = hl.get_active_monitor()
+  if active_monitor == nil then
+    return nil
+  end
+
+  local monitors = { "eDP-1", "HDMI-A-1" }
+  for i, monitor in ipairs(monitors) do
+    if active_monitor.name == monitor then
+      option.workspace = (i - 1) * 10 + option.workspace
+    end
+  end
+  hl.dispatch(callback(option))
 end
 
-hl.bind(mainMod .. ' + comma', hl.dsp.focus({ workspace = 'e+1' }))
-hl.bind(mainMod .. ' + period', hl.dsp.focus({ workspace = 'e-1' }))
+for i = 1, 10 do
+  local key = i % 10
+  hl.bind(mainMod .. ' + ' .. key, function()
+    dispatch_relative_workspace(hl.dsp.focus, { workspace = key })
+  end)
+  hl.bind(mainMod .. ' + SHIFT + ' .. key, function()
+    dispatch_relative_workspace(hl.dsp.window.move, { workspace = key })
+  end)
+  hl.bind(mainMod .. ' + CTRL + ' .. key, function()
+    dispatch_relative_workspace(hl.dsp.window.move, { workspace = key, follow = false })
+  end)
+end
+
+hl.bind(mainMod .. ' + comma', hl.dsp.focus({ workspace = '-1' }))
+hl.bind(mainMod .. ' + SHIFT + comma', hl.dsp.window.move({ workspace = '-1' }))
+hl.bind(mainMod .. ' + CTRL + comma', hl.dsp.window.move({ workspace = '-1', follow = false }))
+
+hl.bind(mainMod .. ' + period', hl.dsp.focus({ workspace = '+1' }))
+hl.bind(mainMod .. ' + SHIFT + period', hl.dsp.window.move({ workspace = '+1' }))
+hl.bind(mainMod .. ' + CTRL + period', hl.dsp.window.move({ workspace = '+1', follow = false }))
 
 hl.bind(mainMod .. ' + U', hl.dsp.workspace.toggle_special('terminal'))
 hl.bind(mainMod .. ' + I', hl.dsp.workspace.toggle_special('browser'))
@@ -393,8 +440,8 @@ hl.bind(mainMod .. ' + mouse_up', hl.dsp.focus({ workspace = 'e-1' }))
 hl.bind(mainMod .. ' + mouse:272', hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. ' + SHIFT + mouse:272', hl.dsp.window.resize(), { mouse = true })
 
-hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh set 5%+'), { locked = true, repeating = true })
-hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh set 5%-'), { locked = true, repeating = true })
+hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase'), { locked = true, repeating = true })
+hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease'), { locked = true, repeating = true })
 hl.bind('SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh set 1%+'), { locked = true, repeating = true })
 hl.bind('SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh set 1%-'), { locked = true, repeating = true })
 hl.bind('XF86AudioMute', hl.dsp.exec_cmd('volume.sh toggle-mute'), { locked = true })
@@ -424,6 +471,7 @@ hl.bind(mainMod .. ' + CTRL + S', hl.dsp.exec_cmd('screenshot.sh --win'))
 
 hl.bind(mainMod .. ' + X', hl.dsp.exec_cmd('powermenu.sh open'))
 hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('launcher.sh open'))
+-- hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('hyprlauncher'))
 
 hl.define_submap("powermenu", function()
   hl.bind('Tab', hl.dsp.exec_cmd('powermenu.sh next'))
@@ -452,6 +500,15 @@ end)
 
 -- Example window rules that are useful
 
+for i, m in ipairs({ "eDP-1", "HDMI-A-1" }) do
+  for j = 1, 10 do
+    hl.workspace_rule({
+      workspace = tostring((i - 1) * 10 + j),
+      monitor = m,
+    })
+  end
+end
+
 local suppressMaximizeRule = hl.window_rule({
   -- Ignore maximize requests from all apps. You'll probably like this.
   name           = 'suppress-maximize-events',
@@ -476,13 +533,21 @@ hl.window_rule({
   no_focus = true,
 })
 
--- Layer rules also return a handle.
--- local overlayLayerRule = hl.layer_rule({
---     name  = 'no-anim-overlay',
---     match = { namespace = '^my-overlay$' },
---     no_anim = true,
--- })
--- overlayLayerRule:set_enabled(false)
+hl.window_rule({
+  name = "Browser's File Selector Window Size",
+  match = {
+    class = "xdg-desktop-portal-gtk",
+    float = true
+  },
+  size = { 'monitor_w * 0.5', 'monitor_h * 0.5' },
+  center = true,
+})
+
+hl.layer_rule({
+  name  = 'Blur Powermenu',
+  match = { namespace = 'powermenu' },
+  blur  = true,
+})
 
 -- Hyprland-run windowrule
 hl.window_rule({

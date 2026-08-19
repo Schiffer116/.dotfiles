@@ -1,8 +1,8 @@
 zmodload zsh/complist
 
-# +---------+
-# | options |
-# +---------+
+###########
+# options #
+###########
 
 HISTSIZE=100
 SAVEHIST=100
@@ -13,9 +13,11 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-# +------------+
-# | completion |
-# +------------+
+##############
+# completion #
+##############
+
+fpath=("$XDG_CONFIG_HOME/zsh" $fpath)
 
 autoload -U compinit
 zstyle ':completion:*' completer _extensions _complete _approximate
@@ -30,9 +32,14 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 compinit
 _comp_options+=(globdots)
 
-# +----+
-# | vi |
-# +----+
+autoload bashcompinit
+bashcompinit
+complete -C '/usr/bin/aws_completer' aws
+
+
+######
+# vi #
+######
 
 bindkey -v
 export KEYTIMEOUT=1
@@ -84,16 +91,16 @@ for km in viopp visual; do
 done
 
 
-# +----------+
-# | keybinds |
-# +----------+
+############
+# keybinds #
+############
 
 bindkey -s '^f' 'tmux-session.sh^M'
 # bindkey -s '^r' 'rebuild.sh^M'
 
-# +---------+
-# | aliases |
-# +---------+
+###########
+# aliases #
+###########
 
 alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
 alias code='codium'
@@ -103,8 +110,8 @@ alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
 
 alias icat='kitty +kitten icat'
 
-alias ls='exa --color=always --icons'
-alias tree='exa --tree --color=always --icons'
+alias ls='exa --color=always --icons=always'
+alias tree='exa --tree --color=always --icons=always'
 
 alias grep='grep --color=auto'
 
@@ -119,9 +126,9 @@ bindkey '^[[B' history-substring-search-down
 
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
-# +------------+
-# | shellhooks |
-# +------------+
+##############
+# shellhooks #
+##############
 
 eval "$(starship init zsh)"
 eval "$(direnv hook $SHELL)"

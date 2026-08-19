@@ -15,6 +15,12 @@ return {
           enable = true,
           additional_vim_regex_highlighting = false
         },
+        custom_highlights = function(colors)
+          return {
+            LineNr = { fg = colors.text },
+            CursorLineNr = { fg = colors.text, bold = true },
+          }
+        end,
       })
       vim.cmd.colorscheme 'catppuccin'
     end
