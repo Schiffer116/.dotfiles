@@ -10,7 +10,7 @@ on-touch=dismiss
 # STYLE OPTIONS
 font=JetBrains Mono 12
 width=600
-height=600
+height=300
 margin=25
 padding=15, 15, 15, 20
 border-size=3
@@ -26,7 +26,7 @@ default-timeout=5000
 ignore-timeout=0
 max-visible=5
 layer=overlay
-anchor=top-right
+anchor=bottom-right
 
 background-color=#11161FDD
 text-color=#d9e0ee

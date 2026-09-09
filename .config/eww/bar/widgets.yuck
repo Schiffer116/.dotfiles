@@ -64,8 +64,8 @@
 
 
 (defvar full_time false)
-(defwidget clock []
-  (eventbox :onclick "${EWW_CMD} open --toggle calendar"
+(defwidget clock [monitor_id]
+  (eventbox :onclick "${EWW_CMD} open --screen ${monitor_id} --toggle calendar"
             :onhover "${EWW_CMD} update full_time=true"
             :onhoverlost "${EWW_CMD} update full_time=false"
             :cursor "pointer"
@@ -100,7 +100,7 @@
            :text "${EWW_BATTERY.BAT0.capacity}%")))
 
 
-(deflisten volume "volume.sh get")
+(deflisten volume "tail -f $VOLUME_LOG")
 (deflisten muted "volume.sh is-muted")
 (defwidget sound [volume]
   (eventbox :onscroll "[ {} = 'up' ] && volume.sh increase || volume.sh decrease"

@@ -16,7 +16,7 @@
   (centerbox :orientation "h"
     (left :monitor_id monitor_id)
     (center)
-    (right)))
+    (right :monitor_id monitor_id)))
 
 (defwidget sep []
   (label :class "sep" :text "|"))
@@ -49,7 +49,7 @@
   (box :orientation "h" :space-evenly false :halign "center"
     (media_player)))
 
-(defwidget right []
+(defwidget right [monitor_id]
   (box :orientation "h" :space-evenly false :halign "end"
     (language)
     (sep)
@@ -60,4 +60,4 @@
     (battery)
     (right_triangle :fg bg-color
                     :bg bg-grad-1)
-    (clock)))
+    (clock :monitor_id monitor_id)))

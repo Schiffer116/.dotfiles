@@ -345,6 +345,7 @@ hl.bind(mainMod .. ' + F', hl.dsp.window.fullscreen({ action = 'toggle' }))
 hl.bind(mainMod .. ' + C', hl.dsp.exec_cmd('mpv /dev/video0 --profile=low-latency --untimed'))
 hl.bind(mainMod .. ' + Return', hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. ' + CTRL + SHIFT + P', hl.dsp.window.pin())
+hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('pkill -USR1 sotto')) -- toggle sotto speech-to-text
 
 hl.bind(mainMod .. ' + B', hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. ' + W', hl.dsp.window.close())
@@ -449,8 +450,8 @@ hl.bind('XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh set +5%'), { locke
 hl.bind('XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh set 5%-'), { locked = true, repeating = true })
 hl.bind('SHIFT + XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh set +1%'), { locked = true, repeating = true })
 hl.bind('SHIFT + XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh set 1%-'), { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh set +5%'), { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh set 5%-'), { locked = true, repeating = true })
+hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase'), { locked = true, repeating = true })
+hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease'), { locked = true, repeating = true })
 hl.bind('ALT + SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh set +1%'),
   { locked = true, repeating = true })
 hl.bind('ALT + SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh set 1%-'),

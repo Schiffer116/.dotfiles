@@ -42,8 +42,5 @@ export VCPKG_ROOT=$HOME/.local/share/vcpkg
 . "/home/schiffer/.local/share/cargo/env"
 
 export VOLUME_SERVER_SOCKET=$XDG_RUNTIME_DIR/volume_server.sock
-export BRIGHTNESS_PIPE=$XDG_RUNTIME_DIR/brightness.fifo
-
-export EWW_VOLUME_OUT=$XDG_RUNTIME_DIR/volume.out
-export EWW_BRIGHTNESS_0_OUT=$XDG_RUNTIME_DIR/brightness.0.out
-export EWW_BRIGHTNESS_1_OUT=$XDG_RUNTIME_DIR/brightness.1.out
+export VOLUME_LOG=$XDG_RUNTIME_DIR/volume.log
+export BRIGHTNESS_SERVER_SOCKET=$XDG_RUNTIME_DIR/brightness_server.sock

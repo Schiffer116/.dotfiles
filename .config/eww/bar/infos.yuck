@@ -2,7 +2,7 @@
   :stacking "fg"
   :exclusive false
   ;; :focusable true
-  :monitor 0
+  :monitor '[0, 1]'
   :geometry (geometry
     :x 10
     :width 320
