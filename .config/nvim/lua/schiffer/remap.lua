@@ -19,7 +19,6 @@ vim.keymap.set("n", "<leader>Y", [["+y]])
 
 vim.keymap.set("n", "<leader>s", [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "<leader>%s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>x", "<cmd>silent !chmod +x %<CR>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-session.sh<CR>")
 
 -- vim.keymap.set("n", "<leader>q", "vip:'<,'>!sql.sh %:t:r<CR><Esc>")

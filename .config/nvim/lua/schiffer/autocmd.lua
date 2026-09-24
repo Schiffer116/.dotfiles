@@ -22,10 +22,32 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end,
 })
 
+local shiftwidth_by_filetype = {
+  javascript = 2,
+  javascriptreact = 2,
+  typescript = 2,
+  typescriptreact = 2,
+  css = 2,
+  scss = 2,
+  html = 2,
+  lua = 2,
+  json = 2,
+  yaml = 2,
+  tsx = 2,
+  jsx = 2,
+  python = 4,
+  go = 4,
+}
+
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "javascript", "typescript", "css", "scss", "html", "lua", "json", "yaml", "tsx" },
-  callback = function()
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.tabstop = 2
+  desc = "set shiftwidth/tabstop based on filetype",
+  pattern = vim.tbl_keys(shiftwidth_by_filetype),
+  callback = function(args)
+    local width = shiftwidth_by_filetype[args.match]
+    if width then
+      vim.opt_local.shiftwidth = width
+      vim.opt_local.tabstop = width
+      vim.opt_local.softtabstop = width
+    end
   end,
 })

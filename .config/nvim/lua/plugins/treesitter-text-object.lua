@@ -46,10 +46,39 @@ return {
         -- and should return true of false
         include_surrounding_whitespace = false,
       },
+      move = {
+        -- whether to set jumps in the jumplist
+        set_jumps = true,
+      },
     }
 
+    -- move: ]x / [x jump to next / previous start, ]X / [X to next / previous end
+    local move_keymaps = {
+      f = '@function.outer',
+      o = '@class.outer',
+      r = '@parameter.inner',
+      i = '@conditional.outer',
+      l = '@loop.outer',
+      a = '@assignment.outer',
+    }
+    local move = require "nvim-treesitter-textobjects.move"
+    for key, textobject in pairs(move_keymaps) do
+      local upper = key:upper()
+      vim.keymap.set({ "n", "x", "o" }, "]" .. key, function()
+        move.goto_next_start(textobject, "textobjects")
+      end, { desc = "Next " .. textobject .. " start" })
+      vim.keymap.set({ "n", "x", "o" }, "]" .. upper, function()
+        move.goto_next_end(textobject, "textobjects")
+      end, { desc = "Next " .. textobject .. " end" })
+      vim.keymap.set({ "n", "x", "o" }, "[" .. key, function()
+        move.goto_previous_start(textobject, "textobjects")
+      end, { desc = "Previous " .. textobject .. " start" })
+      vim.keymap.set({ "n", "x", "o" }, "[" .. upper, function()
+        move.goto_previous_end(textobject, "textobjects")
+      end, { desc = "Previous " .. textobject .. " end" })
+    end
 
-    keymaps = {
+    local keymaps = {
       ['ir'] = '@parameter.inner',
       ['ar'] = '@parameter.outer',
       ['if'] = '@function.inner',
@@ -75,13 +104,14 @@ return {
       end)
     end
 
-    -- keymaps
+    -- swap: move the argument under the cursor forward / backward
+    local swap = require "nvim-treesitter-textobjects.swap"
     vim.keymap.set("n", "<leader>sn", function()
-      require("nvim-treesitter-textobjects.swap").swap_next "@parameter.inner"
-    end)
+      swap.swap_next("@parameter.inner", "textobjects")
+    end, { desc = "Swap argument with next" })
     vim.keymap.set("n", "<leader>sp", function()
-      require("nvim-treesitter-textobjects.swap").swap_previous "@parameter.outer"
-    end)
+      swap.swap_previous("@parameter.inner", "textobjects")
+    end, { desc = "Swap argument with previous" })
 
     -- vim.keymap.set({ "x", "o" }, "am", function()
     --   require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
