@@ -12,6 +12,7 @@ font=JetBrains Mono 12
 width=600
 height=300
 margin=25
+outer-margin=0,0,25,0
 padding=15, 15, 15, 20
 border-size=3
 border-radius=5
