@@ -56,14 +56,17 @@ hl.on('hyprland.start', function()
   hl.exec_cmd('mako')
   hl.exec_cmd('hypr_ipc.sh')
   hl.exec_cmd([[
-    eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 \
-                  bar:ew270q_bar --arg ew270q_bar:monitor_id=1 \
+    eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 \
+                  bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1 \
                   monitor
   ]])
   hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')
+  hl.exec_cmd('tmux-session.sh --cache')
   hl.exec_cmd('volume_controller')
+  hl.exec_cmd('brightness_controller')
   hl.exec_cmd('ollama serve')
   hl.exec_cmd('hyprctl setcursor Bibata-Modern-Ice 30')
+  hl.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 1')
   -- hl.exec_cmd('brave', { workspace = "1" })
   hl.exec_cmd('kitty', { workspace = "special:terminal" })
 end)
@@ -345,7 +348,18 @@ hl.bind(mainMod .. ' + F', hl.dsp.window.fullscreen({ action = 'toggle' }))
 hl.bind(mainMod .. ' + C', hl.dsp.exec_cmd('mpv /dev/video0 --profile=low-latency --untimed'))
 hl.bind(mainMod .. ' + Return', hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. ' + CTRL + SHIFT + P', hl.dsp.window.pin())
-hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('pkill -USR1 sotto')) -- toggle sotto speech-to-text
+-- hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('pkill -USR1 sotto')) -- toggle sotto speech-to-text
+
+-- Push-to-talk: run nerd-dictation while F13 is held
+-- local nerd_dictation_mic = 'alsa_input.pci-0000_00_1f.3.analog-stereo'
+-- hl.bind('F12', hl.dsp.exec_cmd(
+--   'notify-send begin; nerd-dictation begin --simulate-input-tool WTYPE --pulse-device-name ' .. nerd_dictation_mic))
+-- hl.bind('F12', hl.dsp.exec_cmd('notify-send end; nerd-dictation end'), { release = true })
+
+-- Push-to-talk: unmute mic while mouse thumb button (remapped to F13 via ratbagctl) is held
+-- Note: with this system's XKB config, evdev KEY_F13 resolves to keysym XF86Tools, not F13
+hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 0'), { locked = true })
+hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 1'), { locked = true, release = true })
 
 hl.bind(mainMod .. ' + B', hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. ' + W', hl.dsp.window.close())
