@@ -1,6 +1,12 @@
 return {
   -- only because catppuccin transparent background sucks
-  'xiyaowong/transparent.nvim',
+  {
+    'xiyaowong/transparent.nvim',
+    opts = {
+      -- catppuccin sets these directly instead of linking to NormalFloat
+      extra_groups = { "TroubleNormal", "TroubleNormalNC" },
+    },
+  },
 
   {
     "catppuccin/nvim",
@@ -11,6 +17,7 @@ return {
       require("catppuccin").setup({
         auto_integrations = true,
         -- transparent_background = true,
+        float = { transparent = true },
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false

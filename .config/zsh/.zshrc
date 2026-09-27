@@ -126,6 +126,9 @@ bindkey '^[[B' history-substring-search-down
 
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
+# git aliasas
+alias gs='git status'
+
 ##############
 # shellhooks #
 ##############

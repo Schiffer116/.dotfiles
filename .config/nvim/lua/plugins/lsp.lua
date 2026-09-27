@@ -50,6 +50,18 @@ return {
       },
     })
 
+    -- also attach to composite action manifests, not just workflow files
+    vim.lsp.config('gh_actions_ls', {
+      root_dir = function(bufnr, on_dir)
+        local path = vim.api.nvim_buf_get_name(bufnr)
+        local parent = vim.fs.dirname(path)
+        local name = vim.fs.basename(path)
+        if parent:match('/%.github/workflows$') or name == 'action.yml' or name == 'action.yaml' then
+          on_dir(vim.fs.root(bufnr, '.git') or parent)
+        end
+      end,
+    })
+
     vim.lsp.config('texlab', {
       settings = {
         texlab = {
