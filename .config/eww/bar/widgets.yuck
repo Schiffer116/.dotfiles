@@ -156,9 +156,9 @@
              :text "${color_temp}K"))))
 
 
-(deflisten brightness "brightness.sh get")
+(deflisten brightness :initial "{}" "tail -f $BRIGHTNESS_LOG")
 ;; (deflisten nightlight "brightness.sh is-nightlight")
-(defwidget backlight [brightness]
+(defwidget backlight [brightness monitor_name]
   (eventbox :onscroll "[ {} = 'up' ] && brightness.sh increase || brightness.sh decrease"
     (box :space-evenly false
          :class "pill-wrapper"
@@ -167,12 +167,12 @@
            text-shadow: 0 0 2px rgba(238, 212, 159, 1);
          "
       (label :class "backlight"
-             :text { brightness < 26 ? "󰃞" :
-                     brightness < 51 ? "󰃝" :
-                     brightness < 76 ? "󰃟" : "󰃠"})
+             :text { brightness[monitor_name] < 26 ? "󰃞" :
+                     brightness[monitor_name] < 51 ? "󰃝" :
+                     brightness[monitor_name] < 76 ? "󰃟" : "󰃠"})
       (label :class "backlight"
              :style "font-size: 15px; margin-left: 0"
-             :text "${brightness}%"))))
+             :text "${brightness[monitor_name]}%"))))
 
 
 (defvar show_all_lang false)

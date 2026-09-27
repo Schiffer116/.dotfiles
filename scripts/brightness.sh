@@ -25,13 +25,12 @@ set_brightness() {
             ddcutil setvcp 10 "$sign" "$amount"
             ;;
     esac
-    eww update brightness="$(get_brightness)"
 }
 
 case $1 in
     get) get_brightness ;;
     set) set_brightness "$2" ;;
-    increase) set_brightness + 1 ;;
-    decrease) set_brightness - 1;;
+    increase) printf '+' | socat - UNIX-SENDTO:"$BRIGHTNESS_SERVER_SOCKET" ;;
+    decrease) printf '-' | socat - UNIX-SENDTO:"$BRIGHTNESS_SERVER_SOCKET" ;;
     # blackout) brightnessctl set 0% ;;
 esac

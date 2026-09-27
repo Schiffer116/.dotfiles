@@ -1,7 +1,7 @@
 (include "./bar/widgets.yuck")
 (include "./color.yuck")
 
-(defwindow bar [monitor_id]
+(defwindow bar [monitor_id monitor_name]
   :stacking "fg"
   :exclusive true
 
@@ -10,13 +10,13 @@
     :width "100%"
     :height 40
     :anchor "top center")
-  (bar :monitor_id monitor_id))
+  (bar :monitor_id monitor_id :monitor_name monitor_name))
 
-(defwidget bar [monitor_id]
+(defwidget bar [monitor_id monitor_name]
   (centerbox :orientation "h"
     (left :monitor_id monitor_id)
     (center)
-    (right :monitor_id monitor_id)))
+    (right :monitor_id monitor_id :monitor_name monitor_name)))
 
 (defwidget sep []
   (label :class "sep" :text "|"))
@@ -49,12 +49,12 @@
   (box :orientation "h" :space-evenly false :halign "center"
     (media_player)))
 
-(defwidget right [monitor_id]
+(defwidget right [monitor_id monitor_name]
   (box :orientation "h" :space-evenly false :halign "end"
     (language)
     (sep)
     (temp)
-    (backlight :brightness brightness)
+    (backlight :brightness brightness :monitor_name monitor_name)
     (sound :volume volume)
     (network)
     (battery)
