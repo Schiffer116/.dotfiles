@@ -126,8 +126,8 @@ bindkey '^[[B' history-substring-search-down
 
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
-# git aliasas
 alias gs='git status'
+alias tf='terraform'
 
 ##############
 # shellhooks #
@@ -144,6 +144,31 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# Play a sound when a long-running command finishes (same trigger conditions as auto-notify above)
+[[ -z "$AUTO_NOTIFY_SOUND_FILE" ]] &&
+    export AUTO_NOTIFY_SOUND_FILE=/usr/share/sounds/freedesktop/stereo/complete.oga
+
+function _auto_notify_sound_track() {
+    AUTO_NOTIFY_SOUND_START="$(date +"%s")"
+    AUTO_NOTIFY_SOUND_CMD="$3"
+}
+
+function _auto_notify_sound_play() {
+    local exit_code="$?"
+    [[ -z "$AUTO_NOTIFY_SOUND_START" ]] && return
+
+    local current="$(date +"%s")"
+    local elapsed=$((current - AUTO_NOTIFY_SOUND_START))
+    if [[ $elapsed -gt $AUTO_NOTIFY_THRESHOLD ]] && [[ "$(_is_auto_notify_ignored "$AUTO_NOTIFY_SOUND_CMD")" == "no" ]]; then
+        (paplay "$AUTO_NOTIFY_SOUND_FILE" &) 2>/dev/null
+    fi
+    unset AUTO_NOTIFY_SOUND_START AUTO_NOTIFY_SOUND_CMD
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec _auto_notify_sound_track
+add-zsh-hook precmd _auto_notify_sound_play
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

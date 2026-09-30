@@ -12,6 +12,8 @@ return {
       null_ls.builtins.formatting.black,
       -- Lua
       null_ls.builtins.formatting.stylua,
+      -- GitHub Actions
+      null_ls.builtins.diagnostics.actionlint,
     }
 
     null_ls.setup({

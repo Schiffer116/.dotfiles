@@ -50,14 +50,25 @@ return {
       },
     })
 
-    -- also attach to composite action manifests, not just workflow files
+    -- workflows and composite action manifests go to gh_actions_ls, other yaml to yamlls
+    local function is_gh_actions(bufnr)
+      local path = vim.api.nvim_buf_get_name(bufnr)
+      local name = vim.fs.basename(path)
+      return vim.fs.dirname(path):match('/%.github/workflows$') ~= nil or name == 'action.yml' or name == 'action.yaml'
+    end
+
     vim.lsp.config('gh_actions_ls', {
       root_dir = function(bufnr, on_dir)
-        local path = vim.api.nvim_buf_get_name(bufnr)
-        local parent = vim.fs.dirname(path)
-        local name = vim.fs.basename(path)
-        if parent:match('/%.github/workflows$') or name == 'action.yml' or name == 'action.yaml' then
-          on_dir(vim.fs.root(bufnr, '.git') or parent)
+        if is_gh_actions(bufnr) then
+          on_dir(vim.fs.root(bufnr, '.git') or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+        end
+      end,
+    })
+
+    vim.lsp.config('yamlls', {
+      root_dir = function(bufnr, on_dir)
+        if not is_gh_actions(bufnr) then
+          on_dir(vim.fs.root(bufnr, '.git') or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
         end
       end,
     })

@@ -18,12 +18,15 @@ return {
           -- preview_width = 0.5,
         },
         sorting_strategy = 'ascending',
-        file_ignore_patterns = { "node_modules", "git" }
+        file_ignore_patterns = { "node_modules/" }
       },
       pickers = {
         find_files = {
-          hidden = true
-        }
+          find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
+        },
+        live_grep = {
+          additional_args = { "--hidden", "--glob", "!.git/" },
+        },
       },
     })
   end
