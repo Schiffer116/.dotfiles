@@ -1,0 +1,43 @@
+{
+  "model": "opus",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dir=$(jq -r '.cwd // \"\"'); notify-send -a 'Claude Code' 'Claude Code' \"Finished in ${dir##*/}\"; bash \"$HOME/.claude/hooks/speak-notify.sh\" /usr/share/sounds/freedesktop/stereo/complete.oga \"Finished in ${dir##*/}\" &"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "json=$(cat); cwd=$(printf '%s' \"$json\" | jq -r '.cwd // empty'); cwd=\"${cwd:-$PWD}\"; root=$(git -C \"$cwd\" rev-parse --show-toplevel 2>/dev/null || printf '%s' \"$cwd\"); name=\"${root##*/}\"; orig=$(printf '%s' \"$json\" | jq -r '.message // \"needs your input\"'); first=$(printf '%s' \"$orig\" | sed -E 's/([.!?]).*/\\1/'); msg=\"$name needs your input: $first\"; notify-send -a 'Claude Code' 'Claude Code' \"$name needs your input: $orig\"; bash \"$HOME/.claude/hooks/speak-notify.sh\" /usr/share/sounds/deepin/stereo/dialog-error.wav \"$msg\" &"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/schiffer/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "theme": "dark",
+  "voiceEnabled": true
+}
