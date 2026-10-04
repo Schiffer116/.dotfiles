@@ -2,6 +2,9 @@
 .config/tmux/plugins/
 .config/zsh/.zcompdump
 
+.config/herdr/*
+!.config/herdr/config.toml
+
 .mozilla/*
 !.mozilla/firefox/schiffer/chrome/userChrome.css
 
