@@ -32,10 +32,4 @@ return {
       vim.cmd.colorscheme 'catppuccin'
     end
   },
-
-  {
-    'numToStr/Comment.nvim',
-    opts = {},
-    lazy = false,
-  },
 }
