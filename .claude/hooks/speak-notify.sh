@@ -7,7 +7,7 @@ SOUND_FILE="$1"
 MESSAGE="$2"
 
 VENV="$HOME/.local/share/piper-tts/venv"
-VOICE="$HOME/.local/share/piper-tts/voices/en_US-lessac-medium.onnx"
+VOICE="$HOME/.local/share/piper-tts/voices/en_US-amy-medium.onnx"
 
 paplay "$SOUND_FILE" 2>/dev/null
 

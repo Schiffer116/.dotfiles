@@ -127,7 +127,12 @@ bindkey '^[[B' history-substring-search-down
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
 alias gs='git status'
+alias gl='git log'
+
 alias tf='terraform'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfv='terraform validate'
 
 ##############
 # shellhooks #

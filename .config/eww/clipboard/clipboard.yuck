@@ -1,0 +1,74 @@
+(defvar show_clipboard true)
+(defwindow clipboard
+  :stacking "overlay"
+  :focusable "exclusive"
+  :exclusive false
+
+  :geometry (geometry :width "380px"
+                      :height "480px"
+                      :anchor "top left")
+  (box
+    (revealer :reveal show_clipboard
+              :transition "slideup"
+              :duration "200ms"
+      (clip_panel))))
+
+(defvar clip_json "[]")
+(defvar clip_all_json "[]")
+(defvar clip_page 0)
+(defvar clip_total_pages 1)
+(defvar selected_clip_index 0)
+
+(defwidget clip_panel []
+  (box :class "clipboard-panel"
+       :orientation "v"
+       :space-evenly false
+    (clip_input_box)
+    (clip_candidate_list)
+    (clip_page_footer)))
+
+(defwidget clip_input_box []
+  (box :class "clip-search-box"
+         :space-evenly false
+      (label :class "clip-search-icon"
+             :text "")
+      (input :class "clip-search-input"
+             :onchange `clipboard.sh search "{}"`
+             :timeout "2000ms"
+             :onaccept "clipboard.sh select"
+             :hexpand true)))
+
+(defwidget clip_candidate_list []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 8
+       :class "clip-list"
+       :vexpand true
+    (for entry in clip_json
+      (eventbox :class "clip-card-event ${clip_json?.[selected_clip_index] == entry ? 'clip-card-event-active' : ''}"
+                :cursor "pointer"
+                :onclick "clipboard.sh select '${entry}' &"
+        (box :space-evenly false
+          (label :class "clip-card-text ${clip_json?.[selected_clip_index] == entry ? 'clip-card-text-active' : ''}"
+                 :xalign 0
+                 :limit-width 36
+                 :wrap true
+                 :hexpand true
+                 :text "${entry.text}")
+          (label :class "clip-pin-icon"
+                 :visible {entry.pinned}
+                 :text "📌"))))))
+
+(defwidget clip_page_footer []
+  (box :class "clip-page-footer"
+       :space-evenly false
+       :halign "center"
+       :visible {clip_total_pages > 1}
+    (eventbox :cursor "pointer"
+              :onclick "clipboard.sh previous-page"
+      (label :class "clip-page-arrow" :text "‹"))
+    (label :class "clip-page-label"
+           :text "${clip_page + 1} / ${clip_total_pages}")
+    (eventbox :cursor "pointer"
+              :onclick "clipboard.sh next-page"
+      (label :class "clip-page-arrow" :text "›"))))

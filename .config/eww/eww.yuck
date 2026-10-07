@@ -2,5 +2,6 @@
 (include "./media_player/media_player.yuck")
 (include "./powermenu/powermenu.yuck")
 (include "./launcher/launcher.yuck")
+(include "./clipboard/clipboard.yuck")
 (include "./quote/quote.yuck")
 (include "./monitor/hardware.yuck")

@@ -1,0 +1,73 @@
+@import "../color.scss";
+
+.clipboard-panel {
+  background-color: $bg-color;
+  border: 1px solid $bg-grad-3;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 16px 4px rgba(0, 0, 0, 0.5);
+}
+
+.clip-search-box {
+  background-color: $bg-grad-1;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.clip-search-icon {
+  color: $bg-grad-5;
+  padding: 0 8px;
+}
+
+.clip-search-input {
+  all: unset;
+  color: white;
+  border-radius: 8px;
+  padding: 6px 4px;
+}
+
+.clip-card-event {
+  background-color: $bg-grad-1;
+  border: 1px solid $bg-grad-2;
+  border-radius: 8px;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.clip-card-text {
+  color: $bg-grad-5;
+  padding: 10px 12px;
+}
+
+.clip-pin-icon {
+  padding: 10px 12px 10px 4px;
+}
+
+.clip-page-footer {
+  margin-top: 8px;
+}
+
+.clip-page-arrow {
+  color: $bg-grad-5;
+  padding: 4px 14px;
+  transition: color 150ms;
+}
+
+.clip-page-arrow:hover {
+  color: $pink;
+}
+
+.clip-page-label {
+  color: $bg-grad-4;
+  padding: 0 6px;
+}
+
+.clip-card-event:hover,
+.clip-card-event-active {
+  background-color: $bg-grad-2;
+  border-color: $pink;
+}
+
+.clip-card-text-active,
+.clip-card-event:hover .clip-card-text {
+  color: white;
+}
