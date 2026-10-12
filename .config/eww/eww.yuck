@@ -5,3 +5,4 @@
 (include "./clipboard/clipboard.yuck")
 (include "./quote/quote.yuck")
 (include "./monitor/hardware.yuck")
+(include "./claude/claude.yuck")
