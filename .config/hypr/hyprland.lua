@@ -62,6 +62,7 @@ hl.on('hyprland.start', function()
                   bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1 \
                   monitor \
                   finance \
+                  claude_usage \
                   quote
   ]])
   hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')

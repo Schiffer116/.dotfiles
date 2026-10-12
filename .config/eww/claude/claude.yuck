@@ -1,0 +1,69 @@
+(defwindow claude_usage []
+  :stacking "bg"
+  :exclusive true
+
+  :monitor 0
+  :geometry (geometry
+    :anchor "bottom right")
+  (box :orientation "v"
+       :spacing 20
+    (claude_session_monitor)
+    (claude_week_monitor)
+    (claude_reset_monitor)
+  )
+)
+
+(defpoll claude_usage_data
+  :interval "60s"
+  :initial "{\"available\": false, \"session_used\": \"--\", \"session_reset\": \"--\", \"week_used\": \"--\", \"week_reset\": \"--\", \"next_reset_window\": \"--\", \"next_reset_at\": \"--\", \"next_reset_in\": \"--\"}"
+  "claude-usage.sh")
+
+(defwidget claude_session_monitor []
+  (left_widget :icon "󰔟"
+               :value 0
+               :css_class "claude-session"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Claude Session"
+             :xalign 0)
+      (label :text "Used: ${claude_usage_data.session_used}  "
+             :xalign 0)
+      (label :text "Resets: ${claude_usage_data.session_reset}  "
+             :xalign 0))))
+
+(defwidget claude_week_monitor []
+  (left_widget :icon "󰃭"
+               :value 0
+               :css_class "claude-week"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Claude Week"
+             :xalign 0)
+      (label :text "Used: ${claude_usage_data.week_used}  "
+             :xalign 0)
+      (label :text "Resets: ${claude_usage_data.week_reset}  "
+             :xalign 0))))
+
+(defwidget claude_reset_monitor []
+  (left_widget :icon "󰑓"
+               :value 0
+               :css_class "claude-reset"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Next Reset"
+             :xalign 0)
+      (label :text {claude_usage_data.available
+                      ? "${claude_usage_data.next_reset_window} in ${claude_usage_data.next_reset_in}  "
+                      : "Usage unavailable  "}
+             :xalign 0)
+      (label :text "At: ${claude_usage_data.next_reset_at}  "
+             :xalign 0))))
