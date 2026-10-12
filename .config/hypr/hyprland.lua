@@ -60,7 +60,8 @@ hl.on('hyprland.start', function()
   hl.exec_cmd([[
     eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 \
                   bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1 \
-                  monitor
+                  monitor \
+                  finance
   ]])
   hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')
   hl.exec_cmd('tmux-session.sh --cache')

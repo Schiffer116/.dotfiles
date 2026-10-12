@@ -1,0 +1,80 @@
+(defwindow finance []
+  :stacking "bg"
+  :exclusive true
+
+  :monitor 0
+  :geometry (geometry
+    :anchor "top right")
+  (box :orientation "v"
+       :spacing 20
+    (assets_monitor)
+    (daily_monitor)
+    (new_year_monitor)
+    (lunar_new_year_monitor)
+  )
+)
+
+(deflisten finance_data
+  :initial "{\"total\": \"...\", \"daily\": \"...\", \"days_remaining\": 0, \"accounts\": [], \"days_until_new_year\": 0, \"days_until_lunar_new_year\": 0}"
+  "ls \"$PERSONAL_FINANCE_LEDGER/ledger/accounts.beancount\" \"$PERSONAL_FINANCE_LEDGER/ledger/transactions.beancount\" | entr -n finance.sh")
+
+(defwidget assets_monitor []
+  (left_widget :icon ""
+               :value 0
+               :css_class "assets"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Assets"
+             :xalign 0)
+      (for acct in {finance_data.accounts}
+        (label :text "${acct.name}: ${acct.balance} VND  "
+               :xalign 0))
+      (label :text "Total: ${finance_data.total} VND  "
+             :xalign 0))))
+
+(defwidget daily_monitor []
+  (left_widget :icon ""
+               :value 0
+               :css_class "daily"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Until Payday"
+             :xalign 0)
+      (label :text "Per day: ${finance_data.daily} VND  "
+             :xalign 0)
+      (label :text "Days left: ${finance_data.days_remaining}  "
+             :xalign 0))))
+
+(defwidget new_year_monitor []
+  (left_widget :icon ""
+               :value 0
+               :css_class "newyear"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Until New Year"
+             :xalign 0)
+      (label :text "Days left: ${finance_data.days_until_new_year}  "
+             :xalign 0))))
+
+(defwidget lunar_new_year_monitor []
+  (left_widget :icon "🐐"
+               :value 0
+               :css_class "lunar"
+    (box :orientation "vertical"
+         :space-evenly false
+         :valign "center"
+         :style "color: white;"
+      (label :class "info-title"
+             :text "Until Lunar New Year"
+             :xalign 0)
+      (label :text "Days left: ${finance_data.days_until_lunar_new_year}  "
+             :xalign 0))))
