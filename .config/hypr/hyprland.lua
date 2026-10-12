@@ -507,6 +507,8 @@ hl.define_submap("launcher", function()
   hl.bind('Tab', hl.dsp.exec_cmd('launcher.sh next'))
   hl.bind('SHIFT + Tab', hl.dsp.exec_cmd('launcher.sh previous'))
   hl.bind('Return', hl.dsp.exec_cmd('launcher.sh launch'))
+  hl.bind('Right', hl.dsp.exec_cmd('launcher.sh next-page'))
+  hl.bind('Left', hl.dsp.exec_cmd('launcher.sh previous-page'))
 
   hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('launcher.sh close'))
   hl.bind('Escape', hl.dsp.exec_cmd('launcher.sh close'))
