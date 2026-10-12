@@ -6,6 +6,10 @@ return {
   },
 
   config = function()
+    vim.lsp.config('*', {
+      capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    })
+
     require('mason').setup()
     require('mason-lspconfig').setup()
 
@@ -28,17 +32,6 @@ return {
         vim.keymap.set('n', '<leader>t', vim.lsp.buf.type_definition, opts)
       end
     })
-
-    -- local vim.lsp.config = require('lspconfig')
-
-    local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-    require('mason-lspconfig').setup { handlers = {
-      function(server_name)
-        vim.lsp.config[server_name].setup({
-          capabilities = lsp_capabilities,
-        })
-      end,
-    } }
 
     vim.lsp.config("lua_ls", {
       settings = {

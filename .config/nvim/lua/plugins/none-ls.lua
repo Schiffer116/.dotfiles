@@ -5,13 +5,20 @@ return {
   config = function()
     local null_ls = require("null-ls")
 
+    -- skip formatters that are not installed instead of failing on every save
+    local function has_exe(name)
+      return function()
+        return vim.fn.executable(name) == 1
+      end
+    end
+
     local sources = {
       -- JS/TS
       null_ls.builtins.formatting.prettier,
       -- Python
-      null_ls.builtins.formatting.black,
+      null_ls.builtins.formatting.black.with({ condition = has_exe("black") }),
       -- Lua
-      null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.stylua.with({ condition = has_exe("stylua") }),
       -- GitHub Actions
       null_ls.builtins.diagnostics.actionlint,
     }

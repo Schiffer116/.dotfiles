@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 swaylock  \
-    --image ~/.config/hypr/bg/twilight.png \
+    --image ~/Pictures/arts/twilight.png \
     --clock \
 	--indicator-radius 147 \
 	--indicator-thickness 7 \

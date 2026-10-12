@@ -141,7 +141,8 @@ alias tfv='terraform validate'
 eval "$(starship init zsh)"
 eval "$(direnv hook $SHELL)"
 
-if [ -z $DISPLAY ]; then
+# only from a local virtual console login, never over SSH
+if [[ -z $DISPLAY && -z $SSH_CONNECTION && $(tty) == /dev/tty[0-9]* ]]; then
     start-hyprland
 fi
 
