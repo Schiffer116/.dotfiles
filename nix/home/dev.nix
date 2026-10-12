@@ -1,6 +1,6 @@
 # Toolchains, cloud CLIs and git. C compilers stay with the OS (pacman on Arch,
 # the system profile on the box) so builds keep finding the OS headers.
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   home.packages = with pkgs; [
     go
@@ -10,7 +10,8 @@
     rustup
     awscli2
     terraform
-    kubectl
+    # minikube also ships bin/kubectl (a shim); prefer the real one.
+    (lib.hiPrio kubectl)
     minikube
     act
     gh
