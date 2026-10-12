@@ -21,3 +21,4 @@ Whichever of the session and week resets comes first, shown as a countdown and a
 
 **Unavailable**:
 Shown as `--` when quota-axi is missing, fails, or returns no Claude windows (for example when Claude Code's sign-in has expired and needs a running session to refresh).
+A window with no data shows `--` only for its own fields, and one with no reset scheduled (such as a session after hours idle) shows `--` for its reset; the next reset uses whichever resets are known.
