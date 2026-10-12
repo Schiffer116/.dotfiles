@@ -60,7 +60,10 @@ hl.on('hyprland.start', function()
   hl.exec_cmd([[
     eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 \
                   bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1 \
-                  monitor claude_usage
+                  monitor \
+                  finance \
+                  claude_usage \
+                  quote
   ]])
   hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')
   hl.exec_cmd('tmux-session.sh --cache')
@@ -505,6 +508,8 @@ hl.define_submap("launcher", function()
   hl.bind('Tab', hl.dsp.exec_cmd('launcher.sh next'))
   hl.bind('SHIFT + Tab', hl.dsp.exec_cmd('launcher.sh previous'))
   hl.bind('Return', hl.dsp.exec_cmd('launcher.sh launch'))
+  hl.bind('Right', hl.dsp.exec_cmd('launcher.sh next-page'))
+  hl.bind('Left', hl.dsp.exec_cmd('launcher.sh previous-page'))
 
   hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('launcher.sh close'))
   hl.bind('Escape', hl.dsp.exec_cmd('launcher.sh close'))

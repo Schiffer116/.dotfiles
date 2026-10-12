@@ -119,10 +119,16 @@
              :text "${volume}%"))))
 
 
-(deflisten network_name "nmcli --terse --fields 'NAME' connection show --active | head -1;
-                         nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
-(deflisten network_type "nmcli --terse --fields 'TYPE' connection show --active | head -1;
-                        nmcli connection monitor | awk -F ':' '{ print $1; fflush() }'")
+(deflisten network_name "exec 9>/tmp/eww-network-name.lock; flock -n 9 || exit 0;
+                         nmcli --terse --fields 'NAME' connection show --active | head -1;
+                         nmcli connection monitor | while read -r _; do
+                           nmcli --terse --fields 'NAME' connection show --active | head -1
+                         done")
+(deflisten network_type "exec 9>/tmp/eww-network-type.lock; flock -n 9 || exit 0;
+                        nmcli --terse --fields 'TYPE' connection show --active | head -1;
+                        nmcli connection monitor | while read -r _; do
+                          nmcli --terse --fields 'TYPE' connection show --active | head -1
+                        done")
 (defpoll network_strength :interval "5s"
                           :initial "N/A"
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)

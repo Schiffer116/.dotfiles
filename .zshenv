@@ -42,6 +42,8 @@ export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export VCPKG_ROOT="$HOME/.local/share/vcpkg"
 . "/home/schiffer/.local/share/cargo/env"
 
+export PERSONAL_FINANCE_LEDGER="$HOME/Documents/personal_finance"
+
 export VOLUME_SERVER_SOCKET="$XDG_RUNTIME_DIR/volume_server.sock"
 export VOLUME_LOG="$XDG_RUNTIME_DIR/volume.log"
 export BRIGHTNESS_SERVER_SOCKET="$XDG_RUNTIME_DIR/brightness_server.sock"
