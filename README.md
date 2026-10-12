@@ -9,7 +9,7 @@ Config files stay in this repo and are linked into place, so edits apply without
 - Laptop (Arch, Nix installed): `home-manager switch --flake ~/.dotfiles#schiffer@archlinux`. pacman keeps the desktop and system services; stow still links the desktop configs.
   Before the first switch, remove the old stow links for the paths home-manager now owns:
   ```sh
-  for p in .zshenv .config/zsh .config/nvim .config/starship.toml .config/tmux .config/herdr .claude/keybindings.json .claude/hooks .CLAUDE.md; do
+  for p in .zshenv .config/zsh .config/nvim .config/starship.toml .config/tmux .config/herdr .claude/keybindings.json .claude/hooks/speak-notify.sh .CLAUDE.md; do
     [ -L ~/$p ] && rm ~/$p
   done
   ```
