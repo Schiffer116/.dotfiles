@@ -24,13 +24,13 @@ return {
 
     dap.adapters.lldb = {
       type = 'executable',
-      -- absolute path is important here, otherwise the argument in the `runInTerminal` request will default to $CWD/lldb-vscode
-      command = '/usr/bin/lldb-vscode',
+      -- absolute path is important here, otherwise the argument in the `runInTerminal` request will default to $CWD/lldb-dap
+      command = '/usr/bin/lldb-dap',
       name = "lldb"
     }
 
-    dap.defaults.fallback.externatl_terminal = {
-      command = '/usr/local/bin/kitty',
+    dap.defaults.fallback.external_terminal = {
+      command = '/usr/bin/kitty',
       args = {
         '--hold',
       },
