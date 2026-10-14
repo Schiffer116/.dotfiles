@@ -14,3 +14,7 @@ Pictures/*
 scripts/brightness_controller/brightness_controller
 scripts/volume_controller/volume_controller
 .config/hypr/card
+
+infra/**/.terraform/
+infra/**/*.tfstate*
+infra/**/*.tfvars
