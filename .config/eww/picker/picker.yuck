@@ -1,0 +1,56 @@
+;; The keyboard picker (scripts/picker.sh): apps on SUPER+D, clipboard history on SUPER+V.
+;; picker.sh owns the state and pushes the visible page here as `picker`.
+(defvar picker_shown false)
+(defvar picker '{"name":"","icon":"","items":[],"index":0,"page":0,"pages":1}')
+
+(defwindow picker
+  :stacking "overlay"
+  :focusable "exclusive"
+  :exclusive true
+
+  :geometry (geometry :width "100%"
+                      :anchor "bottom center")
+  (box
+    (revealer :reveal picker_shown
+              :transition "slideup"
+              :duration "300ms"
+      (box :space-evenly false
+        (picker_search)
+        (picker_entries)
+        (picker_footer)))))
+
+(defwidget picker_search []
+  (box :class "search-box"
+       :space-evenly false
+    (label :class "search-icon"
+           :text {picker.icon})
+    (input :class "search-input"
+           :onchange "picker.sh search \"{}\""
+           :timeout "2000ms"
+           :onaccept "picker.sh select"
+           :hexpand true)))
+
+(defwidget picker_entries []
+  (box :space-evenly false
+       :hexpand true
+    (for entry in {picker.items}
+      (eventbox :class "app-item-event"
+                :cursor "pointer"
+                :onclick "picker.sh select ${entry.i} &"
+        (label :class "app-item ${entry.i == picker.index ? 'app-item-active' : ''}"
+               :xalign 0.5
+               :text "${entry.label}${entry.pinned ? ' 󰐃' : ''}")))))
+
+(defwidget picker_footer []
+  (box :class "page-footer"
+       :space-evenly false
+       :halign "center"
+       :visible {picker.pages > 1}
+    (eventbox :cursor "pointer"
+              :onclick "picker.sh previous-page"
+      (label :class "page-arrow" :text "‹"))
+    (label :class "page-label"
+           :text "${picker.page + 1} / ${picker.pages}")
+    (eventbox :cursor "pointer"
+              :onclick "picker.sh next-page"
+      (label :class "page-arrow" :text "›"))))

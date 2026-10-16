@@ -456,7 +456,6 @@ hl.device({
 
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('eww open --toggle search_menu'))
 hl.bind(mainMod .. ' + SHIFT + Space', hl.dsp.window.float({ action = 'toggle' }))
 hl.bind(mainMod .. ' + F', hl.dsp.window.fullscreen({ action = 'toggle' }))
 hl.bind(mainMod .. ' + C', hl.dsp.exec_cmd('mpv /dev/video0 --profile=low-latency --untimed'))
@@ -597,9 +596,8 @@ hl.bind(mainMod .. ' + CTRL + S', hl.dsp.exec_cmd('screenshot.sh --win'))
 -------------
 
 hl.bind(mainMod .. ' + X', hl.dsp.exec_cmd('powermenu.sh open'))
-hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('launcher.sh open'))
--- hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('hyprlauncher'))
-hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('clipboard.sh open'))
+hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('picker.sh launcher'))
+hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('picker.sh clipboard'))
 
 hl.define_submap("powermenu", function()
   hl.bind('Tab', hl.dsp.exec_cmd('powermenu.sh next'))
@@ -610,27 +608,18 @@ hl.define_submap("powermenu", function()
   hl.bind('Escape', hl.dsp.exec_cmd('powermenu.sh close'))
 end)
 
-hl.define_submap("launcher", function()
-  hl.bind('Tab', hl.dsp.exec_cmd('launcher.sh next'))
-  hl.bind('SHIFT + Tab', hl.dsp.exec_cmd('launcher.sh previous'))
-  hl.bind('Return', hl.dsp.exec_cmd('launcher.sh launch'))
-  hl.bind('Right', hl.dsp.exec_cmd('launcher.sh next-page'))
-  hl.bind('Left', hl.dsp.exec_cmd('launcher.sh previous-page'))
+-- One submap for both pickers; CTRL+P (pin) only does something in the clipboard.
+hl.define_submap("picker", function()
+  hl.bind('Tab', hl.dsp.exec_cmd('picker.sh next'))
+  hl.bind('SHIFT + Tab', hl.dsp.exec_cmd('picker.sh previous'))
+  hl.bind('Return', hl.dsp.exec_cmd('picker.sh select'))
+  hl.bind('CTRL + P', hl.dsp.exec_cmd('picker.sh toggle-pin'))
+  hl.bind('Right', hl.dsp.exec_cmd('picker.sh next-page'))
+  hl.bind('Left', hl.dsp.exec_cmd('picker.sh previous-page'))
 
-  hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('launcher.sh close'))
-  hl.bind('Escape', hl.dsp.exec_cmd('launcher.sh close'))
-end)
-
-hl.define_submap("clipboard", function()
-  hl.bind('Tab', hl.dsp.exec_cmd('clipboard.sh next'))
-  hl.bind('SHIFT + Tab', hl.dsp.exec_cmd('clipboard.sh previous'))
-  hl.bind('Return', hl.dsp.exec_cmd('clipboard.sh select'))
-  hl.bind('CTRL + P', hl.dsp.exec_cmd('clipboard.sh toggle-pin'))
-  hl.bind('Right', hl.dsp.exec_cmd('clipboard.sh next-page'))
-  hl.bind('Left', hl.dsp.exec_cmd('clipboard.sh previous-page'))
-
-  hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('clipboard.sh close'))
-  hl.bind('Escape', hl.dsp.exec_cmd('clipboard.sh close'))
+  hl.bind(mainMod .. ' + D', hl.dsp.exec_cmd('picker.sh close'))
+  hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('picker.sh close'))
+  hl.bind('Escape', hl.dsp.exec_cmd('picker.sh close'))
 end)
 
 --------------------------------
