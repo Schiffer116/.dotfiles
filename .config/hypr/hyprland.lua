@@ -15,25 +15,83 @@ local mainMod = 'SUPER' -- Sets 'Windows' key as main modifier
 ---- MONITORS ----
 ------------------
 
-local laptop_monitor = {
-  output   = 'eDP-1',
-  mode     = '1920x1080',
-  position = '0x665',
-  scale    = '1',
-}
+local monitors = require('monitors')
 
-hl.monitor({
-  output   = 'HDMI-A-1',
-  mode     = '2560x1440@144.01Hz',
-  position = '1920x0',
-  scale    = '1',
-  -- cm       = "hdr"
-})
+local monitor_by_name = {}
+local internal_monitor
+for _, m in ipairs(monitors) do
+  monitor_by_name[m.name] = m
+  if m.internal then
+    internal_monitor = m
+  end
+end
+
+local function add_workspace_rules(m)
+  for j = 1, 10 do
+    hl.workspace_rule({ workspace = tostring(m.workspace_base + j), monitor = m.name })
+  end
+end
+
+local function json_string(s)
+  return '"' .. (s:gsub('[%c"\\]', function(c) return string.format('\\u%04x', c:byte()) end)) .. '"'
+end
+
+-- Publish the table for eww-windows.sh and levelctl. Rewritten on every change, never stale.
+local function write_monitors_json()
+  local entries = {}
+  for _, m in ipairs(monitors) do
+    local windows = {}
+    for _, w in ipairs(m.windows) do
+      table.insert(windows, json_string(w))
+    end
+    table.insert(entries, string.format(
+      '{"name":%s,"internal":%s,"workspace_base":%d,"bar":%s,"windows":[%s],"backlight":%s}',
+      json_string(m.name), tostring(m.internal == true), m.workspace_base, json_string(m.bar),
+      table.concat(windows, ','), m.backlight and json_string(m.backlight) or 'null'))
+  end
+  local path = os.getenv('XDG_RUNTIME_DIR') .. '/monitors.json'
+  local f = io.open(path .. '.tmp', 'w')
+  if f == nil then
+    return
+  end
+  f:write('[' .. table.concat(entries, ',') .. ']\n')
+  f:close()
+  os.rename(path .. '.tmp', path)
+end
+
+-- An output missing from the table gets the next free workspace base and a bar.
+local function adopt_unknown_monitors()
+  local changed = false
+  for _, mon in ipairs(hl.get_monitors()) do
+    if monitor_by_name[mon.name] == nil then
+      local base = 0
+      for _, m in ipairs(monitors) do
+        base = math.max(base, m.workspace_base + 10)
+      end
+      local m = { name = mon.name, workspace_base = base, bar = 'bar_' .. mon.name:gsub('%W', '_'), windows = {} }
+      table.insert(monitors, m)
+      monitor_by_name[m.name] = m
+      add_workspace_rules(m)
+      changed = true
+    end
+  end
+  if changed then
+    write_monitors_json()
+  end
+end
+
+for _, m in ipairs(monitors) do
+  if not m.internal then
+    hl.monitor({ output = m.name, mode = m.mode, position = m.position, scale = m.scale })
+  end
+  add_workspace_rules(m)
+end
+write_monitors_json()
 
 -- Lid: logind ignores the switch (system/logind.conf.d/lid.conf), so closing it never
 -- suspends and the laptop keeps running as a headless server. Closing only turns the panel
--- off: with HDMI connected eDP-1 is disabled so its workspaces move over, otherwise it goes
--- DPMS off (disabling the only monitor would leave Hyprland on a fallback output).
+-- off: with another output connected the panel is disabled so its workspaces move over,
+-- otherwise it goes DPMS off (disabling the only monitor would leave Hyprland on a fallback output).
 local function lid_is_closed()
   local f = io.open('/proc/acpi/button/lid/LID0/state')
   if f == nil then
@@ -44,63 +102,49 @@ local function lid_is_closed()
   return state:find('closed') ~= nil
 end
 
--- eww windows pinned to each output. When an output goes away Hyprland moves its windows to
--- another one and eww never moves them back, so they are closed with the output and reopened
--- once it is back (retrying until GTK sees it; eww exits non-zero while the name is unknown).
-local monitor_widgets = {
-  ['eDP-1'] = {
-    open  = 'bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 monitor finance quote',
-    close = 'laptop_bar monitor finance quote',
-  },
-  ['HDMI-A-1'] = {
-    open  = 'bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1',
-    close = 'ew270q_bar',
-  },
-}
-local widgets_open = {}
-
-local function sync_widgets()
-  for output, widgets in pairs(monitor_widgets) do
-    local present = hl.get_monitor(output) ~= nil
-    if present ~= (widgets_open[output] == true) then
-      if present then
-        -- Wait for the daemon started at login: eww starts one on demand, so two opens racing
-        -- at startup would each start their own and split the bar variables between them.
-        hl.exec_cmd('for _ in $(seq 50); do eww ping >/dev/null 2>&1 && break; sleep 0.1; done; '
-          .. 'for _ in $(seq 20); do eww open-many ' .. widgets.open .. ' && break; sleep 0.25; done')
-      else
-        hl.exec_cmd('eww close ' .. widgets.close)
-      end
-      widgets_open[output] = present
+local function external_connected()
+  for _, mon in ipairs(hl.get_monitors()) do
+    if mon.name ~= internal_monitor.name then
+      return true
     end
   end
+  return false
+end
+
+local function set_internal_monitor(disabled)
+  hl.monitor({
+    output   = internal_monitor.name,
+    mode     = internal_monitor.mode,
+    position = internal_monitor.position,
+    scale    = internal_monitor.scale,
+    disabled = disabled,
+  })
 end
 
 local function apply_lid()
   local closed = lid_is_closed()
-  local disable = closed and hl.get_monitor('HDMI-A-1') ~= nil
+  local disable = closed and external_connected()
   -- Only touch the layout when it changes, so the monitor events below cannot loop.
-  if disable ~= (hl.get_monitor('eDP-1') == nil) then
-    laptop_monitor.disabled = disable
-    hl.monitor(laptop_monitor)
+  if disable ~= (hl.get_monitor(internal_monitor.name) == nil) then
+    set_internal_monitor(disable)
   end
   if not disable then
-    hl.dispatch(hl.dsp.dpms({ action = closed and 'off' or 'on', monitor = 'eDP-1' }))
+    hl.dispatch(hl.dsp.dpms({ action = closed and 'off' or 'on', monitor = internal_monitor.name }))
   end
 end
 
 -- Any output change: fix the lid layout, then match the eww windows to the outputs left.
 local function on_monitors_changed()
+  adopt_unknown_monitors()
   apply_lid()
-  sync_widgets()
+  hl.exec_cmd('eww-windows.sh sync')
 end
 
-laptop_monitor.disabled = lid_is_closed() and hl.get_monitor('HDMI-A-1') ~= nil
-hl.monitor(laptop_monitor)
+set_internal_monitor(lid_is_closed() and external_connected())
 
 hl.bind('switch:on:Lid Switch', apply_lid, { locked = true })
 hl.bind('switch:off:Lid Switch', apply_lid, { locked = true })
--- Plugging or unplugging HDMI (with the lid closed: moves the session to whichever is left).
+-- Plugging or unplugging an output (with the lid closed: moves the session to whichever is left).
 hl.on('monitor.added', on_monitors_changed)
 hl.on('monitor.removed', on_monitors_changed)
 
@@ -130,8 +174,8 @@ hl.on('hyprland.start', function()
   hl.exec_cmd('hyprsunset --temperature 1000')
   hl.exec_cmd('fcitx5 -d')
   hl.exec_cmd('mako')
-  hl.exec_cmd('eww daemon')
-  sync_widgets()
+  adopt_unknown_monitors()
+  hl.exec_cmd('eww-windows.sh sync')
   hl.exec_cmd('tmux-session.sh --cache')
   hl.exec_cmd('volume_controller')
   hl.exec_cmd('brightness_controller')
@@ -483,12 +527,8 @@ local function dispatch_relative_workspace(callback, option)
     return nil
   end
 
-  local monitors = { "eDP-1", "HDMI-A-1" }
-  for i, monitor in ipairs(monitors) do
-    if active_monitor.name == monitor then
-      option.workspace = (i - 1) * 10 + option.workspace
-    end
-  end
+  local m = monitor_by_name[active_monitor.name]
+  option.workspace = (m and m.workspace_base or 0) + option.workspace
   hl.dispatch(callback(option))
 end
 
@@ -602,15 +642,6 @@ end)
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
 -- Example window rules that are useful
-
-for i, m in ipairs({ "eDP-1", "HDMI-A-1" }) do
-  for j = 1, 10 do
-    hl.workspace_rule({
-      workspace = tostring((i - 1) * 10 + j),
-      monitor = m,
-    })
-  end
-end
 
 local suppressMaximizeRule = hl.window_rule({
   -- Ignore maximize requests from all apps. You'll probably like this.

@@ -1,7 +1,6 @@
 (defwindow quote
   :stacking "bg"
 
-  :monitor "eDP-1"
   :geometry (geometry
     :x 50
     :y 40

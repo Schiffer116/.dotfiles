@@ -23,14 +23,14 @@
                      workspace-label${id == jq(hypr_state, '.monitors[] | select(.name == "${monitor_name}") | .previousWorkspace') ? '-previous ' : ' '}"))))
 
 
-(defwidget workspaces [monitor_id monitor_name]
+(defwidget workspaces [workspace_base monitor_name]
   (box :class "workspaces"
        :spacing 5
-    (workspace :id {monitor_id * 10 + 1} :monitor_name monitor_name :icon "󰈹")
-    (workspace :id {monitor_id * 10 + 2} :monitor_name monitor_name :icon "")
-    (workspace :id {monitor_id * 10 + 3} :monitor_name monitor_name :icon "")
-    (workspace :id {monitor_id * 10 + 4} :monitor_name monitor_name :icon "")
-    (workspace :id {monitor_id * 10 + 5} :monitor_name monitor_name :icon "")))
+    (workspace :id {workspace_base + 1} :monitor_name monitor_name :icon "󰈹")
+    (workspace :id {workspace_base + 2} :monitor_name monitor_name :icon "")
+    (workspace :id {workspace_base + 3} :monitor_name monitor_name :icon "")
+    (workspace :id {workspace_base + 4} :monitor_name monitor_name :icon "")
+    (workspace :id {workspace_base + 5} :monitor_name monitor_name :icon "")))
 
 
 (defwidget current_window []
@@ -53,7 +53,7 @@
 
 (defvar full_time false)
 (defwidget clock [monitor_name]
-  (eventbox :onclick "${EWW_CMD} open --screen ${monitor_name} --toggle calendar"
+  (eventbox :onclick "${EWW_CMD} --no-daemonize open --screen ${monitor_name} --toggle calendar"
             :onhover "${EWW_CMD} update full_time=true"
             :onhoverlost "${EWW_CMD} update full_time=false"
             :cursor "pointer"
