@@ -1,69 +1,23 @@
-(defwindow claude_usage []
-  :stacking "bg"
-  :exclusive true
-
-  :monitor 0
-  :geometry (geometry
-    :anchor "bottom right")
-  (box :orientation "v"
-       :spacing 20
-    (claude_session_monitor)
-    (claude_week_monitor)
-    (claude_reset_monitor)
-  )
-)
-
 (defpoll claude_usage_data
   :interval "60s"
-  :initial "{\"available\": false, \"session_used\": \"--\", \"session_reset\": \"--\", \"week_used\": \"--\", \"week_reset\": \"--\", \"next_reset_window\": \"--\", \"next_reset_at\": \"--\", \"next_reset_in\": \"--\"}"
+  :initial "{\"available\": false, \"session_percent\": 0, \"week_percent\": 0, \"session_used\": \"--\", \"session_reset\": \"--\", \"week_used\": \"--\", \"week_reset\": \"--\", \"next_reset_window\": \"--\", \"next_reset_at\": \"--\", \"next_reset_in\": \"--\"}"
   "claude-usage.sh")
 
-(defwidget claude_session_monitor []
-  (left_widget :icon "󰔟"
-               :value 0
-               :css_class "claude-session"
-    (box :orientation "vertical"
-         :space-evenly false
-         :valign "center"
-         :style "color: white;"
-      (label :class "info-title"
-             :text "Claude Session"
-             :xalign 0)
-      (label :text "Used: ${claude_usage_data.session_used}  "
-             :xalign 0)
-      (label :text "Resets: ${claude_usage_data.session_reset}  "
-             :xalign 0))))
+;; Session and week rings for the bar, styled like the hardware monitors; details on hover.
+(defwidget claude_usage []
+  (eventbox :tooltip {claude_usage_data.available
+                        ? "Claude session: ${claude_usage_data.session_used} used, resets ${claude_usage_data.session_reset}
+Claude week: ${claude_usage_data.week_used} used, resets ${claude_usage_data.week_reset}
+Next reset: ${claude_usage_data.next_reset_window} in ${claude_usage_data.next_reset_in} (${claude_usage_data.next_reset_at})"
+                        : "Claude usage unavailable"}
+    (box :space-evenly false
+      (claude_ring :css_class "claude-session" :value {claude_usage_data.session_percent})
+      (claude_ring :css_class "claude-week" :value {claude_usage_data.week_percent}))))
 
-(defwidget claude_week_monitor []
-  (left_widget :icon "󰃭"
-               :value 0
-               :css_class "claude-week"
-    (box :orientation "vertical"
-         :space-evenly false
-         :valign "center"
-         :style "color: white;"
-      (label :class "info-title"
-             :text "Claude Week"
-             :xalign 0)
-      (label :text "Used: ${claude_usage_data.week_used}  "
-             :xalign 0)
-      (label :text "Resets: ${claude_usage_data.week_reset}  "
-             :xalign 0))))
-
-(defwidget claude_reset_monitor []
-  (left_widget :icon "󰑓"
-               :value 0
-               :css_class "claude-reset"
-    (box :orientation "vertical"
-         :space-evenly false
-         :valign "center"
-         :style "color: white;"
-      (label :class "info-title"
-             :text "Next Reset"
-             :xalign 0)
-      (label :text {claude_usage_data.available
-                      ? "${claude_usage_data.next_reset_window} in ${claude_usage_data.next_reset_in}  "
-                      : "Usage unavailable  "}
-             :xalign 0)
-      (label :text "At: ${claude_usage_data.next_reset_at}  "
-             :xalign 0))))
+(defwidget claude_ring [value css_class]
+  (circular-progress :class "circle ${css_class}"
+                     :value value
+                     :start-at 75
+                     :thickness 4
+    (label :class "circ-icon"
+           :text "")))

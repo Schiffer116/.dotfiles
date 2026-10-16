@@ -9,8 +9,8 @@ close() {
 case $1 in
     open)
         eww update active_button=0
-        eww open powermenu --screen 0 --id laptop_powermenu
-        eww open powermenu --screen 1 --id eq270q_powermenu
+        eww open powermenu --screen eDP-1 --id laptop_powermenu
+        eww open powermenu --screen HDMI-A-1 --id eq270q_powermenu
         hyprctl dispatch 'hl.dsp.submap("powermenu")'
         ;;
     close)

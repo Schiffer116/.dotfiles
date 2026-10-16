@@ -1,6 +1,6 @@
 # Claude Usage Widget
 
-Shows how much of Claude's rate limits are used and when they next reset, on the eww background layer. Data comes from `scripts/claude-usage.sh`, which reads `quota-axi --provider claude` without refreshing credentials.
+Shows how much of Claude's rate limits are used as two progress rings in the bar (session, then week), next to the hardware monitors; hovering shows the resets and the next reset. Data comes from `scripts/claude-usage.sh`, which reads `quota-axi --provider claude` without refreshing credentials.
 
 ## Language
 
@@ -20,5 +20,5 @@ _Avoid_: Remaining, left
 Whichever of the session and week resets comes first, shown as a countdown and a local time.
 
 **Unavailable**:
-Shown as `--` when quota-axi is missing, fails, or returns no Claude windows (for example when Claude Code's sign-in has expired and needs a running session to refresh).
+Shown as `--` (and empty rings) when quota-axi is missing, fails, or returns no Claude windows (for example when Claude Code's sign-in has expired and needs a running session to refresh).
 A window with no data shows `--` only for its own fields, and one with no reset scheduled (such as a session after hours idle) shows `--` for its reset; the next reset uses whichever resets are known.

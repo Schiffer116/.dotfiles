@@ -4,7 +4,7 @@
   :focusable "exclusive"
   :exclusive true
 
-  :monitor '[1, 0]'
+  :monitor '["HDMI-A-1", "eDP-1"]'
   :geometry (geometry :width "100%"
                       :anchor "bottom center")
   (box

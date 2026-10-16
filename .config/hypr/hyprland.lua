@@ -15,12 +15,12 @@ local mainMod = 'SUPER' -- Sets 'Windows' key as main modifier
 ---- MONITORS ----
 ------------------
 
-hl.monitor({
+local laptop_monitor = {
   output   = 'eDP-1',
   mode     = '1920x1080',
   position = '0x665',
   scale    = '1',
-})
+}
 
 hl.monitor({
   output   = 'HDMI-A-1',
@@ -29,6 +29,77 @@ hl.monitor({
   scale    = '1',
   -- cm       = "hdr"
 })
+
+-- Lid: logind ignores the switch (system/logind.conf.d/lid.conf), so closing it never
+-- suspends and the laptop keeps running as a headless server. Closing only turns the panel
+-- off: with HDMI connected eDP-1 is disabled so its workspaces move over, otherwise it goes
+-- DPMS off (disabling the only monitor would leave Hyprland on a fallback output).
+local function lid_is_closed()
+  local f = io.open('/proc/acpi/button/lid/LID0/state')
+  if f == nil then
+    return false
+  end
+  local state = f:read('a')
+  f:close()
+  return state:find('closed') ~= nil
+end
+
+-- eww windows pinned to each output. When an output goes away Hyprland moves its windows to
+-- another one and eww never moves them back, so they are closed with the output and reopened
+-- once it is back (retrying until GTK sees it; eww exits non-zero while the name is unknown).
+local monitor_widgets = {
+  ['eDP-1'] = {
+    open  = 'bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 monitor finance quote',
+    close = 'laptop_bar monitor finance quote',
+  },
+  ['HDMI-A-1'] = {
+    open  = 'bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1',
+    close = 'ew270q_bar',
+  },
+}
+local widgets_open = {}
+
+local function sync_widgets()
+  for output, widgets in pairs(monitor_widgets) do
+    local present = hl.get_monitor(output) ~= nil
+    if present ~= (widgets_open[output] == true) then
+      if present then
+        hl.exec_cmd('for _ in $(seq 20); do eww open-many ' .. widgets.open .. ' && break; sleep 0.25; done')
+      else
+        hl.exec_cmd('eww close ' .. widgets.close)
+      end
+      widgets_open[output] = present
+    end
+  end
+end
+
+local function apply_lid()
+  local closed = lid_is_closed()
+  local disable = closed and hl.get_monitor('HDMI-A-1') ~= nil
+  -- Only touch the layout when it changes, so the monitor events below cannot loop.
+  if disable ~= (hl.get_monitor('eDP-1') == nil) then
+    laptop_monitor.disabled = disable
+    hl.monitor(laptop_monitor)
+  end
+  if not disable then
+    hl.dispatch(hl.dsp.dpms({ action = closed and 'off' or 'on', monitor = 'eDP-1' }))
+  end
+end
+
+-- Any output change: fix the lid layout, then match the eww windows to the outputs left.
+local function on_monitors_changed()
+  apply_lid()
+  sync_widgets()
+end
+
+laptop_monitor.disabled = lid_is_closed() and hl.get_monitor('HDMI-A-1') ~= nil
+hl.monitor(laptop_monitor)
+
+hl.bind('switch:on:Lid Switch', apply_lid, { locked = true })
+hl.bind('switch:off:Lid Switch', apply_lid, { locked = true })
+-- Plugging or unplugging HDMI (with the lid closed: moves the session to whichever is left).
+hl.on('monitor.added', on_monitors_changed)
+hl.on('monitor.removed', on_monitors_changed)
 
 ---------------------
 ---- MY PROGRAMS ----
@@ -56,16 +127,7 @@ hl.on('hyprland.start', function()
   hl.exec_cmd('hyprsunset --temperature 1000')
   hl.exec_cmd('fcitx5 -d')
   hl.exec_cmd('mako')
-  hl.exec_cmd('hypr_ipc.sh')
-  hl.exec_cmd([[
-    eww open-many bar:laptop_bar --arg laptop_bar:monitor_id=0 --arg laptop_bar:monitor_name=eDP-1 \
-                  bar:ew270q_bar --arg ew270q_bar:monitor_id=1 --arg ew270q_bar:monitor_name=HDMI-A-1 \
-                  monitor \
-                  finance \
-                  claude_usage \
-                  quote
-  ]])
-  hl.exec_cmd('eww set app_json="$(launcher.sh fuzzy)"')
+  sync_widgets()
   hl.exec_cmd('tmux-session.sh --cache')
   hl.exec_cmd('volume_controller')
   hl.exec_cmd('brightness_controller')
@@ -460,20 +522,22 @@ hl.bind(mainMod .. ' + mouse_up', hl.dsp.focus({ workspace = 'e-1' }))
 hl.bind(mainMod .. ' + mouse:272', hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. ' + SHIFT + mouse:272', hl.dsp.window.resize(), { mouse = true })
 
-hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase'), { locked = true, repeating = true })
-hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh set 1%+'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh set 1%-'), { locked = true, repeating = true })
+-- Plain keys step 5%, SHIFT steps 1%. ALT + volume keys drive the brightness of the focused monitor.
+hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase 5'), { locked = true, repeating = true })
+hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease 5'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase 1'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease 1'), { locked = true, repeating = true })
 hl.bind('XF86AudioMute', hl.dsp.exec_cmd('volume.sh toggle-mute'), { locked = true })
-hl.bind('XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh set +5%'), { locked = true, repeating = true })
-hl.bind('XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh set 5%-'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh set +1%'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh set 1%-'), { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase'), { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease'), { locked = true, repeating = true })
-hl.bind('ALT + SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh set +1%'),
+hl.bind('XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh increase 5'), { locked = true, repeating = true })
+hl.bind('XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh decrease 5'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh increase 1'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh decrease 1'),
   { locked = true, repeating = true })
-hl.bind('ALT + SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh set 1%-'),
+hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase 5'), { locked = true, repeating = true })
+hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease 5'), { locked = true, repeating = true })
+hl.bind('ALT + SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase 1'),
+  { locked = true, repeating = true })
+hl.bind('ALT + SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease 1'),
   { locked = true, repeating = true })
 
 hl.bind('XF86AudioNext', hl.dsp.exec_cmd('playerctl next'), { locked = true })

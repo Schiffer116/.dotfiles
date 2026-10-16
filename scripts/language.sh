@@ -32,6 +32,13 @@ set_language() {
     fcitx5-remote -s "$1"
 }
 
-ime="$(symbol_to_ime "$2")"
-set_language "$ime"
-eww update cur_lang="$(get_symbol)"
+# The bar reads `get` once when eww starts (cur_lang in bar/widgets.yuck) and `set` pushes
+# each switch, since fcitx5 has no signal for it. Its own trigger keys (Zenkaku_Hankaku,
+# Hangul) bypass this; they are not on this keyboard.
+case $1 in
+    get) get_symbol ;;
+    set)
+        set_language "$(symbol_to_ime "$2")"
+        eww update cur_lang="$(get_symbol)"
+        ;;
+esac

@@ -5,7 +5,7 @@
   :stacking "fg"
   :exclusive true
 
-  :monitor monitor_id
+  :monitor monitor_name
   :geometry (geometry
     :width "100%"
     :height 40
@@ -14,7 +14,7 @@
 
 (defwidget bar [monitor_id monitor_name]
   (centerbox :orientation "h"
-    (left :monitor_id monitor_id)
+    (left :monitor_id monitor_id :monitor_name monitor_name)
     (center)
     (right :monitor_id monitor_id :monitor_name monitor_name)))
 
@@ -29,19 +29,21 @@
   (box :class "right-triangle"
        :style "background: ${bg}; border-left: 25px solid ${fg};"))
 
-(defwidget left [monitor_id]
+(defwidget left [monitor_id monitor_name]
   (box :orientation "h"
        :space-evenly false
        :halign "start"
     (power)
     (right_triangle :fg nix-blue
                     :bg bd-color)
-    (workspaces :monitor_id monitor_id)
+    (workspaces :monitor_id monitor_id :monitor_name monitor_name)
     (right_triangle :fg bd-color
                     :bg bg-color)
     (monitor :css_class "cpu" :value {EWW_CPU.avg})
     (monitor :css_class "ram" :value {EWW_RAM.used_mem_perc})
     (monitor :css_class "rom" :value {EWW_DISK["/"].used_perc})
+    (sep)
+    (claude_usage)
     (sep)
     (current_window)))
 
@@ -60,4 +62,4 @@
     (battery)
     (right_triangle :fg bg-color
                     :bg bg-grad-1)
-    (clock :monitor_id monitor_id)))
+    (clock :monitor_name monitor_name)))

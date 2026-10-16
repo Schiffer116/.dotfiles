@@ -41,6 +41,7 @@ func main() {
 	defer logFile.Close()
 
 	log.Println("Listening on:", socketPath)
+	writeVolume(logFile)
 
 	events := make(chan byte, readBufferSize)
 	go socketListen(conn, events)

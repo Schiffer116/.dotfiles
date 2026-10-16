@@ -92,6 +92,12 @@ func runBatch(buffer []byte, logFile *os.File) {
 	log.Printf("Delta, sign, input: %d, %c, %s", delta, sign, input)
 
 	execCommand("wpctl", "set-volume", "--limit", "1.0", "@DEFAULT_SINK@", fmt.Sprintf("%d%%%c", delta, sign))
+	writeVolume(logFile)
+}
+
+// writeVolume appends the current volume to the log that the eww bar tails.
+// Called once at startup too, so the bar shows a value before the first change.
+func writeVolume(logFile *os.File) {
 	volume, err := getVolume()
 	if err != nil {
 		log.Println("Error getting volume: ", err)

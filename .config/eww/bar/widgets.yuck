@@ -8,45 +8,33 @@
     (label :class "os-logo"
            :text "󰣇")))
 
-(defvar monitors '[
-  {
-    "id": 0,
-    "name": "eDP-1",
-    "currentWorkspace": 1,
-    "previousWorkspace": 1
-  },
-  {
-    "id": 1,
-    "name": "HDMI-A-1",
-    "currentWorkspace": 11,
-    "previousWorkspace": 11
-  }
-]')
+(deflisten hypr_state
+  :initial '{"monitors": [], "cur_win": ""}'
+  "hypr_ipc.sh")
 
-(defwidget workspace [id monitor_id icon]
+(defwidget workspace [id monitor_name icon]
     (eventbox :class "workspace"
               :cursor "pointer"
               :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = "${id}" })'`
     (box :space-evenly false
       (label :text icon
              :class "workspace-label
-                     workspace-label${id == jq(monitors, '.[] | select(.id == ${monitor_id}) | .currentWorkspace') ? '-active ' : ' '}
-                     workspace-label${id == jq(monitors, '.[] | select(.id == ${monitor_id}) | .previousWorkspace') ? '-previous ' : ' '}"))))
+                     workspace-label${id == jq(hypr_state, '.monitors[] | select(.name == "${monitor_name}") | .currentWorkspace') ? '-active ' : ' '}
+                     workspace-label${id == jq(hypr_state, '.monitors[] | select(.name == "${monitor_name}") | .previousWorkspace') ? '-previous ' : ' '}"))))
 
 
-(defwidget workspaces [monitor_id]
+(defwidget workspaces [monitor_id monitor_name]
   (box :class "workspaces"
        :spacing 5
-    (workspace :id {monitor_id * 10 + 1} :monitor_id monitor_id :icon "󰈹")
-    (workspace :id {monitor_id * 10 + 2} :monitor_id monitor_id :icon "")
-    (workspace :id {monitor_id * 10 + 3} :monitor_id monitor_id :icon "")
-    (workspace :id {monitor_id * 10 + 4} :monitor_id monitor_id :icon "")
-    (workspace :id {monitor_id * 10 + 5} :monitor_id monitor_id :icon "")))
+    (workspace :id {monitor_id * 10 + 1} :monitor_name monitor_name :icon "󰈹")
+    (workspace :id {monitor_id * 10 + 2} :monitor_name monitor_name :icon "")
+    (workspace :id {monitor_id * 10 + 3} :monitor_name monitor_name :icon "")
+    (workspace :id {monitor_id * 10 + 4} :monitor_name monitor_name :icon "")
+    (workspace :id {monitor_id * 10 + 5} :monitor_name monitor_name :icon "")))
 
 
-(defvar cur_win "")
 (defwidget current_window []
-    (label :text cur_win
+    (label :text {hypr_state.cur_win}
            :truncate true
            :limit-width 35
            :style "margin-left: 10px; color: white;"))
@@ -64,8 +52,8 @@
 
 
 (defvar full_time false)
-(defwidget clock [monitor_id]
-  (eventbox :onclick "${EWW_CMD} open --screen ${monitor_id} --toggle calendar"
+(defwidget clock [monitor_name]
+  (eventbox :onclick "${EWW_CMD} open --screen ${monitor_name} --toggle calendar"
             :onhover "${EWW_CMD} update full_time=true"
             :onhoverlost "${EWW_CMD} update full_time=false"
             :cursor "pointer"
@@ -90,18 +78,19 @@
        :class "pill-wrapper"
        :visible has_battery
     (label :class "battery ${role}"
-           :text { EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
+           :text { !has_battery ? "" :
+                   EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
                    EWW_BATTERY.BAT0.capacity <= 20 ? "" :
                    EWW_BATTERY.BAT0.capacity <= 40 ? "" :
                    EWW_BATTERY.BAT0.capacity <= 60 ? "":
                    EWW_BATTERY.BAT0.capacity <= 80 ? "" : "" })
     (label :class "battery"
            :style "font-size: 15px; margin-left: 0"
-           :text "${EWW_BATTERY.BAT0.capacity}%")))
+           :text {has_battery ? "${EWW_BATTERY.BAT0.capacity}%" : ""})))
 
 
 (deflisten volume "tail -f $VOLUME_LOG")
-(deflisten muted "volume.sh is-muted")
+(deflisten muted :initial false "volume.sh is-muted")
 (defwidget sound [volume]
   (eventbox :onscroll "[ {} = 'up' ] && volume.sh increase || volume.sh decrease"
             :onclick `hyprctl dispatch "hl.dsp.exec_cmd('pavucontrol', { float = true, size = { 'monitor_w * 0.5', 'monitor_h * 0.5' } })"`
@@ -112,11 +101,11 @@
          :class "pill-wrapper"
       (label :class "sound"
              :text { muted ? "󰝟" :
-                     volume < 34 ? "" :
-                     volume < 67 ? "" : "" })
+                     (volume ?: 0) < 34 ? "" :
+                     (volume ?: 0) < 67 ? "" : "" })
       (label :class "sound"
              :style "font-size: 15px; margin-left: 0"
-             :text "${volume}%"))))
+             :text "${volume ?: "--"}%"))))
 
 
 (deflisten network_name "exec 9>/tmp/eww-network-name.lock; flock -n 9 || exit 0;
@@ -130,7 +119,7 @@
                           nmcli --terse --fields 'TYPE' connection show --active | head -1
                         done")
 (defpoll network_strength :interval "5s"
-                          :initial "N/A"
+                          :initial ""
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
 (defwidget network [?role]
   (eventbox :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e nmtui', { float = true, size = { 'monitor_w * 0.6', 'monitor_h * 0.6' } })"`
@@ -147,7 +136,8 @@
            :style "font-size: 15px; margin-left: 0"
            :text network_name))))
 
-(defvar color_temp 1000)
+;; Read once whenever eww starts; color-temp.sh pushes each change (hyprsunset has no events).
+(deflisten color_temp :initial 1000 "color-temp.sh get")
 (defwidget temp []
   (eventbox :onscroll "[ {} = 'up' ] && color-temp.sh increase || color-temp.sh decrease"
     (box :space-evenly false
@@ -173,17 +163,18 @@
            text-shadow: 0 0 2px rgba(238, 212, 159, 1);
          "
       (label :class "backlight"
-             :text { brightness[monitor_name] < 26 ? "󰃞" :
-                     brightness[monitor_name] < 51 ? "󰃝" :
-                     brightness[monitor_name] < 76 ? "󰃟" : "󰃠"})
+             :text { (brightness[monitor_name] ?: 0) < 26 ? "󰃞" :
+                     (brightness[monitor_name] ?: 0) < 51 ? "󰃝" :
+                     (brightness[monitor_name] ?: 0) < 76 ? "󰃟" : "󰃠"})
       (label :class "backlight"
              :style "font-size: 15px; margin-left: 0"
-             :text "${brightness[monitor_name]}%"))))
+             :text "${brightness[monitor_name] ?: "--"}%"))))
 
 
 (defvar show_all_lang false)
 (defvar all_lang '["E","J","V"]')
-(defvar cur_lang "E")
+;; Read once whenever eww starts; language.sh pushes each switch (fcitx5 broadcasts none).
+(deflisten cur_lang :initial "E" "language.sh get")
 (defwidget language []
   (eventbox :cursor "pointer"
             :onhover "${EWW_CMD} update show_all_lang=true"

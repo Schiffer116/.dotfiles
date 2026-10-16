@@ -1,6 +1,7 @@
 #!/bin/bash
 # Reports Claude usage for the session (five-hour) and week (seven-day)
 # rate-limit windows plus the next reset, as one JSON object for eww.
+# The *_percent fields are numbers for the bar's progress rings (0 when unknown).
 # Reads quota-axi without refreshing credentials, reusing a reading for up
 # to 5 minutes so frequent polls only keep the countdown current.
 set -uo pipefail
@@ -9,6 +10,7 @@ QUOTA_AXI="$(command -v quota-axi || echo "$HOME/.local/bin/quota-axi")"
 
 unavailable() {
   jq -nc '{available: false,
+           session_percent: 0, week_percent: 0,
            session_used: "--", session_reset: "--",
            week_used: "--", week_reset: "--",
            next_reset_window: "--", next_reset_at: "--", next_reset_in: "--"}'
@@ -67,6 +69,8 @@ jq -nc \
   --arg next_window "$next_window" --arg next_at "$(at "$next_epoch" '+%a %H:%M')" \
   --arg next_in "$([ -n "$next_epoch" ] && countdown "$next_epoch" || echo "--")" \
   '{available: true,
+    session_percent: ($session_used | rtrimstr("%") | tonumber? // 0),
+    week_percent: ($week_used | rtrimstr("%") | tonumber? // 0),
     session_used: $session_used, session_reset: $session_reset,
     week_used: $week_used, week_reset: $week_reset,
     next_reset_window: $next_window, next_reset_at: $next_at, next_reset_in: $next_in}'

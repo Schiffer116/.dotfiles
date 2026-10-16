@@ -15,3 +15,5 @@ infra
 ^/\.claude/keybindings\.json$
 ^/\.claude/hooks$
 ^/\.CLAUDE\.md$
+^/CLAUDE\.md$
+^/system$

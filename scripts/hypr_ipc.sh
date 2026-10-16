@@ -1,36 +1,63 @@
 #!/usr/bin/env sh
+# eww deflisten source for the bar (hypr_state in bar/widgets.yuck). Prints the bar's
+# Hyprland state as one JSON line at start and after every workspace, window or monitor
+# change, so a restarted eww daemon gets it back on its own:
+#   {"monitors": [{"name", "currentWorkspace", "previousWorkspace"}], "cur_win": "class, title"}
 
-socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR"/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock | while read -r line; do
+# "class,title" from Hyprland -> "class, title", first line only; "" when no window.
+format_window() {
+    awk '{
+        gsub(",", ", ", $0);
+        sub(/\\n.*/, "", $0);
+        sub(/^, $/, "", $0);
+        print $0
+    }'
+}
+
+# Live monitors, keeping each one's previous workspace across rebuilds.
+read_monitors() {
+    hyprctl monitors -j | jq -c --argjson old "${monitors:-[]}" 'map(.name as $n | {
+        name: $n,
+        currentWorkspace: .activeWorkspace.id,
+        previousWorkspace: (($old[] | select(.name == $n) | .previousWorkspace) // .activeWorkspace.id)
+    })'
+}
+
+emit() {
+    jq -nc --argjson monitors "$monitors" --arg cur_win "$cur_win" '{monitors: $monitors, cur_win: $cur_win}'
+}
+
+monitors=$(read_monitors)
+cur_win=$(hyprctl activewindow -j | jq -r '"\(.class // ""),\(.title // "")"' | format_window)
+emit
+
+# eww stops a deflisten by killing this shell only, so socat runs as a tracked background job
+# feeding a FIFO (not a pipeline, whose processes would outlive us) and is killed on exit.
+fifo="$XDG_RUNTIME_DIR/hypr_ipc.$$.fifo"
+mkfifo "$fifo"
+socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR"/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock >"$fifo" &
+socat_pid=$!
+trap 'kill "$socat_pid" 2>/dev/null; rm -f "$fifo"' EXIT
+trap 'exit 0' INT TERM HUP
+
+while read -r line; do
     case $line in
         'workspace>>'*)
-            monitors=$(eww get monitors)
             current_monitor=$(hyprctl activeworkspace -j | jq -r '.monitor')
-            previous_workspace=$(echo "$monitors" | jq ".[] | select(.name == \"${current_monitor}\") | .currentWorkspace")
-            current_workspace=$(echo "$line" | awk -F '>>' '{ print $2 }')
-            # next_wallpaper="$(find ~/Pictures/arts/ | shuf -n 1)"
-            # hyprctl hyprpaper wallpaper "$current_monitor,$next_wallpaper"
-            eww update monitors="$(echo "$monitors" | jq "map(
-                if .name == \"$current_monitor\" then
-                    .previousWorkspace = $previous_workspace |
-                    .currentWorkspace = $current_workspace
-                else
-                    .
-                end
-                )")"
+            current_workspace=${line#workspace>>}
+            monitors=$(printf '%s' "$monitors" | jq -c --arg m "$current_monitor" --arg w "$current_workspace" '
+                map(if .name == $m then
+                        .previousWorkspace = .currentWorkspace | .currentWorkspace = ($w | tonumber? // $w)
+                    else . end)')
+            emit
             ;;
-
         'activewindow>>'*)
-            active_window="$(echo "$line" | awk -F '>>' '{
-                gsub(",", ", ", $2);
-                sub(/\\n.*/, "", $2);
-                sub(/^, $/, "", $2);
-                print $2
-            }')"
-            if [ "$active_window" != ',' ]; then
-                eww update cur_win="$active_window"
-            else
-                eww update cur_win=''
-            fi
+            cur_win=$(printf '%s\n' "${line#activewindow>>}" | format_window)
+            emit
+            ;;
+        'monitoradded>>'* | 'monitorremoved>>'*)
+            monitors=$(read_monitors)
+            emit
             ;;
     esac
-done
+done <"$fifo"

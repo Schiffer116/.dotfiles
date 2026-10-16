@@ -17,5 +17,6 @@ in
   home.file.".claude/hooks/speak-notify.sh".source = link ".claude/hooks/speak-notify.sh";
   # Claude Code reads user instructions from ~/.claude/CLAUDE.md, not ~/.CLAUDE.md.
   home.file.".claude/CLAUDE.md".source = link ".CLAUDE.md";
-  # ~/.claude/settings.json is deliberately unmanaged: Claude Code rewrites it in place.
+  # ~/.claude/settings.json is linked by stow on the laptop, so Claude Code's in-place
+  # rewrites land in the repo and show up in git diff.
 }
