@@ -177,8 +177,7 @@ hl.on('hyprland.start', function()
   adopt_unknown_monitors()
   hl.exec_cmd('eww-windows.sh sync')
   hl.exec_cmd('tmux-session.sh --cache')
-  hl.exec_cmd('volume_controller')
-  hl.exec_cmd('brightness_controller')
+  hl.exec_cmd('levelctl daemon')
   hl.exec_cmd('hyprctl setcursor Bibata-Modern-Ice 30')
   hl.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 1')
   hl.exec_cmd('brave', { workspace = "11" })
@@ -567,21 +566,21 @@ hl.bind(mainMod .. ' + mouse:272', hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. ' + SHIFT + mouse:272', hl.dsp.window.resize(), { mouse = true })
 
 -- Plain keys step 5%, SHIFT steps 1%. ALT + volume keys drive the brightness of the focused monitor.
-hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase 5'), { locked = true, repeating = true })
-hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease 5'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('volume.sh increase 1'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('volume.sh decrease 1'), { locked = true, repeating = true })
-hl.bind('XF86AudioMute', hl.dsp.exec_cmd('volume.sh toggle-mute'), { locked = true })
-hl.bind('XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh increase 5'), { locked = true, repeating = true })
-hl.bind('XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh decrease 5'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86MonBrightnessUp', hl.dsp.exec_cmd('brightness.sh increase 1'), { locked = true, repeating = true })
-hl.bind('SHIFT + XF86MonBrightnessDown', hl.dsp.exec_cmd('brightness.sh decrease 1'),
+hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('levelctl volume +5'), { locked = true, repeating = true })
+hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('levelctl volume -5'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('levelctl volume +1'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('levelctl volume -1'), { locked = true, repeating = true })
+hl.bind('XF86AudioMute', hl.dsp.exec_cmd('levelctl volume toggle-mute'), { locked = true })
+hl.bind('XF86MonBrightnessUp', hl.dsp.exec_cmd('levelctl brightness +5'), { locked = true, repeating = true })
+hl.bind('XF86MonBrightnessDown', hl.dsp.exec_cmd('levelctl brightness -5'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86MonBrightnessUp', hl.dsp.exec_cmd('levelctl brightness +1'), { locked = true, repeating = true })
+hl.bind('SHIFT + XF86MonBrightnessDown', hl.dsp.exec_cmd('levelctl brightness -1'),
   { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase 5'), { locked = true, repeating = true })
-hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease 5'), { locked = true, repeating = true })
-hl.bind('ALT + SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('brightness.sh increase 1'),
+hl.bind('ALT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('levelctl brightness +5'), { locked = true, repeating = true })
+hl.bind('ALT + XF86AudioLowerVolume', hl.dsp.exec_cmd('levelctl brightness -5'), { locked = true, repeating = true })
+hl.bind('ALT + SHIFT + XF86AudioRaiseVolume', hl.dsp.exec_cmd('levelctl brightness +1'),
   { locked = true, repeating = true })
-hl.bind('ALT + SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('brightness.sh decrease 1'),
+hl.bind('ALT + SHIFT + XF86AudioLowerVolume', hl.dsp.exec_cmd('levelctl brightness -1'),
   { locked = true, repeating = true })
 
 hl.bind('XF86AudioNext', hl.dsp.exec_cmd('playerctl next'), { locked = true })

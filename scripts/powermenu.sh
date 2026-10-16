@@ -40,7 +40,7 @@ case $1 in
                 ;;
             2)
                 close
-                volume.sh mute
+                levelctl volume mute
                 playerctl pause
                 systemctl suspend
                 ;;

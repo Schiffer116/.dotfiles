@@ -56,8 +56,8 @@
     (language)
     (sep)
     (temp)
-    (backlight :brightness brightness :monitor_name monitor_name)
-    (sound :volume volume)
+    (backlight :brightness {levels.brightness} :monitor_name monitor_name)
+    (sound :volume {levels.volume} :muted {levels.muted})
     (network)
     (battery)
     (right_triangle :fg bg-color

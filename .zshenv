@@ -46,10 +46,6 @@ export VCPKG_ROOT="$HOME/.local/share/vcpkg"
 
 export PERSONAL_FINANCE_LEDGER="$HOME/Documents/personal_finance"
 
-export VOLUME_SERVER_SOCKET="$XDG_RUNTIME_DIR/volume_server.sock"
-export VOLUME_LOG="$XDG_RUNTIME_DIR/volume.log"
-export BRIGHTNESS_SERVER_SOCKET="$XDG_RUNTIME_DIR/brightness_server.sock"
-export BRIGHTNESS_LOG="$XDG_RUNTIME_DIR/brightness.log"
 
 # home-manager session variables: standalone (Arch) or as a NixOS module (the dev box)
 for f in "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"; do
