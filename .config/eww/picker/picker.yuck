@@ -37,8 +37,11 @@
       (eventbox :class "app-item-event"
                 :cursor "pointer"
                 :onclick "picker.sh select ${entry.i} &"
+        ;; Ellipsize instead of growing the window past the screen: an unshrinkable row
+        ;; overflowed, and the strip jumped sideways on every page turn.
         (label :class "app-item ${entry.i == picker.index ? 'app-item-active' : ''}"
                :xalign 0.5
+               :truncate true
                :text "${entry.label}${entry.pinned ? ' 󰐃' : ''}")))))
 
 (defwidget picker_footer []
