@@ -64,7 +64,10 @@ local function sync_widgets()
     local present = hl.get_monitor(output) ~= nil
     if present ~= (widgets_open[output] == true) then
       if present then
-        hl.exec_cmd('for _ in $(seq 20); do eww open-many ' .. widgets.open .. ' && break; sleep 0.25; done')
+        -- Wait for the daemon started at login: eww starts one on demand, so two opens racing
+        -- at startup would each start their own and split the bar variables between them.
+        hl.exec_cmd('for _ in $(seq 50); do eww ping >/dev/null 2>&1 && break; sleep 0.1; done; '
+          .. 'for _ in $(seq 20); do eww open-many ' .. widgets.open .. ' && break; sleep 0.25; done')
       else
         hl.exec_cmd('eww close ' .. widgets.close)
       end
@@ -127,6 +130,7 @@ hl.on('hyprland.start', function()
   hl.exec_cmd('hyprsunset --temperature 1000')
   hl.exec_cmd('fcitx5 -d')
   hl.exec_cmd('mako')
+  hl.exec_cmd('eww daemon')
   sync_widgets()
   hl.exec_cmd('tmux-session.sh --cache')
   hl.exec_cmd('volume_controller')

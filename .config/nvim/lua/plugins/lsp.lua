@@ -13,6 +13,33 @@ return {
     require('mason').setup()
     require('mason-lspconfig').setup()
 
+    -- Servers installed by Nix (nix/home/editor.nix), enabled when found on PATH.
+    -- mason-lspconfig above only enables the ones Mason installed.
+    for name, exe in pairs({
+      lua_ls = 'lua-language-server',
+      gopls = 'gopls',
+      basedpyright = 'basedpyright-langserver',
+      bashls = 'bash-language-server',
+      cssls = 'vscode-css-language-server',
+      html = 'vscode-html-language-server',
+      jsonls = 'vscode-json-language-server',
+      eslint = 'vscode-eslint-language-server',
+      ts_ls = 'typescript-language-server',
+      yamlls = 'yaml-language-server',
+      terraformls = 'terraform-ls',
+      tflint = 'tflint',
+      texlab = 'texlab',
+      dockerls = 'docker-langserver',
+      docker_compose_language_service = 'docker-compose-langserver',
+      tailwindcss = 'tailwindcss-language-server',
+      emmet_language_server = 'emmet-language-server',
+      nil_ls = 'nil',
+    }) do
+      if vim.fn.executable(exe) == 1 then
+        vim.lsp.enable(name)
+      end
+    end
+
     vim.api.nvim_create_autocmd('LspAttach', {
       desc = 'LSP actions',
       callback = function(event)
