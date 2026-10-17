@@ -28,7 +28,7 @@
 - In a Herdr pane, end every turn with `berthier report "<one line>"`; start it with `needs you:` when the user must act. A Stop hook enforces it.
 - Never edit another Corps's files: run `berthier owners`, then `berthier ask <corps> "<what and why>"` (ask `berthier` when nobody owns it).
 - When done with an incoming `[berthier ask]`, answer with `berthier ask <sender> "..."`.
-- To work side by side with the main branch, run `berthier task-split <task> "<brief>"` from your Project workspace (creates a `󱎦 <project>/<task>` worktree workspace with its own agent).
+- To work side by side with the main branch, run `berthier task-split <task> "<brief>"` from your Corps workspace (creates a `󱎦 <corps>/<task>` worktree workspace with its own agent).
 - After the user has reviewed it: `berthier task-done <task>`.
 
 ## Maintaining this file
