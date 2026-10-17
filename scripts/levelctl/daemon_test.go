@@ -21,11 +21,15 @@ type fakeSystem struct {
 	muted      bool
 	active     string
 	brightness map[string]int
+	enabled    []string
+	failReads  int // the next brightness reads that fail, like DDC right after login
+	reads      int
 	gate       chan struct{}
 }
 
 func newFake() *fakeSystem {
-	return &fakeSystem{volume: 40, active: "eDP-1", brightness: map[string]int{"eDP-1": 50, "HDMI-A-1": 30}}
+	return &fakeSystem{volume: 40, active: "eDP-1", brightness: map[string]int{"eDP-1": 50, "HDMI-A-1": 30},
+		enabled: []string{"eDP-1", "HDMI-A-1"}}
 }
 
 func (f *fakeSystem) record(call string) {
@@ -65,7 +69,11 @@ func (f *fakeSystem) Volume() (int, bool, error) {
 
 func (f *fakeSystem) ActiveMonitor() (string, error) { return f.active, nil }
 
-func (f *fakeSystem) BrightnessMonitors() []string { return []string{"eDP-1", "HDMI-A-1"} }
+func (f *fakeSystem) BrightnessMonitors() ([]string, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return append([]string(nil), f.enabled...), nil
+}
 
 func (f *fakeSystem) StepBrightness(monitor string, delta int) error {
 	f.record(fmt.Sprintf("brightness %s %+d", monitor, delta))
@@ -79,6 +87,11 @@ func (f *fakeSystem) StepBrightness(monitor string, delta int) error {
 func (f *fakeSystem) Brightness(monitor string) (int, error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
+	f.reads++
+	if f.failReads > 0 {
+		f.failReads--
+		return 0, fmt.Errorf("ddcutil: display not found")
+	}
 	return f.brightness[monitor], nil
 }
 
@@ -142,6 +155,103 @@ func TestBrightnessGoesToFocusedOutput(t *testing.T) {
 	}
 }
 
+// fastRetries makes a daemon retry reads after 1ms, 2ms, 4ms... for 50ms.
+func fastRetries(d *daemon) *daemon {
+	d.firstRetry, d.retryFor = time.Millisecond, 50*time.Millisecond
+	return d
+}
+
+func (d *daemon) brightnessOf(monitor string) (int, bool) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	v, ok := d.state.Brightness[monitor]
+	return v, ok
+}
+
+func (f *fakeSystem) readCount() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return f.reads
+}
+
+func (f *fakeSystem) setEnabled(monitors ...string) {
+	f.mu.Lock()
+	f.enabled = monitors
+	f.mu.Unlock()
+}
+
+func TestBrightnessReadRetriedUntilItAnswers(t *testing.T) {
+	f := newFake()
+	f.enabled = []string{"HDMI-A-1"}
+	f.failReads = 3
+	d := fastRetries(newDaemon(f))
+	d.start()
+	waitFor(t, func() bool { v, _ := d.brightnessOf("HDMI-A-1"); return v == 30 })
+	if got := f.readCount(); got != 4 {
+		t.Fatalf("reads = %d, want 4", got)
+	}
+}
+
+func TestBrightnessReadGivesUp(t *testing.T) {
+	f := newFake()
+	f.enabled = []string{"HDMI-A-1"}
+	f.failReads = 1000
+	d := fastRetries(newDaemon(f))
+	d.syncOutputs()
+	time.Sleep(200 * time.Millisecond)
+	settled := f.readCount()
+	time.Sleep(100 * time.Millisecond)
+	// Backoff from 1ms within 50ms is at most 6 reads (0, 1, 3, 7, 15, 31ms), then nothing.
+	if got := f.readCount(); got != settled || got < 2 || got > 6 {
+		t.Fatalf("reads = %d then %d, want 2..6 and then no more", settled, got)
+	}
+	if _, ok := d.brightnessOf("HDMI-A-1"); ok {
+		t.Fatal("unreadable output has a brightness")
+	}
+}
+
+func TestUnpluggedOutputStopsRetryingAndIsReadAgainOnReplug(t *testing.T) {
+	f := newFake()
+	f.enabled = []string{"HDMI-A-1"}
+	f.failReads = 1000
+	d := newDaemon(f)
+	d.firstRetry, d.retryFor = 20*time.Millisecond, time.Minute
+	d.syncOutputs()
+	waitFor(t, func() bool { return f.readCount() == 1 })
+	f.setEnabled()
+	d.syncOutputs()
+	time.Sleep(100 * time.Millisecond)
+	if got := f.readCount(); got > 2 {
+		t.Fatalf("reads = %d after unplug, want the retries to stop", got)
+	}
+
+	f.mu.Lock()
+	f.failReads, f.brightness["HDMI-A-1"] = 0, 70
+	f.mu.Unlock()
+	f.setEnabled("HDMI-A-1")
+	d.syncOutputs()
+	waitFor(t, func() bool { v, _ := d.brightnessOf("HDMI-A-1"); return v == 70 })
+
+	f.setEnabled()
+	d.syncOutputs()
+	if _, ok := d.brightnessOf("HDMI-A-1"); ok {
+		t.Fatal("unplugged output kept its brightness")
+	}
+}
+
+func TestOutputEvents(t *testing.T) {
+	for event, want := range map[string]bool{
+		"monitoradded>>HDMI-A-1":                 true,
+		"monitorremoved>>eDP-1":                  true,
+		"monitoraddedv2>>1,HDMI-A-1,AOC Q27G2G4": false,
+		"activewindow>>kitty,monitoradded>>x":    false,
+	} {
+		if got := isOutputChange(event); got != want {
+			t.Errorf("isOutputChange(%q) = %v, want %v", event, got, want)
+		}
+	}
+}
+
 func TestParseRequest(t *testing.T) {
 	for _, tc := range []struct {
 		args  string
@@ -183,6 +293,7 @@ func TestWatchSeesChangesOverSocket(t *testing.T) {
 	defer ln.Close()
 	d := newDaemon(newFake())
 	d.start()
+	waitFor(t, func() bool { _, ok := d.brightnessOf("HDMI-A-1"); _, ok2 := d.brightnessOf("eDP-1"); return ok && ok2 })
 	go func() {
 		for {
 			c, err := ln.Accept()

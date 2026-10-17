@@ -72,9 +72,11 @@ func runDaemon() error {
 	if err != nil {
 		return err
 	}
-	d := newDaemon(newDesktop())
+	desktop := newDesktop()
+	d := newDaemon(desktop)
 	d.start()
 	go d.followSink()
+	go desktop.FollowOutputs(d.syncOutputs)
 	for {
 		c, err := ln.Accept()
 		if err != nil {

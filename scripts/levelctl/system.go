@@ -1,14 +1,18 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // System is everything levelctl reads or changes outside itself. The daemon only talks to the
@@ -22,8 +26,8 @@ type System interface {
 
 	// ActiveMonitor is the output that has focus; brightness steps go to it.
 	ActiveMonitor() (string, error)
-	// BrightnessMonitors lists the outputs whose brightness can be read and set.
-	BrightnessMonitors() []string
+	// BrightnessMonitors lists the enabled outputs whose brightness can be read and set.
+	BrightnessMonitors() ([]string, error)
 	StepBrightness(monitor string, delta int) error
 	Brightness(monitor string) (int, error)
 }
@@ -123,12 +127,25 @@ func (d *desktop) backlights() map[string]string {
 	return backlights
 }
 
-func (d *desktop) BrightnessMonitors() []string {
-	var names []string
-	for name := range d.backlights() {
-		names = append(names, name)
+func (d *desktop) BrightnessMonitors() ([]string, error) {
+	out, err := run("hyprctl", "monitors", "-j")
+	if err != nil {
+		return nil, err
 	}
-	return names
+	var enabled []struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal(out, &enabled); err != nil {
+		return nil, fmt.Errorf("unexpected hyprctl output: %w", err)
+	}
+	backlights := d.backlights()
+	var names []string
+	for _, m := range enabled {
+		if _, ok := backlights[m.Name]; ok {
+			names = append(names, m.Name)
+		}
+	}
+	return names, nil
 }
 
 func (d *desktop) StepBrightness(monitor string, delta int) error {
@@ -177,4 +194,34 @@ func (d *desktop) Brightness(monitor string) (int, error) {
 	default:
 		return 0, fmt.Errorf("no brightness control for %s", monitor)
 	}
+}
+
+// FollowOutputs calls changed on every output added or removed, from Hyprland's event socket, and
+// after every (re)connect to it in case an event was missed meanwhile. It never returns.
+func (d *desktop) FollowOutputs(changed func()) {
+	path := filepath.Join(os.Getenv("XDG_RUNTIME_DIR"), "hypr", os.Getenv("HYPRLAND_INSTANCE_SIGNATURE"), ".socket2.sock")
+	for {
+		c, err := net.Dial("unix", path)
+		if err != nil {
+			log.Print("hyprland events: ", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		changed()
+		events := bufio.NewScanner(c)
+		events.Buffer(nil, 1<<20) // window titles can be long
+		for events.Scan() {
+			if isOutputChange(events.Text()) {
+				changed()
+			}
+		}
+		c.Close()
+		time.Sleep(time.Second)
+	}
+}
+
+// isOutputChange matches "monitoradded>>HDMI-A-1" and "monitorremoved>>HDMI-A-1", not their v2
+// twins, so one change triggers one sync.
+func isOutputChange(event string) bool {
+	return strings.HasPrefix(event, "monitoradded>>") || strings.HasPrefix(event, "monitorremoved>>")
 }

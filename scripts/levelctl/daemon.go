@@ -34,6 +34,12 @@ type daemon struct {
 
 	volume     chan request
 	brightness chan request
+
+	backlight  sync.Mutex     // one brightness backend call at a time: ddcutil shares the I2C bus
+	outputs    map[string]int // enabled outputs with a backlight, each with the id of its latest read loop
+	loops      int
+	firstRetry time.Duration // a failed read is retried after this, doubling each time,
+	retryFor   time.Duration // until this long has passed since the output appeared
 }
 
 func newDaemon(sys System) *daemon {
@@ -41,19 +47,81 @@ func newDaemon(sys System) *daemon {
 		sys:        sys,
 		state:      State{Brightness: map[string]int{}},
 		watchers:   map[net.Conn]struct{}{},
+		outputs:    map[string]int{},
+		firstRetry: 500 * time.Millisecond,
+		retryFor:   30 * time.Second,
 		volume:     make(chan request, 256),
 		brightness: make(chan request, 256),
 	}
 }
 
-// start reads the initial state and runs one worker per level.
+// start reads the initial state and runs one worker per level. The caller keeps the outputs
+// current by calling syncOutputs on every output change.
 func (d *daemon) start() {
 	d.refreshVolume()
-	for _, m := range d.sys.BrightnessMonitors() {
-		d.refreshBrightness(m)
-	}
+	d.syncOutputs()
 	go d.work(d.volume, d.applyVolume)
 	go d.work(d.brightness, d.applyBrightness)
+}
+
+// syncOutputs starts reading each newly enabled output and forgets outputs that are gone, so a
+// replugged monitor is read fresh. Idempotent: extra calls cost one hyprctl run.
+func (d *daemon) syncOutputs() {
+	monitors, err := d.sys.BrightnessMonitors()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+	present := map[string]bool{}
+	d.mu.Lock()
+	for _, m := range monitors {
+		present[m] = true
+		if _, ok := d.outputs[m]; !ok {
+			d.loops++
+			d.outputs[m] = d.loops
+			go d.readUntilAnswered(m, d.loops)
+		}
+	}
+	for m := range d.outputs {
+		if !present[m] {
+			delete(d.outputs, m)
+			delete(d.state.Brightness, m)
+		}
+	}
+	d.mu.Unlock()
+	d.publish()
+}
+
+// readUntilAnswered reads an output's brightness, retrying with backoff: a monitor's DDC channel
+// often does not answer for a few seconds after login or hotplug. Stops early if the output goes
+// away (or was replugged, starting a newer loop).
+func (d *daemon) readUntilAnswered(monitor string, loop int) {
+	deadline := time.Now().Add(d.retryFor)
+	for delay := d.firstRetry; ; delay *= 2 {
+		d.mu.Lock()
+		current := d.outputs[monitor] == loop
+		d.mu.Unlock()
+		if !current {
+			return
+		}
+		d.backlight.Lock()
+		value, err := d.sys.Brightness(monitor)
+		d.backlight.Unlock()
+		if err == nil {
+			d.mu.Lock()
+			if d.outputs[monitor] == loop {
+				d.state.Brightness[monitor] = value
+			}
+			d.mu.Unlock()
+			d.publish()
+			return
+		}
+		if time.Now().Add(delay).After(deadline) {
+			log.Printf("giving up on %s brightness: %v", monitor, err)
+			return
+		}
+		time.Sleep(delay)
+	}
 }
 
 // work applies the first request of a burst on its own, so steps at a human pace are visible
@@ -107,6 +175,8 @@ func (d *daemon) applyVolume(batch []request) {
 }
 
 func (d *daemon) applyBrightness(batch []request) {
+	d.backlight.Lock()
+	defer d.backlight.Unlock()
 	delta := 0
 	for _, r := range batch {
 		delta += r.delta
