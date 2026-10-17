@@ -17,7 +17,7 @@ return {
     scale          = '1',
     workspace_base = 0,
     bar            = 'laptop_bar',
-    windows        = { 'monitor', 'finance', 'quote', 'army' },
+    windows        = { 'monitor', 'finance', 'quote' },
     backlight      = 'brightnessctl',
   },
   {
