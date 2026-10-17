@@ -1,18 +1,8 @@
 #!/usr/bin/env sh
 # eww deflisten source for the bar (hypr_state in bar/widgets.yuck). Prints the bar's
-# Hyprland state as one JSON line at start and after every workspace, window or monitor
-# change, so a restarted eww daemon gets it back on its own:
-#   {"monitors": [{"name", "currentWorkspace", "previousWorkspace"}], "cur_win": "class, title"}
-
-# "class,title" from Hyprland -> "class, title", first line only; "" when no window.
-format_window() {
-    awk '{
-        gsub(",", ", ", $0);
-        sub(/\\n.*/, "", $0);
-        sub(/^, $/, "", $0);
-        print $0
-    }'
-}
+# Hyprland state as one JSON line at start and after every workspace or monitor change,
+# so a restarted eww daemon gets it back on its own:
+#   {"monitors": [{"name", "currentWorkspace", "previousWorkspace"}]}
 
 # Live monitors, keeping each one's previous workspace across rebuilds.
 read_monitors() {
@@ -24,11 +14,10 @@ read_monitors() {
 }
 
 emit() {
-    jq -nc --argjson monitors "$monitors" --arg cur_win "$cur_win" '{monitors: $monitors, cur_win: $cur_win}'
+    jq -nc --argjson monitors "$monitors" '{monitors: $monitors}'
 }
 
 monitors=$(read_monitors)
-cur_win=$(hyprctl activewindow -j | jq -r '"\(.class // ""),\(.title // "")"' | format_window)
 emit
 
 # eww stops a deflisten by killing this shell only, so socat runs as a tracked background job
@@ -49,10 +38,6 @@ while read -r line; do
                 map(if .name == $m then
                         .previousWorkspace = .currentWorkspace | .currentWorkspace = ($w | tonumber? // $w)
                     else . end)')
-            emit
-            ;;
-        'activewindow>>'*)
-            cur_win=$(printf '%s\n' "${line#activewindow>>}" | format_window)
             emit
             ;;
         'monitoradded>>'* | 'monitorremoved>>'*)

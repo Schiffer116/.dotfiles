@@ -45,7 +45,7 @@
     (sep)
     (claude_usage)
     (sep)
-    (current_window)))
+    (claude_agents)))
 
 (defwidget center []
   (box :orientation "h" :space-evenly false :halign "center"

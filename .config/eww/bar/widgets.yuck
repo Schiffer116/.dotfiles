@@ -9,7 +9,7 @@
            :text "󰣇")))
 
 (deflisten hypr_state
-  :initial '{"monitors": [], "cur_win": ""}'
+  :initial '{"monitors": []}'
   "hypr_ipc.sh")
 
 (defwidget workspace [id monitor_name icon]
@@ -31,13 +31,6 @@
     (workspace :id {workspace_base + 3} :monitor_name monitor_name :icon "")
     (workspace :id {workspace_base + 4} :monitor_name monitor_name :icon "")
     (workspace :id {workspace_base + 5} :monitor_name monitor_name :icon "")))
-
-
-(defwidget current_window []
-    (label :text {hypr_state.cur_win}
-           :truncate true
-           :limit-width 35
-           :style "margin-left: 10px; color: white;"))
 
 
 (defwidget monitor [value css_class]
