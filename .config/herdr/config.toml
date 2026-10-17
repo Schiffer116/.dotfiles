@@ -121,11 +121,11 @@ split_vertical = "prefix+%"
 split_horizontal = "prefix+\""
 # close_pane = "prefix+x"
 # zoom = "prefix+z"       # legacy alias: fullscreen
-# resize_mode = "prefix+r"
-resize_pane_left = "prefix+shift+h"
-resize_pane_down = "prefix+shift+j"
-resize_pane_up = "prefix+shift+k"
-resize_pane_right = "prefix+shift+l"
+resize_mode = ""
+swap_pane_left = "prefix+shift+h"
+swap_pane_down = "prefix+shift+j"
+swap_pane_up = "prefix+shift+k"
+swap_pane_right = "prefix+shift+l"
 # toggle_sidebar = "prefix+b"
 
 # Navigate-mode movement. These local shortcuts win while navigate mode is open.
