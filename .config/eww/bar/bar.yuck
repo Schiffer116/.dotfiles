@@ -42,7 +42,6 @@
     (monitor :css_class "cpu" :value {EWW_CPU.avg})
     (monitor :css_class "ram" :value {EWW_RAM.used_mem_perc})
     (monitor :css_class "rom" :value {EWW_DISK["/"].used_perc})
-    (sep)
     (claude_usage)
     (sep)
     (claude_agents)))
