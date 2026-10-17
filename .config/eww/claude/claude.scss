@@ -48,7 +48,25 @@
   text-shadow: 0 0 3px rgba(214, 133, 133, 1);
 }
 
-.claude-tip {
-  padding: 2px 4px;
-  font-size: 15px;
+// Plain text over the wallpaper: a dark halo on every line keeps it readable.
+.army {
+  background-color: transparent;
+  color: white;
+  text-shadow: 0 0 4px black, 0 0 2px black, 1px 1px 2px black;
+}
+
+.army-corps {
+  margin-top: 4px;
+}
+
+.army-name {
+  margin-right: 10px;
+}
+
+.army-state {
+  color: rgba(164, 223, 255, 1);
+}
+
+.army-needs-you {
+  color: rgba(255, 120, 120, 1);
 }

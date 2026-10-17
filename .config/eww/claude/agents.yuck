@@ -1,13 +1,20 @@
 ;; Claude Agents from Berthier: one icon and count per status, zeros hidden except working.
-;; The tooltip lists every count, then Berthier's report, one line per Project.
+;; The tooltip lists every count; the Army report has its own desktop window (army.yuck).
 (defpoll claude_agents_data
   :interval "10s"
-  :initial "{\"available\": false, \"working\": 0, \"blocked\": 0, \"done\": 0, \"idle\": 0, \"unknown\": 0, \"gone\": 0, \"report\": \"\", \"report_markup\": \"\"}"
+  :initial "{\"available\": false, \"working\": 0, \"blocked\": 0, \"done\": 0, \"idle\": 0, \"unknown\": 0, \"gone\": 0, \"report\": \"\", \"corps\": []}"
   "claude-agents.sh")
 
 (defwidget claude_agents []
-  (tooltip
-    (claude_agents_tooltip)
+  (eventbox :tooltip {claude_agents_data.available
+                        ? "Claude agents
+󰜎  ${claude_agents_data.working} working
+󰀦  ${claude_agents_data.blocked} blocked, waiting on you
+󰄬  ${claude_agents_data.done} done
+󰒲  ${claude_agents_data.idle} idle
+󰋗  ${claude_agents_data.unknown} unknown
+󰚌  ${claude_agents_data.gone} gone"
+                        : "Claude agents unavailable: Berthier's Main Loop is not updating"}
     (box :class "claude-agents"
          :space-evenly false
       (label :class "claude-agents-unavailable"
@@ -26,20 +33,3 @@
   (label :class "claude-agent claude-agent-${status}"
          :visible {count > 0 || status == "working"}
          :text "${icon} ${count}"))
-
-;; One markup label: eww hides `:visible` children inside a tooltip and GTK then shows
-;; an empty box, so the unavailable case switches text instead of widgets.
-(defwidget claude_agents_tooltip []
-  (label :class "claude-tip"
-         :xalign 0
-         :markup {claude_agents_data.available
-                    ? "Claude agents
-󰜎  ${claude_agents_data.working} working
-󰀦  ${claude_agents_data.blocked} blocked, waiting on you
-󰄬  ${claude_agents_data.done} done
-󰒲  ${claude_agents_data.idle} idle
-󰋗  ${claude_agents_data.unknown} unknown
-󰚌  ${claude_agents_data.gone} gone${claude_agents_data.report_markup == "" ? "" : "
-
-${claude_agents_data.report_markup}"}"
-                    : "Claude agents unavailable: Berthier's Main Loop is not updating"}))

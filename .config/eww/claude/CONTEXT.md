@@ -25,7 +25,7 @@ A window with no data shows `--` only for its own fields, and one with no reset 
 
 # Claude Agents Widget
 
-Shows how many Claude Agents are in each status, as icon and count pairs after the usage rings; hovering lists every status, then the Report. Data comes from `scripts/claude-agents.sh`, which runs `berthier counts` (Berthier's Main Loop refreshes it about every 10s). Agent, Main Loop and Fleet State are Berthier's terms, defined in Berthier's own `CONTEXT.md`.
+Shows how many Claude Agents are in each status, as icon and count pairs after the usage rings; hovering lists every status. The Report has its own desktop window, `army`, at the bottom right of the laptop screen. Data comes from `scripts/claude-agents.sh`, which runs `berthier counts` (Berthier's Main Loop refreshes it about every 10s). Agent, Corps, Army, Main Loop and Fleet State are Berthier's terms, defined in Berthier's own `CONTEXT.md`.
 
 ## Language
 
@@ -33,7 +33,7 @@ Shows how many Claude Agents are in each status, as icon and count pairs after t
 The Agent's status as herdr reports it. Blocked means the Agent waits on the user, so it is the one status drawn as a filled red pill.
 
 **Report**:
-Berthier's plain-text Fleet report, one line per Project (`skipli: needs you - review the PR`), possibly empty. The tooltip lines it up in columns: Project, its state (red for `needs you`), then the detail.
+Berthier's plain-text Army report, one line per Corps (`skipli: needs you - review the PR`), needs-you first, possibly empty. The `army` window shows each Corps's name and state (red for `needs you`) with the detail cut to one line below; the window is hidden when the report is empty or Berthier is unavailable.
 
 **Gone**:
 An Agent whose pane vanished; Berthier's Main Loop Revives it unless the user exited it on purpose.

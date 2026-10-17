@@ -7,3 +7,4 @@
 (include "./finance/finance.yuck")
 (include "./claude/claude.yuck")
 (include "./claude/agents.yuck")
+(include "./claude/army.yuck")
