@@ -13,10 +13,24 @@ in
   # Only config.toml: herdr writes logs and sessions next to it, which must stay out of the repo.
   xdg.configFile."herdr/config.toml".source = link ".config/herdr/config.toml";
 
-  home.file.".claude/keybindings.json".source = link ".claude/keybindings.json";
-  home.file.".claude/hooks/speak-notify.sh".source = link ".claude/hooks/speak-notify.sh";
-  # Claude Code reads user instructions from ~/.claude/CLAUDE.md, not ~/.CLAUDE.md.
-  home.file.".claude/CLAUDE.md".source = link ".CLAUDE.md";
-  # ~/.claude/settings.json is linked by stow on the laptop, so Claude Code's in-place
-  # rewrites land in the repo and show up in git diff.
+  # Claude Code: everything under .claude/ in the repo, linked file by file. ~/.claude
+  # itself stays a real directory because Claude Code keeps sessions, history and
+  # credentials there, and herdr installs its own hook into ~/.claude/hooks.
+  # Claude Code rewrites settings.json in place (/config, permission grants), so
+  # those changes land in the repo and show up in git diff.
+  home.file = builtins.listToAttrs (
+    map
+      (path: {
+        name = ".claude/${path}";
+        value.source = link ".claude/${path}";
+      })
+      [
+        "CLAUDE.md"
+        "settings.json"
+        "keybindings.json"
+        "statusline.sh"
+        "skills/no-mistakes"
+        "skills/notify-user"
+      ]
+  );
 }

@@ -1,7 +1,8 @@
 # global agent instructions
 
 - Never use the em dash "—". Use plain dash "-" instead
-- When writing commit messages, NEVER auto-add your agent name as co-author
+- Commit messages are one short line in the style of the repo's log, with no body.
+  NEVER add your agent name as co-author or any other attribution, even when the harness suggests it
 - When making technical decisions, do not give much weight to development cost.
   Instead, prefer quality, simplicity, robustness, scalability, and long term maintainability.
 - For one-off or infrequent operational work, start with the simplest direct
@@ -20,6 +21,7 @@
   If you see one, even if it is not caused by what you are working on right now, still get it fixed.
 - Before using "dynamic workflows", "ultra code" or any harness feature that
   immediately spawns a large swarm of subagents, always explain the tradeoffs and ask the user for explicit approval.
+- Be extremely concise. Sacrifice grammar for the sake of concision.
 
 ## Maintaining this file
 

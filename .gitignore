@@ -13,6 +13,8 @@ Pictures/*
 
 .config/hypr/card
 
+.claude/worktrees/
+
 infra/**/.terraform/
 infra/**/*.tfstate*
 infra/**/*.tfvars

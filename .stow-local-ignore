@@ -12,8 +12,6 @@ infra
 ^/\.config/starship\.toml$
 ^/\.config/tmux$
 ^/\.config/herdr$
-^/\.claude/keybindings\.json$
-^/\.claude/hooks$
-^/\.CLAUDE\.md$
+^/\.claude$
 ^/CLAUDE\.md$
 ^/system$

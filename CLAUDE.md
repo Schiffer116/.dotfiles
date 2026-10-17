@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The repo lives at `~/.dotfiles` (required: the Nix links hardcode that path). Two tools link files into place, and each path is owned by exactly one of them:
 
-- **home-manager** (`flake.nix`, `nix/`) owns the dev environment: zsh, nvim, starship, tmux, herdr, Claude Code keybindings/hooks, and `.CLAUDE.md` (linked to `~/.claude/CLAUDE.md`; it is the user's global agent instructions, not guidance for this repo). It also installs the CLI tools, toolchains and the LSP servers/formatters nvim uses.
+- **home-manager** (`flake.nix`, `nix/`) owns the dev environment: zsh, nvim, starship, tmux, herdr, and all of Claude Code's config under `.claude/` (the list is in `nix/home/agents.nix`). `.claude/CLAUDE.md` is the user's global agent instructions for every project, not guidance for this repo. It also installs the CLI tools, toolchains and the LSP servers/formatters nvim uses.
 - **GNU Stow** (`cd ~/.dotfiles && stow .`) owns the desktop: Hyprland, eww, mako, kitty, `scripts/`, `Pictures/`. pacman provides the desktop packages and system services.
 
 `system/` holds the few `/etc` files the laptop needs (e.g. `system/logind.conf.d/lid.conf`); neither tool can write `/etc` there, so each is copied in by hand with sudo, as its header comment says. Copy, never symlink: system daemons like logind run with `ProtectHome=yes` and silently ignore a link into `~/.dotfiles`.
 
 `.stow-local-ignore` is what keeps the two apart: every home-manager-owned path, and every repo-only file (this one, `nix/`, `infra/`), must be listed there or stow will link it into `$HOME` too. Moving a path to home-manager means adding a `config.lib.dotfiles.link` entry in a `nix/home/*.nix` module and a stow-ignore entry.
 
-Both use symlinks back into the repo (home-manager via `mkOutOfStoreSymlink`, see `nix/home/common.nix`), so editing a config file here edits the live config with no rebuild. A rebuild is only needed after changing `.nix` files. `.claude/settings.json` is stow-linked, so when Claude Code rewrites its settings (`/config`, permission grants) the change appears in `git diff` here; commit or revert it deliberately.
+Both use symlinks back into the repo (home-manager via `mkOutOfStoreSymlink`, see `nix/home/common.nix`), so editing a config file here edits the live config with no rebuild. A rebuild is only needed after changing `.nix` files. When Claude Code rewrites `~/.claude/settings.json` (`/config`, permission grants) the change appears in `git diff` here; commit or revert it deliberately. That file is shared by every project on both machines: repo-specific settings such as auto-mode trust facts belong in that repo's `.claude/settings.local.json`. Status line logic lives in `.claude/statusline.sh`, not inline in the JSON. Spoken alerts are a skill, not a hook: `.claude/skills/notify-user/` (the agent calls it when it needs the user; `DRY_RUN=1` previews `speak.sh`).
 
 ## Nix layout
 
