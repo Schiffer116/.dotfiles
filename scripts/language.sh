@@ -20,10 +20,6 @@ get_symbol() {
     echo "$languages" | jq -r '.[] | select(.ime == "'"$cur_lang"'") | .symbol'
 }
 
-get_languages()  {
-    echo "$languages" | jq '[ .[] | .symbol ]'
-}
-
 symbol_to_ime() {
     echo "$languages" | jq -r '.[] | select(.symbol == "'"$1"'") | .ime'
 }
