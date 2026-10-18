@@ -1,7 +1,6 @@
 .git
 .gitignore
 README.md
-nixos
 flake\.nix
 flake\.lock
 nix
