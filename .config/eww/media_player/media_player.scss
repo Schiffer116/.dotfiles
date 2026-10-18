@@ -1,10 +1,5 @@
 @import "../color.scss";
 
-.song_info {
-  background-color: transparent;
-  padding: 20px;
-}
-
 .cover-art {
   background-position: center;
   background-size: cover;
@@ -14,14 +9,6 @@
   min-width: 30px;
 }
 
-.cover-art-info {
-  background-position: center;
-  background-size: cover;
-  border-radius: 10px;
-  min-height: 150px;
-  min-width: 150px;
-}
-
 .media-button {
   color: rgba(210, 210, 210, 1);
   font-weight: 900;
@@ -29,10 +16,4 @@
 
 .media-button:hover {
   color: rgba(255, 255, 255, 1);
-}
-
-.song-scale {
-  all: unset;
-  margin-right: 13px;
-  min-width: 150px;
 }
