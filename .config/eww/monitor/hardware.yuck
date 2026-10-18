@@ -13,7 +13,7 @@
 )
 
 
-(defwidget left_widget [icon value css_class]
+(defwidget left_widget [icon css_class]
   (box :space-evenly false
        :spacing 20
     (label :class "circ-icon info-hardware ${css_class}"
@@ -25,7 +25,6 @@
 
 (defwidget cpu_monitor []
   (left_widget :icon ""
-               :value {EWW_CPU.avg}
                :css_class "cpu"
     (box :orientation "vertical"
          :space-evenly false
@@ -41,7 +40,6 @@
 
 (defwidget ram_monitor []
   (left_widget :icon "󰍛"
-               :value {EWW_RAM.used_mem_perc}
                :css_class "ram"
     (box :orientation "vertical"
          :space-evenly false
@@ -59,7 +57,6 @@
 
 (defwidget rom_monitor []
     (left_widget :icon ""
-                 :value 12
                  :css_class "rom"
       (box :orientation "vertical"
            :space-evenly false
@@ -74,40 +71,3 @@
                :xalign 0)
         (label :text "Available: ${round(EWW_DISK["/"].free / (1024 * 1024 * 1024), 0)}GB  "
                :xalign 0))))
-
-(defwidget network_monitor []
-  (box :space-evenly false
-       :spacing 5
-    (network :strength network_strength
-             :role "info-network")
-    (box :orientation "vertical"
-         :space-evenly false
-         :valign "center"
-      (label :class "info-title"
-             :text "Network"
-             :xalign 0)
-      (label :text {network_name}
-             :xalign 0)
-      (label :text "Strength: ${network_strength}  "
-             :xalign 0)
-      (label :text "down: ${EWW_NET["wlp3s0"].NET_DOWN}  "
-             :xalign 0)
-      (label :text "Up: ${EWW_NET["wlp3s0"].NET_UP}  "
-             :xalign 0))))
-
-(defwidget battery_monitor []
-  (box :space-evenly false
-       :spacing 5
-    (battery :status {EWW_BATTERY.BAT0.status}
-             :battery {EWW_BATTERY.BAT0.capacity}
-             :role "info-battery")
-    (box :orientation "vertical"
-         :space-evenly false
-         :valign "center"
-      (label :class "info-title"
-             :text "Battery"
-             :xalign 0)
-      (label :text "Remaining: ${EWW_BATTERY.BAT0.capacity}% "
-             :xalign 0)
-      (label :text "${EWW_BATTERY.BAT0.status}"
-             :xalign 0))))

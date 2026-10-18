@@ -19,7 +19,6 @@
 
 (defwidget assets_monitor []
   (left_widget :icon ""
-               :value 0
                :css_class "assets"
     (box :orientation "vertical"
          :space-evenly false
@@ -36,7 +35,6 @@
 
 (defwidget daily_monitor []
   (left_widget :icon ""
-               :value 0
                :css_class "daily"
     (box :orientation "vertical"
          :space-evenly false
@@ -52,7 +50,6 @@
 
 (defwidget new_year_monitor []
   (left_widget :icon ""
-               :value 0
                :css_class "newyear"
     (box :orientation "vertical"
          :space-evenly false
@@ -66,7 +63,6 @@
 
 (defwidget lunar_new_year_monitor []
   (left_widget :icon "🐐"
-               :value 0
                :css_class "lunar"
     (box :orientation "vertical"
          :space-evenly false

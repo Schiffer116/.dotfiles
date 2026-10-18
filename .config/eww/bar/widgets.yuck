@@ -66,11 +66,11 @@
   :initial "false"
   "[ -d /sys/class/power_supply/BAT0 ] && echo true || echo false")
 
-(defwidget battery [?role]
+(defwidget battery []
   (box :space-evenly false
        :class "pill-wrapper"
        :visible has_battery
-    (label :class "battery ${role}"
+    (label :class "battery"
            :text { !has_battery ? "" :
                    EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" :
                    EWW_BATTERY.BAT0.capacity <= 20 ? "" :
@@ -113,12 +113,12 @@
 (defpoll network_strength :interval "5s"
                           :initial ""
                           `nmcli -t -f SIGNAL,ACTIVE device wifi | awk -F':' '{ if ($2 == "yes") print $1 }'`)
-(defwidget network [?role]
+(defwidget network []
   (eventbox :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e nmtui', { float = true, size = { 'monitor_w * 0.6', 'monitor_h * 0.6' } })"`
             :cursor "pointer"
     (box :space-evenly false
          :class "pill-wrapper"
-    (label :class "network ${role}"
+    (label :class "network"
            :text { matches(network_type, "ethernet") ? "󱎔" :
                    network_strength == "" ? "󰤮" :
                    network_strength < 26 ? "󰤟" :

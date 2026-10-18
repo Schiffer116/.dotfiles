@@ -21,10 +21,6 @@
 (defwidget sep []
   (label :class "sep" :text "|"))
 
-(defwidget left_triangle [fg bg]
-  (box :class "left-triangle"
-       :style "background: ${bg}; border-right: 25px solid ${fg};"))
-
 (defwidget right_triangle [fg bg]
   (box :class "right-triangle"
        :style "background: ${bg}; border-left: 25px solid ${fg};"))
