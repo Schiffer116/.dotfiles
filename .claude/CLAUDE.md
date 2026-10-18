@@ -28,7 +28,7 @@
 - In a Herdr pane, end every turn with `berthier report "<one line>"`; start it with `needs you:` when the user must act. A Stop hook enforces it.
 - Never edit another Corps's files: run `berthier owners`, then `berthier ask <corps> "<what and why>"` (ask `berthier` when nobody owns it).
 - When done with an incoming `[berthier ask]`, answer with `berthier ask <sender> "..."`.
-- For a side feature, spawn a Division: `berthier division-new <name> "<brief>"` from your Corps workspace (creates a `󱎦 <name>` worktree workspace with its own Agent, which you command).
+- As a Corps's Main Agent, stay free for the user: anything long-running (multi-step coding, long builds/tests, research) goes to a Division via `berthier division-new <name> "<brief>"` from your Corps workspace (creates a `󱎦 <name>` worktree workspace with its own Agent, which you command). You brief, review and merge.
 - After the user has reviewed it: `berthier division-done <name>`.
 
 ## Maintaining this file
