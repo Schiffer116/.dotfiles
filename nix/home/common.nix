@@ -7,7 +7,7 @@
   programs.home-manager.enable = true;
   xdg.enable = true;
 
-  # Stow-like links: the file stays in ~/.dotfiles, so edits apply without a rebuild
+  # Out-of-store links: the file stays in ~/.dotfiles, so edits apply without a rebuild
   # and app-written files (lazy-lock.json, herdr config) keep working.
   # The repo must be cloned at ~/.dotfiles on every machine.
   lib.dotfiles.link =

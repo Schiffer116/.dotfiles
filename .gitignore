@@ -12,3 +12,4 @@ Pictures/*
 infra/**/.terraform/
 infra/**/*.tfstate*
 infra/**/*.tfvars
+/result
