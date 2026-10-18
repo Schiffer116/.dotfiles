@@ -1,5 +1,4 @@
 (defwindow powermenu
-  :monitor "[\"HDMI-A-1\", \"eDP-1\"]"
   :stacking "overlay"
   :namespace "powermenu"
 

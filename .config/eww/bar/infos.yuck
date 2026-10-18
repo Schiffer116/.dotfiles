@@ -2,7 +2,6 @@
   :stacking "fg"
   :exclusive false
   ;; :focusable true
-  :monitor '["eDP-1", "HDMI-A-1"]'
   :geometry (geometry
     :x 10
     :width 320

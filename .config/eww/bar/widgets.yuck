@@ -46,7 +46,7 @@
 
 (defvar full_time false)
 (defwidget clock [monitor_name]
-  (eventbox :onclick "${EWW_CMD} --no-daemonize open --screen ${monitor_name} --toggle calendar"
+  (eventbox :onclick "eww-windows.sh toggle calendar --screen ${monitor_name}"
             :onhover "${EWW_CMD} update full_time=true"
             :onhoverlost "${EWW_CMD} update full_time=false"
             :cursor "pointer"

@@ -1,17 +1,15 @@
 #!/usr/bin/env sh
 
-# One powermenu window per enabled output, with id powermenu_<output>.
+# One powermenu window per enabled output.
 close() {
     hyprctl dispatch 'hl.dsp.submap("reset")'
-    eww active-windows | cut -d: -f1 | grep '^powermenu_' | xargs -r eww close
+    eww-windows.sh close powermenu
 }
 
 case $1 in
     open)
         eww update active_button=0
-        for output in $(hyprctl monitors -j | jq -r '.[].name'); do
-            eww --no-daemonize open powermenu --screen "$output" --id "powermenu_$output"
-        done
+        eww-windows.sh open powermenu --all
         hyprctl dispatch 'hl.dsp.submap("powermenu")'
         ;;
     close)

@@ -97,7 +97,7 @@ save() {
 close() {
     hyprctl dispatch 'hl.dsp.submap("reset")' >/dev/null
     eww update picker_shown=false
-    eww close picker 2>/dev/null || true
+    eww-windows.sh close picker
     rm -f "$state"
 }
 
@@ -114,10 +114,9 @@ case ${1:-} in
         esac
         "${name}_list" "" | jq -c --arg name "$name" --arg icon "$icon" --argjson size "$size" \
             '{name: $name, icon: $icon, size: $size, query: "", all: ., page: 0, index: 0}' | save
-        output=$(hyprctl activeworkspace -j | jq -r '.monitor')
         hyprctl dispatch 'hl.dsp.submap("picker")' >/dev/null
         eww update picker_shown=true
-        eww --no-daemonize open picker --screen "$output" >/dev/null
+        eww-windows.sh open picker --focused
         ;;
     close)
         close
