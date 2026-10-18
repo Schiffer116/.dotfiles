@@ -1,8 +1,8 @@
 ;; Claude Agents from Berthier: one icon and count per status, zeros hidden except working.
-;; The tooltip lists every count; the Army report has its own desktop window (army.yuck).
+;; The tooltip lists every count.
 (defpoll claude_agents_data
   :interval "10s"
-  :initial "{\"available\": false, \"working\": 0, \"blocked\": 0, \"done\": 0, \"idle\": 0, \"unknown\": 0, \"gone\": 0, \"report\": \"\", \"corps\": []}"
+  :initial "{\"available\": false, \"working\": 0, \"blocked\": 0, \"done\": 0, \"idle\": 0, \"unknown\": 0, \"gone\": 0}"
   "claude-agents.sh")
 
 (defwidget claude_agents []
