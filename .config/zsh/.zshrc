@@ -7,7 +7,6 @@ zmodload zsh/complist
 HISTSIZE=100
 SAVEHIST=100
 HISTFILE=$XDG_CACHE_HOME/zsh/history
-# HISTCONTROL='ignoreboth:erasedups'
 
 setopt HIST_IGNORE_ALL_DUPS
 setopt INC_APPEND_HISTORY
@@ -96,14 +95,11 @@ done
 ############
 
 bindkey -s '^f' 'tmux-session.sh^M'
-# bindkey -s '^r' 'rebuild.sh^M'
 
 ###########
 # aliases #
 ###########
 
-alias insomnia='insomnia --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland'
-alias code='codium'
 alias anki='anki --no-sandbox'
 
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
@@ -121,8 +117,6 @@ alias df='df -h'
 # history-substring
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-
-# alias less='less --raw-control-chars --color=always'
 
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 

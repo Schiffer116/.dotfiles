@@ -13,11 +13,6 @@ export LESS="-R"
 
 export MANPAGER='nvim +Man!'
 
-# export VDPAU_DRIVER=va_gl
-# export LIBVA_DRIVER_NAME=iHD
-
-export RANGER_LOAD_DEFAULT_RC=false
-
 export DISABLE_QT5_COMPAT=1
 
 export PATH="$PATH:$XDG_DATA_HOME/cargo/bin"
