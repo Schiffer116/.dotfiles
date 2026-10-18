@@ -1,18 +1,11 @@
 #!/usr/bin/env sh
 
-icon_dir="$HOME/.config/mako/icons"
-
 time=$(date +%Y-%m-%d-%H-%M-%S)
 dir="$HOME/Pictures/Screenshots"
 file="screenshot_${time}.png"
 
 if [ ! -d "$dir" ]; then
 	mkdir -p "$dir"
-fi
-
-if [ "$2" = "--no-save" ]; then
-    dir=""
-    file=""
 fi
 
 notify_view() {
@@ -25,20 +18,8 @@ notify_view() {
 	fi
 }
 
-countdown() {
-	for sec in $(seq "$1" -1 1); do
-		notify-send -h string:x-canonical-private-synchronous:shot-notify -t 1000 -i "$icon_dir"/timer.png "Taking shot in : $sec"
-		sleep 1
-	done
-}
-
 shot_now() {
 	grim - | tee "$dir/$file" | wl-copy
-}
-
-shot_5() {
-	countdown '5'
-	sleep 1 && grim - | tee "$dir/$file" | wl-copy
 }
 
 shot_win() {
@@ -57,7 +38,6 @@ shot_area() {
 
 case $1 in
     --now) shot_now ;;
-    --in5) shot_5 ;;
     --win) shot_win ;;
     --area) shot_area ;;
 esac
