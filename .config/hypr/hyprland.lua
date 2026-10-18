@@ -1,14 +1,3 @@
--- This is an example Hyprland Lua config file.
--- Refer to the wiki for more information.
--- https://wiki.hypr.land/Configuring/Start/
-
--- Please note not all available settings / options are set here.
--- For a full list, see the wiki
-
--- You can (and should!!) split this configuration into multiple files
--- Create your files separately and then require them like this:
--- require('myColors')
-
 local mainMod = 'SUPER' -- Sets 'Windows' key as main modifier
 
 ------------------
@@ -160,11 +149,6 @@ local browser  = 'brave'
 ---- AUTOSTART ----
 -------------------
 
--- See https://wiki.hypr.land/Configuring/Basics/Autostart/
-
--- Autostart necessary processes (like notifications daemons, status bars, etc.)
--- Or execute your favorite apps at launch like this:
---
 hl.on('hyprland.start', function()
   hl.exec_cmd('dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP')
   hl.exec_cmd('wl-paste -w notify_copy.sh')
@@ -191,14 +175,8 @@ end)
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
--- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
-
--- env = AQ_DRM_DEVICES,/dev/dri/card1
-
 hl.env('MOZ_ENABLE_WAYLAND', '1')
 hl.env('ANKI_WAYLAND', '1')
-
--- env = GDK_BACKEND, wayland, x11, *
 
 hl.env('QT_AUTO_SCREEN_SCALE_FACTOR', '1')
 hl.env('QT_QPA_PLATFORM', 'wayland;xcb')
@@ -209,25 +187,6 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
 hl.env('XCURSOR_SIZE', '24')
 hl.env('HYPRCURSOR_SIZE', '30')
-
------------------------
------ PERMISSIONS -----
------------------------
-
--- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Permissions/
--- Please note permission changes here require a Hyprland restart and are not applied on-the-fly
--- for security reasons
-
--- hl.config({
---   ecosystem = {
---     enforce_permissions = true,
---   },
--- })
-
--- hl.permission('/usr/(bin|local/bin)/grim', 'screencopy', 'allow')
--- hl.permission('/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland', 'screencopy', 'allow')
--- hl.permission('/usr/(bin|local/bin)/hyprpm', 'plugin', 'allow')
-
 
 -----------------------
 ---- LOOK AND FEEL ----
@@ -289,7 +248,7 @@ for i = 1, 10 do
   local key = i % 10
   hl.bind(mainMod .. ' + ALT + ' .. key, hl.dsp.group.active({ index = key }))
 end
-hl.bind(mainMod .. ' + SHIFT + + Tab', hl.dsp.group.prev())
+hl.bind(mainMod .. ' + SHIFT + Tab', hl.dsp.group.prev())
 
 
 --------------------
@@ -304,10 +263,6 @@ hl.config({
       enabled = true,
       size = 5,
       passes = 2,
-    },
-
-    motion_blur = {
-      -- enabled = true,
     },
 
     shadow = {
@@ -343,7 +298,6 @@ hl.curve('overshot', { type = 'bezier', points = { { 0.05, 0.9 }, { 0.1, 1.1 } }
 -- Default springs
 hl.curve('easy', { type = 'spring', mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
 
--- hl.animation({ leaf = 'global', enabled = true, speed = 10, bezier = 'default' })
 hl.animation({ leaf = 'border', enabled = true, speed = 2, bezier = 'default' })
 hl.animation({ leaf = 'windows', enabled = true, speed = 5, bezier = 'overshot', style = 'popin' })
 hl.animation({ leaf = 'fade', enabled = true, speed = 3, bezier = 'quick' })
@@ -353,24 +307,6 @@ hl.animation({ leaf = 'fadeLayersOut', enabled = true, speed = 1.39, bezier = 'a
 hl.animation({ leaf = 'workspaces', enabled = true, speed = 5, bezier = 'overshot', style = 'slide' })
 hl.animation({ leaf = 'specialWorkspace', enabled = true, speed = 5, bezier = 'overshot', style = 'slidevert' })
 hl.animation({ leaf = 'zoomFactor', enabled = true, speed = 7, bezier = 'quick' })
-
--- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
--- 'Smart gaps' / 'No gaps when only'
--- uncomment all if you wish to use that.
--- hl.workspace_rule({ workspace = 'w[--[[ tv1 ]]]', gaps_out = 0, gaps_in = 0 })
--- hl.workspace_rule({ workspace = 'f[1]',   gaps_out = 0, gaps_in = 0 })
--- hl.window_rule({
---     name  = 'no-gaps-wtv1',
---     match = { float = false, workspace = 'w[tv1]' },
---     border_size = 0,
---     rounding    = 0,
--- })
--- hl.window_rule({
---     name  = 'no-gaps-f1',
---     match = { float = false, workspace = 'f[1]' },
---     border_size = 0,
---     rounding    = 0,
--- })
 
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
@@ -443,32 +379,16 @@ hl.gesture({
   action = 'workspace'
 })
 
--- Example per-device config
--- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
-hl.device({
-  name        = 'epic-mouse-v1',
-  sensitivity = -0.5,
-})
-
 
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
 
-
--- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. ' + SHIFT + Space', hl.dsp.window.float({ action = 'toggle' }))
 hl.bind(mainMod .. ' + F', hl.dsp.window.fullscreen({ action = 'toggle' }))
 hl.bind(mainMod .. ' + C', hl.dsp.exec_cmd('mpv /dev/video0 --profile=low-latency --untimed'))
 hl.bind(mainMod .. ' + Return', hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. ' + CTRL + SHIFT + P', hl.dsp.window.pin())
--- hl.bind(mainMod .. ' + V', hl.dsp.exec_cmd('pkill -USR1 sotto')) -- toggle sotto speech-to-text
-
--- Push-to-talk: run nerd-dictation while F13 is held
--- local nerd_dictation_mic = 'alsa_input.pci-0000_00_1f.3.analog-stereo'
--- hl.bind('F12', hl.dsp.exec_cmd(
---   'notify-send begin; nerd-dictation begin --simulate-input-tool WTYPE --pulse-device-name ' .. nerd_dictation_mic))
--- hl.bind('F12', hl.dsp.exec_cmd('notify-send end; nerd-dictation end'), { release = true })
 
 -- Push-to-talk: unmute mic while mouse thumb button (remapped to F13 via ratbagctl) is held
 -- Note: with this system's XKB config, evdev KEY_F13 resolves to keysym XF86Tools, not F13
@@ -494,13 +414,6 @@ hl.bind(mainMod .. ' + SHIFT + H', hl.dsp.window.move({ direction = 'left', grou
 hl.bind(mainMod .. ' + SHIFT + L', hl.dsp.window.move({ direction = 'right', group_aware = true }))
 hl.bind(mainMod .. ' + SHIFT + K', hl.dsp.window.move({ direction = 'up', group_aware = true }))
 hl.bind(mainMod .. ' + SHIFT + J', hl.dsp.window.move({ direction = 'down', group_aware = true }))
-
--- for i = 1, 10 do
---   local key = i % 10
---   hl.bind(mainMod .. ' + ' .. key, hl.dsp.focus({ workspace = i }))
---   hl.bind(mainMod .. ' + SHIFT + ' .. key, hl.dsp.window.move({ workspace = i }))
---   hl.bind(mainMod .. ' + CTRL + ' .. key, hl.dsp.window.move({ workspace = i, follow = false }))
--- end
 
 local function dispatch_relative_workspace(callback, option)
   local active_monitor = hl.get_active_monitor()
@@ -612,16 +525,13 @@ end)
 -- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
--- Example window rules that are useful
-
-local suppressMaximizeRule = hl.window_rule({
-  -- Ignore maximize requests from all apps. You'll probably like this.
+hl.window_rule({
+  -- Ignore maximize requests from all apps.
   name           = 'suppress-maximize-events',
   match          = { class = '.*' },
 
   suppress_event = 'maximize',
 })
--- suppressMaximizeRule:set_enabled(false)
 
 hl.window_rule({
   -- Fix some dragging issues with XWayland
