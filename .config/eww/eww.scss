@@ -16,10 +16,6 @@ button {
   all: unset;
 }
 
-combo-box-text {
-  background-color: #fff;
-}
-
 tooltip {
   background-color: $bg-color;
   padding: 5px;
@@ -67,7 +63,6 @@ tooltip {
 }
 
 .workspace-label-previous {
-  /* color: $bg-grad-5; */
   border-bottom: 2px solid rgba(164, 223, 255, 1);
 }
 
@@ -140,62 +135,22 @@ revealer {
   background-color: #fff;
 }
 
-scale,
-trought,
-highlight,
-slider {
-  all: unset;
-  border-radius: 16px;
-}
-
-scale trough {
-  border-radius: 16px;
-  border: 2px solid #000;
-  min-height: 8px;
-  background-color: $bd-color;
-}
-
-trough {
-  background-color: $bg-color;
-}
-
 .pill-wrapper {
     margin: 5px 6px;
     padding: 0 5px;
     background-color: rgba(9, 9, 14, 1);
-    /* background-color: $bd-color; */
     border-radius: 20px;
 }
 
 .backlight {
-  /* color: rgba(238, 212, 159, 1); */
-  /* text-shadow: 0 0 2px rgba(238, 212, 159, 1); */
   font-size: 20px;
   margin: 0 10px;
-}
-
-.backlight-scale {
-  all: unset;
-  min-width: 100px;
-
-  highlight {
-    background-color: rgba(238, 212, 159, 1);
-  }
 }
 
 .color-temp {
   color: red;
   font-size: 22px;
   margin: 0 10px;
-}
-
-.temp-scale {
-  all: unset;
-  min-width: 100px;
-
-  highlight {
-    background-color: red;
-  }
 }
 
 .network {
@@ -212,37 +167,11 @@ trough {
   margin: 0 10px;
 }
 
-.volume-scale {
-  all: unset;
-  min-width: 100px;
-
-  highlight {
-    background-color: rgba(229, 180, 226, 1);
-  }
-}
-
-.volume_info,
-.brightness_info {
-  padding: 25px;
-  padding-top: 35px;
-}
-
-.volume-info-icon,
-.brightness-info-icon {
-  margin-bottom: 30px;
-}
-
 .battery {
   color: rgba(177, 227, 173, 1);
   text-shadow: 0 0 2px rgba(177, 227, 173, 1);
   font-size: 20px;
   margin: 0 10px;
-}
-
-.info-battery,
-.info-network {
-  font-size: 80px;
-  padding: 10px;
 }
 
 .clock {
