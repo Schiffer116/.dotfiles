@@ -502,24 +502,6 @@ hl.bind(mainMod .. ' + SHIFT + J', hl.dsp.window.move({ direction = 'down', grou
 --   hl.bind(mainMod .. ' + CTRL + ' .. key, hl.dsp.window.move({ workspace = i, follow = false }))
 -- end
 
-local all_wallpapers = {
-  "bonaparte_before_the_sphinx.jpg",
-  "cityscape.png",
-  "hand.png",
-  "koi-fishes.png",
-  "lucylucy.jpg",
-  "minimal.png",
-  "moon.png",
-  "neko.png",
-  "nord-street.png",
-  "ronin.png",
-  "science_ball.png",
-  "snowhat.png",
-  "the_death_of_julius_caesar.jpg",
-  "the_fallen_angel.jpg",
-  "twilight.png"
-}
-
 local function dispatch_relative_workspace(callback, option)
   local active_monitor = hl.get_active_monitor()
   if active_monitor == nil then
