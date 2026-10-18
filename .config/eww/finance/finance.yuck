@@ -1,6 +1,5 @@
 (defwindow finance []
   :stacking "bg"
-  :exclusive true
 
   :geometry (geometry
     :anchor "top right")

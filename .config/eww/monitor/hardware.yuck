@@ -1,6 +1,5 @@
 (defwindow monitor []
   :stacking "bg"
-  :exclusive true
 
   :geometry (geometry
     :anchor "top left")
