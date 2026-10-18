@@ -43,3 +43,12 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "wrap long lines in markdown at word boundaries",
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+  end,
+})
