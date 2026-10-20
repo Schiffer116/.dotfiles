@@ -27,7 +27,7 @@ MAIN="$LEDGER_DIR/ledger/main.beancount"
 
 balances_csv=$("$BEAN_QUERY" -f csv "$MAIN" \
   "SELECT account, sum(position) FROM OPEN ON 2026-10-01 WHERE account ~ '^Assets:(Bank|Cash|EWallet):' GROUP BY account" \
-  2>/dev/null)
+  2>/dev/null | tr -d '\r')
 
 digital_raw=0
 cash_raw=0
