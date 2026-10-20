@@ -13,8 +13,15 @@ return {
     end
 
     local sources = {
-      -- JS/TS
-      null_ls.builtins.formatting.prettier,
+      -- JS/TS, and markdown hard-wrapped at 80 columns
+      null_ls.builtins.formatting.prettier.with({
+        extra_args = function(params)
+          if params.ft == "markdown" then
+            return { "--prose-wrap", "always", "--print-width", "80" }
+          end
+          return {}
+        end,
+      }),
       -- Python
       null_ls.builtins.formatting.black.with({ condition = has_exe("black") }),
       -- Lua
