@@ -1,6 +1,4 @@
-# Only where that profile exists (the laptop); the dev box uses its own login.
-grep -qs '^\[\(profile \)\?iamadmin-general\]' "$HOME/.aws/config" "$HOME/.aws/credentials" &&
-    export AWS_PROFILE='iamadmin-general'
+export AWS_PROFILE='iamadmin-general'
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_STATE_HOME="$HOME/.local/state"
@@ -37,13 +35,10 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export VCPKG_ROOT="$HOME/.local/share/vcpkg"
-[ -f "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
+. "$CARGO_HOME/env"
 
 export PERSONAL_FINANCE_LEDGER="$HOME/Documents/personal_finance"
 
 
-# home-manager session variables: standalone (Arch) or as a NixOS module (the dev box)
-for f in "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"; do
-    [ -f "$f" ] && . "$f"
-done
-unset f
+# home-manager session variables
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
