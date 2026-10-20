@@ -9,7 +9,4 @@ Pictures/*
 
 .claude/worktrees/
 
-infra/**/.terraform/
-infra/**/*.tfstate*
-infra/**/*.tfvars
 /result

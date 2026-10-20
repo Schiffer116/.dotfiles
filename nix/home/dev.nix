@@ -1,5 +1,5 @@
-# Toolchains, cloud CLIs and git. C compilers stay with the OS (pacman on Arch,
-# the system profile on the box) so builds keep finding the OS headers.
+# Toolchains, cloud CLIs and git. C compilers stay with pacman so builds keep
+# finding the OS headers.
 { lib, pkgs, ... }:
 {
   home.packages = with pkgs; [

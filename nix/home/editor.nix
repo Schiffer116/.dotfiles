@@ -1,5 +1,5 @@
 # Neovim with the repo's lazy.nvim config, plus the LSP servers and formatters it uses,
-# so they come from Nix instead of Mason (Mason binaries need an FHS loader on NixOS).
+# so they come from Nix (pinned by flake.lock) instead of Mason.
 { config, pkgs, ... }:
 {
   xdg.configFile."nvim".source = config.lib.dotfiles.link ".config/nvim";

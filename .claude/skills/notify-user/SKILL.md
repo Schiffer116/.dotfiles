@@ -18,4 +18,4 @@ Write the message to be heard, not read: one short sentence that starts with the
 - `dotfiles needs your approval to run home-manager switch`
 - `skipli: which database should the API use?`
 
-The script returns at once, plays audio in the background, and does nothing when there is no display or audio (e.g. the headless dev box). `DRY_RUN=1` prints instead of acting.
+The script returns at once, plays audio in the background, and does nothing when there is no display or audio (e.g. over SSH). `DRY_RUN=1` prints instead of acting.

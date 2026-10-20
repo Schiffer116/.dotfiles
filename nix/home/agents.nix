@@ -1,5 +1,5 @@
 # herdr and Claude Code config. Claude Code itself is installed with its native
-# installer (self-updating); on the box it runs through nix-ld.
+# installer (self-updating).
 { config, pkgs, ... }:
 let
   link = config.lib.dotfiles.link;

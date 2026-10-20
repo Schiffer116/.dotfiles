@@ -1,6 +1,5 @@
 # zsh, starship, direnv, tmux. The config files stay in the repo (linked, not generated);
-# only plugins.zsh is generated, so plugin paths are the same on Arch and NixOS.
-# zsh itself comes from the OS (pacman on Arch, programs.zsh on the box).
+# only plugins.zsh is generated. zsh itself comes from pacman.
 { config, pkgs, ... }:
 let
   link = config.lib.dotfiles.link;

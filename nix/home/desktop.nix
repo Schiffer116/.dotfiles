@@ -1,4 +1,4 @@
-# Hyprland desktop (laptop only). Configs are linked like the dev env's; the compositor,
+# Hyprland desktop. Configs are linked like the dev env's; the compositor,
 # GUI apps (GL), and tools needing udev rules, setuid or PAM (brightnessctl, ddcutil,
 # swaylock) stay on pacman. Daemons start from hyprland.lua, not systemd units.
 { config, pkgs, ... }:
