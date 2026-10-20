@@ -392,8 +392,8 @@ hl.bind(mainMod .. ' + CTRL + SHIFT + P', hl.dsp.window.pin())
 
 -- Push-to-talk: unmute mic while mouse thumb button (remapped to F13 via ratbagctl) is held
 -- Note: with this system's XKB config, evdev KEY_F13 resolves to keysym XF86Tools, not F13
-hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 0'), { locked = true })
-hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 1'), { locked = true, release = true })
+hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 0'), { locked = true, transparent = true })
+hl.bind('XF86Tools', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_SOURCE@ 1'), { locked = true, release = true, transparent = true })
 
 hl.bind(mainMod .. ' + B', hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. ' + W', hl.dsp.window.close())
