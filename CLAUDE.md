@@ -4,35 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## How configs reach `$HOME`
 
-The repo lives at `~/.dotfiles` (required: the Nix links hardcode that path). home-manager (`flake.nix`, `nix/`) links every config file into `$HOME`; a new path gets a `config.lib.dotfiles.link` entry in a `nix/home/*.nix` module:
+The repo lives at `~/.dotfiles` (required: the Nix links hardcode that path). home-manager (`flake.nix`, `nix/`) links every config file into `$HOME`; a new path gets a `config.lib.dotfiles.link` entry in a `nix/home/*.nix` module. The machine is one Arch laptop:
 
-- Dev environment, both machines: zsh, nvim, starship, tmux, herdr, and all of Claude Code's config under `.claude/` (the list is in `nix/home/agents.nix`). `.claude/CLAUDE.md` is the user's global agent instructions for every project, not guidance for this repo. It also installs the CLI tools, toolchains and the LSP servers/formatters nvim uses.
-- Desktop, laptop only (`nix/home/desktop.nix`): Hyprland, eww, mako, kitty, `scripts/`, `Pictures/`, `levelctl` and the Wayland CLI tools the scripts call. pacman keeps the compositor, GUI apps (Nix GUI apps break on GL outside NixOS), tools needing udev rules, setuid or PAM (brightnessctl, ddcutil, swaylock), and system services; desktop daemons start from `hyprland.lua`.
+- Dev environment: zsh, nvim, starship, tmux, herdr, and all of Claude Code's config under `.claude/` (the list is in `nix/home/agents.nix`). `.claude/CLAUDE.md` is the user's global agent instructions for every project, not guidance for this repo. It also installs the CLI tools, toolchains and the LSP servers/formatters nvim uses.
+- Desktop (`nix/home/desktop.nix`): Hyprland, eww, mako, kitty, `scripts/`, `Pictures/`, `levelctl` and the Wayland CLI tools the scripts call. pacman keeps the compositor, GUI apps (Nix GUI apps break on GL outside NixOS), tools needing udev rules, setuid or PAM (brightnessctl, ddcutil, swaylock), and system services; desktop daemons start from `hyprland.lua`.
 
 `system/` holds the few `/etc` files the laptop needs (e.g. `system/logind.conf.d/lid.conf`); home-manager cannot write `/etc`, so each is copied in by hand with sudo, as its header comment says. Copy, never symlink: system daemons like logind run with `ProtectHome=yes` and silently ignore a link into `~/.dotfiles`.
 
-The links point back into the repo (`mkOutOfStoreSymlink`, see `nix/home/common.nix`), so editing a config file here edits the live config with no rebuild. A rebuild is only needed after changing `.nix` files. When Claude Code rewrites `~/.claude/settings.json` (`/config`, permission grants) the change appears in `git diff` here; commit or revert it deliberately. That file is shared by every project on both machines: repo-specific settings such as auto-mode trust facts belong in that repo's `.claude/settings.local.json`. Status line logic lives in `.claude/statusline.sh`, not inline in the JSON. Spoken alerts are a skill, not a hook: `.claude/skills/notify-user/` (the agent calls it when it needs the user; `DRY_RUN=1` previews `speak.sh`).
+The links point back into the repo (`mkOutOfStoreSymlink`, see `nix/home.nix`), so editing a config file here edits the live config with no rebuild. A rebuild is only needed after changing `.nix` files. When Claude Code rewrites `~/.claude/settings.json` (`/config`, permission grants) the change appears in `git diff` here; commit or revert it deliberately. That file is shared by every project: repo-specific settings such as auto-mode trust facts belong in that repo's `.claude/settings.local.json`. Status line logic lives in `.claude/statusline.sh`, not inline in the JSON. Spoken alerts are a skill, not a hook: `.claude/skills/notify-user/` (the agent calls it when it needs the user; `DRY_RUN=1` previews `speak.sh`).
 
 ## Nix layout
 
-`flake.nix` has two machines sharing the `nix/home/*.nix` modules:
+`flake.nix` has one output, `homeConfigurations."schiffer@archlinux"`: standalone home-manager whose entry `nix/home.nix` holds identity, XDG and the `link` helper, and imports one module per topic from `nix/home/` (shell, editor, agents, cli, dev, desktop).
 
-- `homeConfigurations."schiffer@archlinux"`: the Arch laptop, standalone home-manager (`nix/hosts/laptop.nix`).
-- `nixosConfigurations.aws-dev`: a headless NixOS dev box on EC2, reached only over Tailscale, that powers itself off when idle (`nix/hosts/aws-dev/`). The AWS side is Terraform in `infra/aws-dev/`, whose README covers deploy, daily use and the idle-stop rules.
-
-LSP servers come from Nix (`nix/home/editor.nix`), not Mason, because Mason binaries do not run on NixOS. Add new servers there.
+LSP servers come from Nix (`nix/home/editor.nix`), not Mason. Add new servers there.
 
 Flakes only see files tracked by git: `git add` new files before building.
 
 ## Commands
 
-- Dev tools for this repo (nil, nixfmt, terraform, shellcheck, awscli): `nix develop`
+- Dev tools for this repo (nil, nixfmt, shellcheck): `nix develop`
 - Format Nix: `nix fmt`. Check the flake evaluates: `nix flake check`
 - Apply on the laptop: `home-manager switch --flake ~/.dotfiles#schiffer@archlinux` (`home-manager build --flake ...` to test without activating)
-- Build the box config locally without deploying: `nix build .#nixosConfigurations.aws-dev.config.system.build.toplevel`. Deploying happens on the box: `sudo nixos-rebuild switch --flake ~/.dotfiles#aws-dev`
-- Terraform: `terraform fmt -check && terraform validate` in `infra/aws-dev`. `apply` creates billable resources.
-- Dev box power: `scripts/devbox.sh start|stop|status`
-- Idle-stop logic: `DRY_RUN=1 STATE_DIR=<tmpdir> bash nix/hosts/aws-dev/idle-stop.sh` (other inputs like `FLEET_HOME` and `PROC_STAT` are env-overridable too)
 - eww: `eww reload`, `eww get <var>`; `eww logs` follows forever, so agents read `~/.cache/eww/eww_*.log` instead. Hyprland: `hyprctl reload`, then `hyprctl configerrors`
 
 There is no test suite or CI. Shellcheck scripts you touch and verify changes on the live desktop.
@@ -48,6 +41,4 @@ The pieces talk through shell scripts and eww variables, so a change usually spa
 - Closing the lid never suspends (logind ignores it). `hyprland.lua` disables the internal panel when another output is connected, or turns it DPMS off when not; the window sync follows.
 - `.config/eww/eww.yuck` only `include`s one subdirectory per widget, each with its own `.yuck`/`.scss`. Windows pick screens by connector name (`--screen <name>` from the window sync), never by index: GDK renumbers monitors when eDP-1 is disabled and re-enabled. Widgets read data via `defpoll`/`deflisten` on scripts. Some widget directories carry a `CONTEXT.md` domain glossary (e.g. `finance/` defines payday and liquid assets): read it before changing the widget and keep it in sync.
 - `scripts/picker.sh` is the one keyboard picker (SUPER+D apps, SUPER+V clipboard): state in `$XDG_RUNTIME_DIR/picker.json`, paging as pure jq in `scripts/picker.jq` (`bash scripts/picker.test.sh`), one eww variable `picker` rendered by `.config/eww/picker/`. A new list is a `<name>_list` / `<name>_select` adapter pair in the script.
-- Volume and brightness go through `levelctl` (`scripts/levelctl`, Go, built by Nix in `nix/hosts/laptop.nix`; `go test ./...` there). Keybinds and eww call `levelctl volume|brightness +N|-N`; the bar reads one `deflisten levels` from `levelctl watch`. Brightness backends per output come from the monitor table; volume follows external changes via `pactl subscribe`, and outputs are read on Hyprland's `monitoradded`/`monitorremoved` events with backoff retries (DDC answers late after login or hotplug).
-
-`.zshenv` and `.config/zsh/.zshrc` run on both the laptop and the box, so guard anything machine-specific (paths, AWS profile, graphical-only plugins) with an existence check, as the existing entries do.
+- Volume and brightness go through `levelctl` (`scripts/levelctl`, Go, built by Nix in `nix/home/desktop.nix`; `go test ./...` there). Keybinds and eww call `levelctl volume|brightness +N|-N`; the bar reads one `deflisten levels` from `levelctl watch`. Brightness backends per output come from the monitor table; volume follows external changes via `pactl subscribe`, and outputs are read on Hyprland's `monitoradded`/`monitorremoved` events with backoff retries (DDC answers late after login or hotplug).

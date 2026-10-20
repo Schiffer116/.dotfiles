@@ -29,7 +29,7 @@
       # Laptop (Arch): home-manager switch --flake ~/.dotfiles#schiffer@archlinux
       homeConfigurations."schiffer@archlinux" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [ ./nix/hosts/laptop.nix ];
+        modules = [ ./nix/home.nix ];
       };
 
       # Tools for working on this repo: nix develop
