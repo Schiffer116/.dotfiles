@@ -1,5 +1,5 @@
 {
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -57,6 +57,7 @@
     "enabled": true,
     "mode": "hold"
   },
+  "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "preferredNotifChannel": "notifications_disabled",
   "autoMode": {
@@ -70,6 +71,5 @@
       "**Project facts**: repo-specific trust (accounts, buckets, branches, IaC scopes) lives in each repo's .claude/settings.local.json, not here"
     ]
   },
-  "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "voiceEnabled": true
 }
