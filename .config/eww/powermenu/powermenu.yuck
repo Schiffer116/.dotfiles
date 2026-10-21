@@ -6,7 +6,9 @@
     :width "100%"
     :height "100%"
     :anchor "bottom center")
-  (menu))
+  ; A click anywhere off the buttons closes the menu.
+  (eventbox :onclick "powermenu.sh close &"
+    (menu)))
 
 (defvar active_button 0)
 
