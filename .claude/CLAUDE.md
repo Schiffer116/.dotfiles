@@ -15,6 +15,11 @@
   immediately spawns a large swarm of subagents, always explain the tradeoffs
   and ask the user for explicit approval.
 - Be extremely concise. Sacrifice grammar for the sake of concision.
+- Waiting on something outside you (user's `aws sso login`, PR merge, CI,
+  deploy)? Never stop and wait to be told: start a background watcher that exits
+  on success (`until aws sts get-caller-identity; do sleep 10; done`,
+  `gh pr checks --watch`, poll `gh pr view --json state`), ask the user for
+  their part, and carry on when it fires.
 
 ## Herdr Army
 
