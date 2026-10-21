@@ -29,6 +29,10 @@
   `berthier division-new <name> "<brief>"` from your Corps workspace (creates a
   `<name>` worktree workspace with its own Agent, which you command). You brief,
   review and merge.
+- Pick a Division's model with `--model` (default sonnet): sonnet for a clear
+  Brief (written plan, reproduced bug, refactor, tests); opus for judgment
+  (vague spec, design, hard debugging, cross-cutting); haiku for chores. A stuck
+  Division gets `/model opus` in its pane, no restart.
 - After the user has reviewed it: `berthier division-done <name>`.
 
 ## Maintaining this file
