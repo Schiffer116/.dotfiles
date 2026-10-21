@@ -1,14 +1,16 @@
 #!/bin/bash
-# Claude Code status line: "5h: N% | 7d: N% | Ctx: N% | Cost: $N", skipping any
+# Claude Code status line: "Model | 5h: N% | 7d: N% | Ctx: N% | Cost: $N", skipping any
 # field the session JSON on stdin does not carry.
 set -u
 
 {
+  read -r model
   read -r five
   read -r week
   read -r ctx
   read -r cost
 } < <(jq -r '
+  .model.display_name,
   .rate_limits.five_hour.used_percentage,
   .rate_limits.seven_day.used_percentage,
   .context_window.used_percentage,
@@ -16,6 +18,7 @@ set -u
   | . // ""')
 
 parts=()
+[ -n "$model" ] && parts+=("$model")
 [ -n "$five" ] && parts+=("$(printf '5h: %.0f%%' "$five")")
 [ -n "$week" ] && parts+=("$(printf '7d: %.0f%%' "$week")")
 [ -n "$ctx" ] && parts+=("$(printf 'Ctx: %.0f%%' "$ctx")")
