@@ -3,6 +3,10 @@
 # field the session JSON on stdin does not carry.
 set -u
 
+input=$(cat)
+# Feed Berthier's per-Corps quota ledger; never slows or breaks the line.
+berthier sample <<<"$input" >/dev/null 2>&1 &
+
 {
   read -r model
   read -r five
@@ -15,7 +19,7 @@ set -u
   .rate_limits.seven_day.used_percentage,
   .context_window.used_percentage,
   .cost.total_cost_usd
-  | . // ""')
+  | . // ""' <<<"$input")
 
 parts=()
 [ -n "$model" ] && parts+=("$model")
