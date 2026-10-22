@@ -109,6 +109,11 @@ in
       color15 ${at "subtext0"}
     '';
 
+    # hyprlang: $name = rgb(hex), and $name_dim = the same at ~half alpha, for `source =`.
+    "theme/hyprlock.conf".text = each (
+      n: v: "$" + "${n} = rgb(${v})\n" + "$" + "${n}_dim = rgba(${v}88)"
+    );
+
     # tmux: every colour as a user option (#{@accent}) for tmux.conf, plus the styles.
     "theme/tmux.conf".text = each (n: v: ''set -g @${n} "#${v}"'') + ''
       set -g status-style "fg=${at "text"},bg=${at "bg"}"
