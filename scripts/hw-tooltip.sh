@@ -42,18 +42,19 @@ cores() {
 }
 
 cpu() {
-  local load temp frame
+  local load temp frame top_pid
   load=$(awk -v n="$(nproc)" '{ printf "%d", 100 * $1 / n }' /proc/loadavg)
   temp=$(sensors 2>/dev/null | awk '/^Package id 0/ { gsub(/[+°C]/, "", $4); printf "%d", $4 }')
   frame=$(mktemp)
   top -b -n2 -d0.5 -w 120 -o %CPU >"$frame" &
+  top_pid=$!
   echo "CPU load ${load}%${temp:+ · ${temp}°C}"
   echo
   cores
   wait
   echo
   echo "Top by CPU"
-  awk '/^top -/ { n++ } n == 2 && /^ *PID/ { go = 1; next } n == 2 && go { print $12, $9 }' "$frame" |
+  awk -v top_pid="$top_pid" '/^top -/ { n++ } n == 2 && /^ *PID/ { go = 1; next } n == 2 && go && $1 != top_pid { print $12, $9 }' "$frame" |
     top_procs "%.1f%%"
   rm -f "$frame"
 }
@@ -84,7 +85,7 @@ disk() {
   io=$(awk '$3 ~ /^(sd[a-z]|nvme[0-9]+n[0-9]+|vd[a-z])$/ {
               printf "  %-26s read %.1f GB  written %.1f GB\n", $3, $6 * 512 / 1073741824, $10 * 512 / 1073741824
             }' /proc/diskstats)
-  [ -n "$io" ] && { echo; echo "Lifetime I/O (since boot)"; echo "$io"; }
+  [ -n "$io" ] && { echo; echo "I/O since boot"; echo "$io"; }
 }
 
 case "${1:-}" in
