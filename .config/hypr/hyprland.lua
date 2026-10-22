@@ -6,6 +6,12 @@ local mainMod = 'SUPER' -- Sets 'Windows' key as main modifier
 
 local monitors = require('monitors')
 
+-- The Palette from nix/home/theme.nix as rgba() strings.
+local palette = dofile(os.getenv('HOME') .. '/.config/theme/palette.lua')
+local function rgba(name, alpha)
+  return 'rgba(' .. palette[name] .. (alpha or 'ff') .. ')'
+end
+
 local monitor_by_name = {}
 local internal_monitor
 for _, m in ipairs(monitors) do
@@ -204,8 +210,8 @@ hl.config({
     border_size = 1,
 
     col = {
-      active_border = 'rgba(a4b9efff)',
-      inactive_border = 'rgba(121118ff)'
+      active_border = rgba('accent'),
+      inactive_border = rgba('bg')
     },
 
     snap = {
@@ -221,19 +227,19 @@ hl.config({
 hl.config({
   group = {
     col = {
-      border_active = 'rgba(a4b9efff)',
-      border_inactive = 'rgba(121118ff)',
-      border_locked_active = 'rgba(a4b9efff)',
-      border_locked_inactive = 'rgba(121118ff)',
+      border_active = rgba('accent'),
+      border_inactive = rgba('bg'),
+      border_locked_active = rgba('accent'),
+      border_locked_inactive = rgba('bg'),
     },
 
     groupbar = {
       indicator_height = 5,
       col = {
-        active = 'rgba(ff7a7bff)',
-        inactive = 'rgba(121118ff)',
-        locked_active = 'rgba(a4b9efff)',
-        locked_inactive = 'rgba(121118ff)',
+        active = rgba('urgent'),
+        inactive = rgba('bg'),
+        locked_active = rgba('accent'),
+        locked_inactive = rgba('bg'),
       },
       render_titles = false,
     }
@@ -269,8 +275,8 @@ hl.config({
       enabled = true,
       range = 20,
       render_power = 3,
-      color = 'rgb(a3dfff)',
-      color_inactive = 'rgb(101010)'
+      color = rgba('sky'),
+      color_inactive = rgba('bg')
     },
 
     dim_special = 0.2
