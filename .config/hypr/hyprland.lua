@@ -349,6 +349,9 @@ hl.config({
     animate_mouse_windowdragging = true,
     animate_manual_resizes       = true,
     vrr                          = 1,
+    -- Safety net: input wakes outputs even if hypridle is dead. dpms.sh keeps the lid rule.
+    key_press_enables_dpms       = true,
+    mouse_move_enables_dpms      = true,
   },
 })
 
