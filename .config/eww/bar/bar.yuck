@@ -34,12 +34,9 @@
     (workspaces :workspace_base workspace_base :monitor_name monitor_name)
     (right_triangle :fg theme-mantle
                     :bg theme-bg)
-    (monitor :css_class "cpu" :value {EWW_CPU.avg}
-             :tooltip "CPU ${round(EWW_CPU.avg, 0)}% · ${EWW_TEMPS.DELL_SMM_CPU}°C")
-    (monitor :css_class "ram" :value {EWW_RAM.used_mem_perc}
-             :tooltip "RAM ${round(EWW_RAM.used_mem / 1073741824, 1)} / ${round(EWW_RAM.total_mem / 1073741824, 0)} GB (${round(EWW_RAM.used_mem_perc, 0)}%)")
-    (monitor :css_class "rom" :value {EWW_DISK["/"].used_perc}
-             :tooltip "Disk ${round(EWW_DISK["/"].used / 1073741824, 0)} / ${round(EWW_DISK["/"].total / 1073741824, 0)} GB · ${round(EWW_DISK["/"].free / 1073741824, 0)} GB free")
+    (monitor :css_class "cpu" :kind "cpu" :tip hw_tip_cpu :value {EWW_CPU.avg})
+    (monitor :css_class "ram" :kind "ram" :tip hw_tip_ram :value {EWW_RAM.used_mem_perc})
+    (monitor :css_class "rom" :kind "disk" :tip hw_tip_disk :value {EWW_DISK["/"].used_perc})
     (claude_usage)
     (sep)
     (claude_agents)))

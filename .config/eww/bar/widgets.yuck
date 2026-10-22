@@ -33,8 +33,20 @@
     (workspace :id {workspace_base + 5} :monitor_name monitor_name :icon "")))
 
 
-(defwidget monitor [value css_class tooltip]
-  (eventbox :tooltip tooltip
+;; Which hardware ring is hovered ("" for none). Each tooltip text is only
+;; polled while its ring is hovered, so the rings cost nothing at rest.
+(defvar hw_hover "")
+(defpoll hw_tip_cpu :interval "2s" :initial "" :run-while {hw_hover == "cpu"}
+  `hw-tooltip.sh cpu`)
+(defpoll hw_tip_ram :interval "2s" :initial "" :run-while {hw_hover == "ram"}
+  `hw-tooltip.sh ram`)
+(defpoll hw_tip_disk :interval "2s" :initial "" :run-while {hw_hover == "disk"}
+  `hw-tooltip.sh disk`)
+
+(defwidget monitor [value css_class kind tip]
+  (eventbox :tooltip tip
+            :onhover "${EWW_CMD} update hw_hover=${kind}"
+            :onhoverlost "${EWW_CMD} update hw_hover=''"
             :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e btop', { float = true, size = { 'monitor_w * 0.7', 'monitor_h * 0.7' } })"`
             :cursor "pointer"
     (circular-progress :class "circle ${css_class}"
