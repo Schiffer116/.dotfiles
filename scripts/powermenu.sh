@@ -44,7 +44,7 @@ case $1 in
                 ;;
             3)
                 close
-                swaylock.sh
+                loginctl lock-session
                 ;;
         esac
         ;;

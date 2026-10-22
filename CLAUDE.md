@@ -25,6 +25,7 @@ Only what the code doesn't show. Read the code for everything else.
 - Open and close eww windows only through `scripts/eww-windows.sh`. A plain `eww open` that fails starts a second daemon, and the bar variables then split between the two daemons.
 - Address screens by connector name, never by index: GDK renumbers monitors when eDP-1 is disabled and re-enabled.
 - `.config/hypr/monitors.lua` is the only place that names outputs.
+- hypridle (started by `hyprland.lua`) locks with hyprlock before sleep and after idle; `loginctl lock-session` is the one way to lock. After idle, `scripts/dpms.sh` turns outputs on/off and keeps the internal panel off while the lid is closed.
 - Closing the lid never suspends: the laptop doubles as a headless server.
 - A widget directory with a `CONTEXT.md` defines domain terms. Read it before changing the widget and keep it in sync.
 - `eww logs` follows forever, so read `~/.cache/eww/eww_*.log` instead. After `hyprctl reload`, check `hyprctl configerrors`.
