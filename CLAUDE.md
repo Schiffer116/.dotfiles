@@ -4,7 +4,7 @@ Only what the code doesn't show. Read the code for everything else.
 
 ## Nix and the live configs
 
-- The repo must live at `~/.dotfiles`. home-manager links configs back into it (`mkOutOfStoreSymlink`), so editing a config here changes the live one immediately. Only `.nix` changes need `home-manager switch --flake ~/.dotfiles#schiffer@archlinux`.
+- home-manager links configs back into this checkout (`mkOutOfStoreSymlink`), so editing a config here changes the live one immediately. Its location is set once, in the `link` helper in `nix/home.nix`. Only `.nix` changes need `home-manager switch --flake .#schiffer@archlinux`.
 - Flakes see only files tracked by git, so `git add` new files before building.
 - pacman installs, not Nix:
   - the compositor;
