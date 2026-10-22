@@ -1,6 +1,5 @@
 .powermenu {
-  /* background-color: rgba(0, 0, 0, 0.2); */
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba($bg, 0.2);
 }
 
 .menu-wrapper {
@@ -8,15 +7,15 @@
 }
 
 .goodbye-msg {
-  color: white;
+  color: $text;
   margin-bottom: 50px;
   font-size: 80px;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+  text-shadow: 0 0 10px $bg;
 }
 
 .power-button {
   border-radius: 20px;
-  background-color: rgba(34, 44, 61, 0.75);
+  background-color: rgba($surface0, 0.75);
   padding: 50px;
   font-size: 70px;
 }
@@ -32,5 +31,5 @@
 
 .power-button-event:hover,
 .power-button-event-active {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba($text, 0.7);
 }

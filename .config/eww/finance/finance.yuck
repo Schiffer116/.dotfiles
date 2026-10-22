@@ -22,7 +22,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "Assets"
              :xalign 0)
@@ -38,7 +38,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "Until Payday"
              :xalign 0)
@@ -53,7 +53,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "Until New Year"
              :xalign 0)
@@ -66,7 +66,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "Until Lunar New Year"
              :xalign 0)

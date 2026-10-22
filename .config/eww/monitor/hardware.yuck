@@ -28,7 +28,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "CPU"
              :xalign 0)
@@ -43,7 +43,7 @@
     (box :orientation "vertical"
          :space-evenly false
          :valign "center"
-         :style "color: white;"
+         :style "color: ${theme-text};"
       (label :class "info-title"
              :text "RAM"
              :xalign 0)
@@ -60,7 +60,7 @@
       (box :orientation "vertical"
            :space-evenly false
            :valign "center"
-           :style "color: white;"
+           :style "color: ${theme-text};"
         (label :class "info-title"
                :text "ROM"
                :xalign 0)

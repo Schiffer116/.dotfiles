@@ -1,11 +1,11 @@
 .claude-session {
-  color: rgba(217, 119, 87, 1);
-  text-shadow: 0 0 3px rgba(217, 119, 87, 1);
+  color: $peach;
+  text-shadow: 0 0 3px $peach;
 }
 
 .claude-week {
-  color: rgba(238, 212, 159, 1);
-  text-shadow: 0 0 3px rgba(238, 212, 159, 1);
+  color: $yellow;
+  text-shadow: 0 0 3px $yellow;
 }
 
 .claude-agents {
@@ -18,32 +18,32 @@
 }
 
 .claude-agent-working {
-  color: rgba(217, 119, 87, 1);
-  text-shadow: 0 0 3px rgba(217, 119, 87, 1);
+  color: $peach;
+  text-shadow: 0 0 3px $peach;
 }
 
 // Blocked means an Agent waits on the user: a filled chip, not just a colour.
 .claude-agent-blocked {
-  color: rgba(9, 9, 14, 1);
-  background-color: rgba(237, 85, 85, 1);
+  color: $bg;
+  background-color: $urgent;
   border-radius: 20px;
   margin: 9px 2px;
   padding: 0 7px;
-  box-shadow: 0 0 4px rgba(237, 85, 85, 0.8);
+  box-shadow: 0 0 4px rgba($urgent, 0.8);
 }
 
 .claude-agent-done {
-  color: rgba(177, 227, 173, 1);
-  text-shadow: 0 0 3px rgba(177, 227, 173, 1);
+  color: $ok;
+  text-shadow: 0 0 3px $ok;
 }
 
 .claude-agent-idle,
 .claude-agent-unknown,
 .claude-agents-unavailable {
-  color: rgba(164, 185, 239, 0.6);
+  color: rgba($lavender, 0.6);
 }
 
 .claude-agent-gone {
-  color: rgba(214, 133, 133, 1);
-  text-shadow: 0 0 3px rgba(214, 133, 133, 1);
+  color: $red;
+  text-shadow: 0 0 3px $red;
 }

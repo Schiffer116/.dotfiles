@@ -151,8 +151,8 @@
     (box :space-evenly false
          :class "pill-wrapper"
          :style "
-           color: rgba(238, 212, 159, 1);
-           text-shadow: 0 0 2px rgba(238, 212, 159, 1);
+           color: ${theme-yellow};
+           text-shadow: 0 0 2px ${theme-yellow};
          "
       (label :class "backlight"
              :text { (brightness[monitor_name] ?: 0) < 26 ? "󰃞" :

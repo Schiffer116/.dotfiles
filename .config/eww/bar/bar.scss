@@ -1,18 +1,18 @@
-@import "../color.scss";
+@import "/home/schiffer/.config/theme/palette";
 
 .bar {
-  background-color: $bg-color;
-  border-bottom: 3px solid $bg-grad-2;
+  background-color: $bg;
+  border-bottom: 3px solid $surface0;
 }
 
 .sep {
-  color: $bg-grad-1;
+  color: $surface;
   font-size: 20px;
   text-shadow: none;
 }
 
 .right-triangle {
-    border-left: 20px solid $bd-color;
+    border-left: 20px solid $mantle;
     border-top: 20px solid transparent;
     border-bottom: 20px solid transparent;
 }

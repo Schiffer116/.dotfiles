@@ -1,5 +1,4 @@
 (include "./bar/widgets.yuck")
-(include "./color.yuck")
 
 (defwindow bar [workspace_base monitor_name]
   :stacking "fg"
@@ -30,11 +29,11 @@
        :space-evenly false
        :halign "start"
     (power)
-    (right_triangle :fg nix-blue
-                    :bg bd-color)
+    (right_triangle :fg theme-sapphire
+                    :bg theme-mantle)
     (workspaces :workspace_base workspace_base :monitor_name monitor_name)
-    (right_triangle :fg bd-color
-                    :bg bg-color)
+    (right_triangle :fg theme-mantle
+                    :bg theme-bg)
     (monitor :css_class "cpu" :value {EWW_CPU.avg})
     (monitor :css_class "ram" :value {EWW_RAM.used_mem_perc})
     (monitor :css_class "rom" :value {EWW_DISK["/"].used_perc})
@@ -55,6 +54,6 @@
     (sound :volume {levels.volume} :muted {levels.muted})
     (network)
     (battery)
-    (right_triangle :fg bg-color
-                    :bg bg-grad-1)
+    (right_triangle :fg theme-bg
+                    :bg theme-surface)
     (clock :monitor_name monitor_name)))

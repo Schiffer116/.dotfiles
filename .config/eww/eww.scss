@@ -1,4 +1,4 @@
-@import "./color.scss";
+@import "/home/schiffer/.config/theme/palette";
 @import "./bar/bar.scss";
 @import "./bar/info.scss";
 @import "./quote/quote.scss";
@@ -17,39 +17,39 @@ button {
 }
 
 tooltip {
-  background-color: $bg-color;
+  background-color: $bg;
   padding: 5px;
 }
 
 .os-logo {
   font-size: 23px;
   margin: 0 0 0 10px;
-  text-shadow: 0 0 4px $bg-grad-3;
+  text-shadow: 0 0 4px $surface1;
 }
 
 .power-event-box {
-  color: $bd-color;
-  background-color: rgba(15, 148, 210, 1);
+  color: $mantle;
+  background-color: $sapphire;
   transition: color 500ms;
 }
 
 .power-event-box:hover {
-  color: rgba(65, 208, 255, 1);
+  color: $sky;
 }
 
 .workspaces {
-  background-color: $bd-color;
+  background-color: $mantle;
   padding: 5px;
 }
 
 .workspace {
-  color: $bg-grad-3;
+  color: $surface1;
   transition: color 500ms;
-  text-shadow: 0 0 4px black;
+  text-shadow: 0 0 4px $bg;
 }
 
 .workspace:hover {
-  color: darkgray;
+  color: $overlay2;
 }
 
 .workspace-label {
@@ -58,17 +58,17 @@ tooltip {
 }
 
 .workspace-label-active {
-  color: rgba(164, 223, 255, 1);
-  text-shadow: 0px 0px 3px rgba(164, 223, 255, 1);
+  color: $sky;
+  text-shadow: 0px 0px 3px $sky;
 }
 
 .workspace-label-previous {
-  border-bottom: 2px solid rgba(164, 223, 255, 1);
+  border-bottom: 2px solid $sky;
 }
 
 
 .circle {
-  background-color: $bg-grad-1;
+  background-color: $surface;
   margin: 0 10px;
 }
 
@@ -83,42 +83,42 @@ tooltip {
 }
 
 .cpu {
-  color: rgba(164, 185, 239, 1);
-  text-shadow: 0 0 3px rgba(164, 185, 239, 1);
+  color: $lavender;
+  text-shadow: 0 0 3px $lavender;
 }
 
 .ram {
-  color: rgba(177, 227, 173, 1);
-  text-shadow: 0 0 3px rgba(177, 227, 173, 1);
+  color: $green;
+  text-shadow: 0 0 3px $green;
 }
 
 .rom {
-  color: rgba(214, 133, 133, 1);
-  text-shadow: 0 0 3px rgba(214, 133, 133, 1);
+  color: $red;
+  text-shadow: 0 0 3px $red;
 }
 
 .assets {
-  color: rgba(238, 212, 159, 1);
-  text-shadow: 0 0 3px rgba(238, 212, 159, 1);
+  color: $yellow;
+  text-shadow: 0 0 3px $yellow;
 }
 
 .daily {
-  color: rgba(197, 165, 234, 1);
-  text-shadow: 0 0 3px rgba(197, 165, 234, 1);
+  color: $mauve;
+  text-shadow: 0 0 3px $mauve;
 }
 
 .newyear {
-  color: rgba(164, 223, 255, 1);
-  text-shadow: 0 0 3px rgba(164, 223, 255, 1);
+  color: $sky;
+  text-shadow: 0 0 3px $sky;
 }
 
 .lunar {
-  color: rgba(240, 97, 99, 1);
-  text-shadow: 0 0 3px rgba(240, 97, 99, 1);
+  color: $red;
+  text-shadow: 0 0 3px $red;
 }
 
 .language {
-  color: rgba(164, 185, 239, 255);
+  color: $lavender;
   font-size: 20px;
   margin: 0 10px;
 }
@@ -128,17 +128,17 @@ tooltip {
 }
 
 .lang-button:hover {
-  background-color: rgba(255, 255, 255, 0.07);
+  background-color: rgba($text, 0.07);
 }
 
 revealer {
-  background-color: #fff;
+  background-color: $text;
 }
 
 .pill-wrapper {
     margin: 5px 6px;
     padding: 0 5px;
-    background-color: rgba(9, 9, 14, 1);
+    background-color: $mantle;
     border-radius: 20px;
 }
 
@@ -148,38 +148,38 @@ revealer {
 }
 
 .color-temp {
-  color: red;
+  color: $red;
   font-size: 22px;
   margin: 0 10px;
 }
 
 .network {
-  color: rgba(190, 228, 237, 1);
-  text-shadow: 0 0 2px rgba(190, 228, 237, 1);
+  color: $sky;
+  text-shadow: 0 0 2px $sky;
   font-size: 20px;
   margin: 0 10px;
 }
 
 .sound {
-  color: rgba(229, 180, 226, 1);
-  text-shadow: 0 0 2px rgba(229, 180, 226, 1);
+  color: $pink;
+  text-shadow: 0 0 2px $pink;
   font-size: 22px;
   margin: 0 10px;
 }
 
 .battery {
-  color: rgba(177, 227, 173, 1);
-  text-shadow: 0 0 2px rgba(177, 227, 173, 1);
+  color: $green;
+  text-shadow: 0 0 2px $green;
   font-size: 20px;
   margin: 0 10px;
 }
 
 .clock {
-  background-color: $bg-grad-1;
+  background-color: $surface;
   padding: 0 15px;
   font-family: Dosis;
-  color: white;
-  text-shadow: 0 0 2px white;
+  color: $text;
+  text-shadow: 0 0 2px $text;
 }
 
 .clock label {
@@ -192,7 +192,7 @@ calendar * {
 
 calendar.view {
   text-shadow: none;
-  background-color: $bg-color;
+  background-color: $bg;
 }
 
 .calendar {
@@ -202,7 +202,7 @@ calendar.view {
 .calendar-padding {
   margin: 10px;
   padding: 8px;
-  background-color: $bg-color;
+  background-color: $bg;
   border-radius: 15px;
-  box-shadow: 0 0 3px 3px rgba(10, 10, 10, 1);
+  box-shadow: 0 0 3px 3px $bg;
 }

@@ -1,4 +1,0 @@
-(defvar nix-blue "rgba(15, 148, 210, 1)")
-(defvar bg-color "rgba(17, 17, 27, 1)")
-(defvar bd-color "rgba(24, 24, 37, 1)")
-(defvar bg-grad-1 "rgba(30, 30, 46,  1)")

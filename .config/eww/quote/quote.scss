@@ -1,5 +1,5 @@
 .quote {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
 }
 
 .fancy-weekday {
@@ -7,20 +7,20 @@
   font-weight: 900;
   font-size: 100px;
   font-style: italic;
-  text-shadow: 5px 5px 10px #000;
-  color: rgba(240, 97, 99, 1);
+  text-shadow: 5px 5px 10px $bg;
+  color: $red;
   margin: 20px 20px 25px 25px;
 }
 
 .fancy-day {
-  color: white;
+  color: $text;
   font-size: 80px;
-  text-shadow: 5px 5px 10px #000;
+  text-shadow: 5px 5px 10px $bg;
   margin-top: 55px;
 }
 
 .fancy-suffix {
-  color: rgba(150, 150, 150, 1);
+  color: $overlay2;
   font-family: "Great Vibes";
   font-size: 60px;
   margin-top: 90px;
@@ -28,14 +28,14 @@
 }
 
 .fancy-time {
-  color: white;
+  color: $text;
   font-family: "Bebas Neue";
   font-weight: 600;
   font-size: 25px;
 }
 
 .quote-content {
-  color: white;
+  color: $text;
   font-family: "Great Vibes";
   font-size: 40px;
   margin-top: 10px;

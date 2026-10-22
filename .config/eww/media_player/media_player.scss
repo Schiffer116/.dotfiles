@@ -1,4 +1,4 @@
-@import "../color.scss";
+@import "/home/schiffer/.config/theme/palette";
 
 .cover-art {
   background-position: center;
@@ -9,11 +9,15 @@
   min-width: 30px;
 }
 
+.cover-art-paused {
+  background-color: rgba($bg, 0.3);
+}
+
 .media-button {
-  color: rgba(210, 210, 210, 1);
+  color: $subtext1;
   font-weight: 900;
 }
 
 .media-button:hover {
-  color: rgba(255, 255, 255, 1);
+  color: $text;
 }

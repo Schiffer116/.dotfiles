@@ -31,13 +31,13 @@
          :spacing 70
       (power_button :index 0
                     :icon ""
-                    :color "rgba(255, 133, 133, 1)")
+                    :color theme-red)
       (power_button :index 1
                     :icon "󰜉"
-                    :color "cyan")
+                    :color theme-sky)
       (power_button :index 2
                     :icon ""
-                    :color "yellow")
+                    :color theme-yellow)
       (power_button :index 3
                     :icon ""
-                    :color "white"))))
+                    :color theme-text))))
