@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# shellcheck source=/dev/null disable=SC2154
+. ~/.config/theme/palette.sh
+
 cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-session-dirs"
 
 query_dirs() {
@@ -24,7 +27,7 @@ fi
 selected=$(
     printf '%s\n' "$dirs" \
     | fzf --layout=reverse --border=rounded --pointer="->" \
-          --color='gutter:#11111B,bg+:#11111B' \
+          --color="gutter:$theme_bg,bg+:$theme_bg" \
           --preview="eza --tree --icons -L2 --color=always {}"
 )
 
