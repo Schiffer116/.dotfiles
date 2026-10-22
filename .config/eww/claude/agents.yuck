@@ -30,6 +30,9 @@
         (claude_agent_count :status "gone" :icon "󰚌" :count {claude_agents_data.gone})))))
 
 (defwidget claude_agent_count [status icon count]
-  (label :class "claude-agent claude-agent-${status}"
-         :visible {count > 0 || status == "working"}
-         :text "${icon} ${count}"))
+  (box :class "claude-agent claude-agent-${status}"
+       :space-evenly false
+       :valign "center"
+       :visible {count > 0 || status == "working"}
+    (label :class "claude-agent-icon" :text icon)
+    (label :class "claude-agent-count" :text "${count}")))

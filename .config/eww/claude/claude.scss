@@ -12,9 +12,18 @@
   margin: 0 5px;
 }
 
+// One rhythm for every item: 4px each side of an item (8px between items, pill included),
+// and a 4px icon-to-number gap. The pill pads 2px top and bottom, 7px left and right.
 .claude-agent {
   margin: 0 4px;
+}
+
+.claude-agent label {
   font-size: 15px;
+}
+
+.claude-agent-count {
+  margin-left: 4px;
 }
 
 .claude-agent-working {
@@ -27,8 +36,7 @@
   color: $bg;
   background-color: $urgent;
   border-radius: 20px;
-  margin: 9px 2px;
-  padding: 0 7px;
+  padding: 2px 7px;
   box-shadow: 0 0 4px rgba($urgent, 0.8);
 }
 
