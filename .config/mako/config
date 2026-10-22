@@ -1,3 +1,6 @@
+# Colours come from the official Catppuccin theme.
+include=~/.config/mako/catppuccin-mocha-lavender
+
 max-history=100
 sort=-time
 
@@ -29,23 +32,15 @@ max-visible=5
 layer=overlay
 anchor=bottom-right
 
-background-color=#11161FDD
-text-color=#d9e0ee
-
 [urgency=low]
-border-color=#b1e3bd
 default-timeout=2000
 
 [urgency=normal]
-border-color=#eed49f
 default-timeout=5000
 
 [urgency=high]
-border-color=#f38ba8
-text-color=#f38ba8
 default-timeout=0
 
 [category=mpd]
-border-color=#f9e2af
 default-timeout=2000
 group-by=category

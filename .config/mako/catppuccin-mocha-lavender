@@ -1,0 +1,11 @@
+# Catppuccin Mocha / Lavender, the official theme from https://github.com/catppuccin/mako
+# (themes/catppuccin-mocha/catppuccin-mocha-lavender at 92844f1). Vendored unchanged.
+# Colors
+
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#b4befe
+progress-color=over #313244
+
+[urgency=high]
+border-color=#fab387
