@@ -56,6 +56,9 @@ in
     # Sass: $name, used as $accent or rgba($accent, 0.5).
     "theme/palette.scss".text = each (n: v: "$" + "${n}: #${v};");
 
+    # CSS custom properties: var(--accent). Berthier's Console serves this as /theme.css.
+    "theme/palette.css".text = ":root {\n" + each (n: v: "  --${n}: #${v};") + "}\n";
+
     # eww: (defvar theme-<name> "#hex"), for styles built in yuck.
     "theme/palette.yuck".text = each (n: v: ''(defvar theme-${n} "#${v}")'');
 
