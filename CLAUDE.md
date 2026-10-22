@@ -19,6 +19,8 @@ The links point back into the repo (`mkOutOfStoreSymlink`, see `nix/home.nix`), 
 
 LSP servers come from Nix (`nix/home/editor.nix`), not Mason. Add new servers there.
 
+Colours come only from `nix/home/theme.nix` (see `GLOSSARY.md`): it generates `~/.config/theme/*` and configs include those. A raw hex or `rgba()` literal in a config is a bug; a colour change needs `home-manager switch`. Apps with an official Catppuccin theme (nvim, herdr, mako) are not generated from it.
+
 Flakes only see files tracked by git: `git add` new files before building.
 
 ## Commands
