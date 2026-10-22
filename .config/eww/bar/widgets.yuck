@@ -33,8 +33,9 @@
     (workspace :id {workspace_base + 5} :monitor_name monitor_name :icon "")))
 
 
-(defwidget monitor [value css_class]
-  (eventbox :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e btop', { float = true, size = { 'monitor_w * 0.7', 'monitor_h * 0.7' } })"`
+(defwidget monitor [value css_class tooltip]
+  (eventbox :tooltip tooltip
+            :onclick `hyprctl dispatch "hl.dsp.exec_cmd('kitty -e btop', { float = true, size = { 'monitor_w * 0.7', 'monitor_h * 0.7' } })"`
             :cursor "pointer"
     (circular-progress :class "circle ${css_class}"
                        :value value
