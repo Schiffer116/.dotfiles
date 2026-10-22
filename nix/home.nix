@@ -10,6 +10,7 @@
     ./home/cli.nix
     ./home/dev.nix
     ./home/desktop.nix
+    ./home/theme.nix
   ];
 
   home.username = "schiffer";
