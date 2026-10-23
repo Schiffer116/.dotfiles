@@ -53,6 +53,8 @@
   "enabledPlugins": {
     "mattpocock-skills@claude-plugins-official": true
   },
+  "viewMode": "focus",
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
@@ -70,6 +72,5 @@
       "**Project facts**: repo-specific trust (accounts, buckets, branches, IaC scopes) lives in each repo's .claude/settings.local.json, not here"
     ]
   },
-  "voiceEnabled": true,
-  "viewMode": "focus"
+  "voiceEnabled": true
 }
