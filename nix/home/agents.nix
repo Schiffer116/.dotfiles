@@ -34,6 +34,7 @@ in
         "statusline.sh"
         "skills/no-mistakes"
         "skills/notify-user"
+        "skills/skipli"
       ]
   );
 }
