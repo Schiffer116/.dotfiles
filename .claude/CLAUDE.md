@@ -25,6 +25,8 @@
 
 - In a Herdr pane, end every turn with `berthier report "<one line>"`; start it
   with `needs you:` when the user must act. A Stop hook enforces it.
+- Whenever you host a demo or preview of your work (dev server, deploy), run
+  `berthier demo <url> [label]` so the Console lists it; `--clear [url]` when gone.
 - Never edit another Corps's files: run `berthier owners`, then
   `berthier ask <corps> "<what and why>"` (ask `berthier` when nobody owns it).
 - When done with an incoming `[berthier ask]`, answer with
