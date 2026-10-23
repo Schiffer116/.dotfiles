@@ -10,6 +10,8 @@ export VISUAL="nvim"
 export LESS="-R"
 
 export MANPAGER='nvim +Man!'
+# No google-chrome here; browser-checking agents drive Arch's chromium
+export CHROME_DEVTOOLS_AXI_EXECUTABLE_PATH=/usr/bin/chromium
 
 export DISABLE_QT5_COMPAT=1
 
