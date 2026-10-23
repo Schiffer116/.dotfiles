@@ -41,6 +41,10 @@
   (vague spec, design, hard debugging, cross-cutting); haiku for chores. A stuck
   Division gets `/model opus` in its pane, no restart.
 - After the user has reviewed it: `berthier division-done <name>`.
+- As a Corps's Main Agent, keep your Board current (its own Skipli board, or
+  your Corps's card on the Grand Army Board; dev env for now): new work arrives
+  as `[board]` messages, mark tasks done as you land, never delete finished
+  work. Divisions don't touch Boards. Mechanics: skipli skill.
 
 ## Maintaining this file
 
