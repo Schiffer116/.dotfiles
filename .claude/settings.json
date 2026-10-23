@@ -70,5 +70,6 @@
       "**Project facts**: repo-specific trust (accounts, buckets, branches, IaC scopes) lives in each repo's .claude/settings.local.json, not here"
     ]
   },
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "viewMode": "focus"
 }
