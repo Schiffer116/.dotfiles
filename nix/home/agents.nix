@@ -10,6 +10,9 @@ in
   # `npm i -g` (the *-axi fleet tools) installs into ~/.local, not the read-only Nix store.
   home.sessionVariables.NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.local";
 
+  # CLAUDE_CODE_TMPDIR (.zshenv) is in the cache, which nothing else ages: drop files after 14 days.
+  systemd.user.tmpfiles.rules = [ "e %C/claude-tmp - - - 14d" ];
+
   # Only config.toml: herdr writes logs and sessions next to it, which must stay out of the repo.
   xdg.configFile."herdr/config.toml".source = link ".config/herdr/config.toml";
 

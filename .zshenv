@@ -12,6 +12,9 @@ export LESS="-R"
 export MANPAGER='nvim +Man!'
 # No google-chrome here; browser-checking agents drive Arch's chromium
 export CHROME_DEVTOOLS_AXI_EXECUTABLE_PATH=/usr/bin/chromium
+# Claude Code scratchpads and task output outlive reboots (/tmp is tmpfs)
+export CLAUDE_CODE_TMPDIR="$XDG_CACHE_HOME/claude-tmp"
+[ -d "$CLAUDE_CODE_TMPDIR" ] || mkdir -p "$CLAUDE_CODE_TMPDIR"
 
 export DISABLE_QT5_COMPAT=1
 
