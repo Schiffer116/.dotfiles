@@ -1,0 +1,18 @@
+# Expose loopback-only services on ports 3000-3999 to the tailnet (DNAT tailscale0 -> 127.0.0.1).
+# Install: sudo install -Dm644 ~/.dotfiles/system/nftables/tailscale-localhost.nft /etc/nftables.d/tailscale-localhost.nft && sudo install -Dm644 ~/.dotfiles/system/systemd/tailscale-localhost.service /etc/systemd/system/tailscale-localhost.service && sudo systemctl daemon-reload && sudo systemctl enable --now tailscale-localhost
+# route_localnet is per-interface, so it is set here (after tailscaled creates tailscale0), not in sysctl.d.
+# If /etc/nftables.conf is ever enabled (input policy drop), add `iifname "tailscale0" tcp dport 3000-3999 accept` to its input chain.
+[Unit]
+Description=Forward tailnet ports 3000-3999 to localhost
+After=tailscaled.service
+Wants=tailscaled.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/sysctl -w net.ipv4.conf.tailscale0.route_localnet=1
+ExecStart=/usr/bin/nft -f /etc/nftables.d/tailscale-localhost.nft
+ExecStop=/usr/bin/nft delete table ip tailscale_localhost
+
+[Install]
+WantedBy=multi-user.target

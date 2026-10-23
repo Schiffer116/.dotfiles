@@ -1,0 +1,7 @@
+destroy table ip tailscale_localhost
+table ip tailscale_localhost {
+  chain prerouting {
+    type nat hook prerouting priority dstnat
+    iifname "tailscale0" tcp dport 3000-3999 dnat to 127.0.0.1
+  }
+}
