@@ -45,6 +45,10 @@
   your Corps's card on the Grand Army Board; dev env for now): new work arrives
   as `[board]` messages, mark tasks done as you land, never delete finished
   work. Divisions don't touch Boards. Mechanics: skipli skill.
+- As a Corps's Main Agent, update your Corps's Notes (`berthier notes --set -`)
+  as you go, not only at shutdown: whenever a decision lands, a thread opens or
+  closes, or something waits on the user. A Fresh Start rebuilds from them; git
+  only shows what changed.
 
 ## Maintaining this file
 
