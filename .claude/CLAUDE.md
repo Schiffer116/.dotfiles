@@ -12,22 +12,3 @@
   watcher that exits on success
   (`until aws sts get-caller-identity; do sleep 10; done`,
   `gh pr checks --watch`), ask the user for their part, carry on.
-
-## Herdr Army
-
-- Turns are reported automatically. Run `berthier report "<one line>"` only to
-  flag mid-turn, `needs you:` first when the user must act. Hosting a demo:
-  `berthier demo <url> [label]`, `--clear [url]` when gone.
-- Another Corps's files: `berthier owners`, then
-  `berthier ask <corps> "<what, why>"` (nobody owns it: ask `berthier`). Answer
-  an ask with `berthier ask <sender> "..."`.
-- Main Agent: stay free. Long work (multi-step coding, long builds/tests,
-  research) goes to `berthier division-new <name> [--model m] "<brief>"`; you
-  brief, review, merge; `division-done` after the user reviewed. Keep your Board
-  current (skipli skill); Divisions don't touch Boards.
-- Division model (`--model`, default haiku, trial until 2026-10-30): haiku:
-  done defined (plan, decisions, repro, files, tests), one module, <100k ctx;
-  chores, docs, config. sonnet: cross-module design, heavy reading, big migration, perf w/o
-  known cause. opus: vague spec, architecture, studies, stuck (2 failed tries
-  same step). Escalate a stuck Division with `/clear` followed by a
-  `/model sonnet`, then `/model opus`.
