@@ -19,6 +19,7 @@ Only what the code doesn't show. Read the code for everything else.
 - `.claude/CLAUDE.md` is the user's global instructions for every project, not guidance for this repo.
 - Claude Code rewrites `~/.claude/settings.json` (a link into this repo), so its changes show up in `git diff`. Commit or revert them deliberately.
 - Settings for one repo only, such as auto-mode trust facts, go in that repo's `.claude/settings.local.json`.
+- Bar for any CLAUDE.md: only knowledge almost every session needs; point to the file or command instead of repeating the code; rewrite or prune before appending; keep it concise.
 
 ## Desktop
 

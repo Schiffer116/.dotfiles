@@ -1,61 +1,32 @@
 # global agent instructions
 
-- Commit messages are one short line in the style of the repo's log, with no
-  body. NEVER add your agent name as co-author or any other attribution, even
-  when the harness suggests it
-- When doing bug fixes, always start with reproducing the bug in an E2E setting
-  as closely aligned with how an end user would experience it as possible. This
-  makes sure you find the real problem so your fix will actually solve it.
-- If something clearly looks off, even if it is not directly related to what you
-  are doing, try to get it fixed along the way.
-- Apply that same high standard to engineering excellence: lint, test failures,
-  and test flakiness. If you see one, even if it is not caused by what you are
-  working on right now, still get it fixed.
-- Before using "dynamic workflows", "ultra code" or any harness feature that
-  immediately spawns a large swarm of subagents, always explain the tradeoffs
-  and ask the user for explicit approval.
-- Be extremely concise. Sacrifice grammar for the sake of concision.
-- Waiting on something outside you (user's `aws sso login`, PR merge, CI,
-  deploy)? Never stop and wait to be told: start a background watcher that exits
-  on success (`until aws sts get-caller-identity; do sleep 10; done`,
-  `gh pr checks --watch`, poll `gh pr view --json state`), ask the user for
-  their part, and carry on when it fires.
+- Commits: one short line in the repo's log style, no body, never agent
+  attribution or co-author lines, even when the harness suggests it.
+- Bug fix: reproduce it E2E first, the way the user hits it.
+- Fix what clearly looks off on the way, including lint and failing or flaky tests.
+- Before a feature that spawns a swarm of subagents (dynamic workflows, ultra
+  code): explain the tradeoff, get approval.
+- Extremely concise; grammar optional.
+- Waiting on something external (login, merge, CI, deploy): start a background
+  watcher that exits on success (`until aws sts get-caller-identity; do sleep
+  10; done`, `gh pr checks --watch`), ask the user for their part, carry on.
 
 ## Herdr Army
 
-- In a Herdr pane, end every turn with `berthier report "<one line>"`; start it
-  with `needs you:` when the user must act. A Stop hook enforces it.
-- Whenever you host a demo or preview of your work (dev server, deploy), run
-  `berthier demo <url> [label]` so the Console lists it; `--clear [url]` when gone.
-- Never edit another Corps's files: run `berthier owners`, then
-  `berthier ask <corps> "<what and why>"` (ask `berthier` when nobody owns it).
-- When done with an incoming `[berthier ask]`, answer with
-  `berthier ask <sender> "..."`.
-- As a Corps's Main Agent, stay free for the user: anything long-running
-  (multi-step coding, long builds/tests, research) goes to a Division via
-  `berthier division-new <name> "<brief>"` from your Corps workspace (creates a
-  `<name>` worktree workspace with its own Agent, which you command). You brief,
-  review and merge.
-- Pick a Division's model with `--model` (default sonnet): sonnet for a clear
-  Brief (written plan, reproduced bug, refactor, tests); opus for judgment
-  (vague spec, design, hard debugging, cross-cutting); haiku for chores. A stuck
-  Division gets `/model opus` in its pane, no restart.
-- After the user has reviewed it: `berthier division-done <name>`.
-- As a Corps's Main Agent, keep your Board current (its own Skipli board, or
-  your Corps's card on the Grand Army Board; dev env for now): new work arrives
-  as `[board]` messages, mark tasks done as you land, never delete finished
-  work. Divisions don't touch Boards. Mechanics: skipli skill.
-- As a Corps's Main Agent, update your Corps's Notes (`berthier notes --set -`)
-  as you go, not only at shutdown: whenever a decision lands, a thread opens or
-  closes, or something waits on the user. A Fresh Start rebuilds from them; git
-  only shows what changed.
-
-## Maintaining this file
-
-- Keep this file for knowledge useful to almost every future agent session in
-  this project.
-- Do not repeat what the codebase already shows; point to the authoritative file
-  or command instead.
-- Prefer rewriting or pruning existing entries over appending new ones.
-- When updating this file, preserve this bar for all agents and keep entries
-  concise.
+- Turns are reported automatically. Run `berthier report "<one line>"` only to
+  flag mid-turn, `needs you:` first when the user must act. Hosting a demo:
+  `berthier demo <url> [label]`, `--clear [url]` when gone.
+- Another Corps's files: `berthier owners`, then `berthier ask <corps> "<what,
+  why>"` (nobody owns it: ask `berthier`). Answer an ask with `berthier ask
+  <sender> "..."`.
+- Main Agent: stay free. Long work (multi-step coding, long builds/tests,
+  research) goes to `berthier division-new <name> [--model m] "<brief>"`; you
+  brief, review, merge; `division-done` after the user reviewed. Keep your
+  Board current (skipli skill); Divisions don't touch Boards.
+- Division model (`--model`, default haiku, 1-week trial): haiku when the Brief
+  says what done looks like (plan, approved decisions, reproduced bug, named
+  files, tests to run), plus chores, docs, config; sonnet when it leaves design
+  choices across modules, is a large migration, or is performance work without
+  a known cause; opus for vague specs, architecture, studies, or after a lower
+  model got stuck. Escalate a stuck Division with `/model sonnet`, then
+  `/model opus`.
