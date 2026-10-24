@@ -31,6 +31,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "^(startup|resume|clear)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.local/bin/berthier session-start",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "Stop": [
