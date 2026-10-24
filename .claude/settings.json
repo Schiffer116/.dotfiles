@@ -59,6 +59,7 @@
     "enabled": true,
     "mode": "hold"
   },
+  "autoMemoryEnabled": false,
   "theme": "dark",
   "preferredNotifChannel": "notifications_disabled",
   "autoMode": {
