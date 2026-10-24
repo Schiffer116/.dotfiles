@@ -25,9 +25,9 @@
   research) goes to `berthier division-new <name> [--model m] "<brief>"`; you
   brief, review, merge; `division-done` after the user reviewed. Keep your Board
   current (skipli skill); Divisions don't touch Boards.
-- Division model (`--model`, default haiku, 1-wk trial): haiku: done defined
-  (plan, decisions, repro, files, tests), one module, <100k ctx; chores, docs,
-  config. sonnet: cross-module design, heavy reading, big migration, perf w/o
+- Division model (`--model`, default haiku, trial until 2026-10-30): haiku:
+  done defined (plan, decisions, repro, files, tests), one module, <100k ctx;
+  chores, docs, config. sonnet: cross-module design, heavy reading, big migration, perf w/o
   known cause. opus: vague spec, architecture, studies, stuck (2 failed tries
   same step). Escalate a stuck Division with `/clear` followed by a
   `/model sonnet`, then `/model opus`.
