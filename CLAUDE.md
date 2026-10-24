@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-Only what the code doesn't show. Read the code for everything else.
-
 ## Nix and the live configs
 
 - home-manager links configs back into this checkout (`mkOutOfStoreSymlink`), so editing a config here changes the live one immediately. Its location is set once, in the `link` helper in `nix/home.nix`. Only `.nix` changes need `home-manager switch --flake .#schiffer@archlinux`.
@@ -19,14 +17,14 @@ Only what the code doesn't show. Read the code for everything else.
 - `.claude/CLAUDE.md` is the user's global instructions for every project, not guidance for this repo.
 - Claude Code rewrites `~/.claude/settings.json` (a link into this repo), so its changes show up in `git diff`. Commit or revert them deliberately.
 - Settings for one repo only, such as auto-mode trust facts, go in that repo's `.claude/settings.local.json`.
-- Bar for any CLAUDE.md: only knowledge almost every session needs; point to the file or command instead of repeating the code; rewrite or prune before appending; keep it concise.
+- Editing any CLAUDE.md or skill: load the writing-for-agents skill.
 
 ## Desktop
 
 - Open and close eww windows only through `scripts/eww-windows.sh`. A plain `eww open` that fails starts a second daemon, and the bar variables then split between the two daemons.
 - Address screens by connector name, never by index: GDK renumbers monitors when eDP-1 is disabled and re-enabled.
 - `.config/hypr/monitors.lua` is the only place that names outputs.
-- hypridle (started by `hyprland.lua`) locks with hyprlock before sleep and after idle; `loginctl lock-session` is the one way to lock. After idle, `scripts/dpms.sh` turns outputs on/off and keeps the internal panel off while the lid is closed.
+- hypridle (started by `hyprland.lua`) locks with hyprlock before sleep and after idle; `loginctl lock-session` is the one way to lock.
 - Closing the lid never suspends: the laptop doubles as a headless server.
 - A widget directory with a `CONTEXT.md` defines domain terms. Read it before changing the widget and keep it in sync.
 - `eww logs` follows forever, so read `~/.cache/eww/eww_*.log` instead. After `hyprctl reload`, check `hyprctl configerrors`.
