@@ -1,0 +1,14 @@
+# greetd + tuigreet replace the tty1 autostart that used to live in .zshrc.
+# A Hyprland crash now returns to the greeter instead of a logged-in shell.
+# zsh -l loads .zshenv and /etc/profile (nix PATH), as the old tty login did.
+# Install a copy (greetd runs as the greeter user, who cannot read ~/.dotfiles):
+#   sudo pacman -S greetd greetd-tuigreet
+#   sudo install -Dm644 ~/.dotfiles/system/greetd/config.toml /etc/greetd/config.toml
+#   sudo systemctl enable greetd
+# Then reboot; never `systemctl start` it from inside a tty1 session (it replaces getty@tty1 and kills the session).
+[terminal]
+vt = 1
+
+[default_session]
+command = "tuigreet --time --remember --asterisks --cmd \"zsh -lc 'exec start-hyprland'\""
+user = "greeter"

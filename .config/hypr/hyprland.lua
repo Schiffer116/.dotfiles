@@ -137,7 +137,13 @@ end
 
 set_internal_monitor(lid_is_closed() and external_connected())
 
-hl.bind('switch:on:Lid Switch', apply_lid, { locked = true })
+-- Closing the lid locks unless another output is still in use (clamshell at a desk).
+hl.bind('switch:on:Lid Switch', function()
+  apply_lid()
+  if not external_connected() then
+    hl.exec_cmd('loginctl lock-session')
+  end
+end, { locked = true })
 hl.bind('switch:off:Lid Switch', apply_lid, { locked = true })
 -- Plugging or unplugging an output (with the lid closed: moves the session to whichever is left).
 hl.on('monitor.added', on_monitors_changed)
