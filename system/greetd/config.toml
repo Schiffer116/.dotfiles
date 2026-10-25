@@ -4,7 +4,7 @@
 # Install a copy (greetd runs as the greeter user, who cannot read ~/.dotfiles):
 #   sudo pacman -S greetd greetd-tuigreet
 #   sudo install -Dm644 ~/.dotfiles/system/greetd/config.toml /etc/greetd/config.toml
-#   sudo systemctl enable greetd
+#   sudo systemctl enable greetd (and install greetd.service.d/quiet-tty.conf)
 # Then reboot; never `systemctl start` it from inside a tty1 session (it replaces getty@tty1 and kills the session).
 [terminal]
 vt = 1
