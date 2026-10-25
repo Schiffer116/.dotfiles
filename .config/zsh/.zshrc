@@ -4,8 +4,8 @@ zmodload zsh/complist
 # options #
 ###########
 
-HISTSIZE=100
-SAVEHIST=100
+HISTSIZE=10000
+SAVEHIST=10000
 HISTFILE=$XDG_CACHE_HOME/zsh/history
 
 setopt HIST_IGNORE_ALL_DUPS
@@ -25,8 +25,6 @@ zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 compinit
 _comp_options+=(globdots)
@@ -100,14 +98,12 @@ bindkey -s '^f' 'tmux-session.sh^M'
 # aliases #
 ###########
 
-alias anki='anki --no-sandbox'
-
 alias dapterm='echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope'
 
 alias icat='kitty +kitten icat'
 
-alias ls='exa --color=always --icons=always'
-alias tree='exa --tree --color=always --icons=always'
+alias ls='eza --color=always --icons=always'
+alias tree='eza --tree --color=always --icons=always'
 
 alias grep='grep --color=auto'
 
@@ -176,19 +172,3 @@ if (( $+functions[_is_auto_notify_ignored] )); then
     add-zsh-hook precmd _auto_notify_sound_play
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/schiffer/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/schiffer/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/schiffer/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/schiffer/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-. "$HOME/.local/bin/env"
