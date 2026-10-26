@@ -1,5 +1,32 @@
 {
+  "env": {
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
+  },
+  "permissions": {
+    "deny": [
+      "SendFeedback",
+      "ScheduleWakeup",
+      "ReportFindings",
+      "ListAgents",
+      "Artifact"
+    ]
+  },
   "model": "opus",
+  "skillOverrides": {
+    "anthropic-skills:docx": "off",
+    "anthropic-skills:pptx": "off",
+    "anthropic-skills:xlsx": "off",
+    "anthropic-skills:pdf": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:morning": "off",
+    "anthropic-skills:deep-research": "off",
+    "anthropic-skills:skill-creator": "off",
+    "anthropic-skills:computer-use": "off",
+    "anthropic-skills:built-in-browser": "off",
+    "anthropic-skills:chrome-browser": "off",
+    "anthropic-skills:import-memory": "off",
+    "anthropic-skills:setup-writing-style": "off"
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -134,6 +161,11 @@
     "mattpocock-skills@claude-plugins-official": true
   },
   "viewMode": "focus",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -153,31 +185,5 @@
       "**Project facts**: repo-specific trust (accounts, buckets, branches, IaC scopes) lives in each repo's .claude/settings.local.json, not here"
     ]
   },
-  "voiceEnabled": true,
-  "permissions": {
-    "deny": [
-      "SendFeedback",
-      "ScheduleWakeup",
-      "ReportFindings",
-      "ListAgents"
-    ]
-  },
-  "skillOverrides": {
-    "anthropic-skills:docx": "off",
-    "anthropic-skills:pptx": "off",
-    "anthropic-skills:xlsx": "off",
-    "anthropic-skills:pdf": "off",
-    "anthropic-skills:docs": "off",
-    "anthropic-skills:morning": "off",
-    "anthropic-skills:deep-research": "off",
-    "anthropic-skills:skill-creator": "off",
-    "anthropic-skills:computer-use": "off",
-    "anthropic-skills:built-in-browser": "off",
-    "anthropic-skills:chrome-browser": "off",
-    "anthropic-skills:import-memory": "off",
-    "anthropic-skills:setup-writing-style": "off"
-  },
-  "env": {
-    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
-  }
+  "voiceEnabled": true
 }
