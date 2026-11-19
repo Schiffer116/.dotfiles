@@ -12,6 +12,8 @@ local function rgba(name, alpha)
   return 'rgba(' .. palette[name] .. (alpha or 'ff') .. ')'
 end
 
+local SPECIAL_SCALE = 0.7
+
 local monitor_by_name = {}
 local internal_monitor
 for _, m in ipairs(monitors) do
@@ -25,6 +27,14 @@ local function add_workspace_rules(m)
   for j = 1, 10 do
     hl.workspace_rule({ workspace = tostring(m.workspace_base + j), monitor = m.name })
   end
+  -- Hyprland 0.57 made special_scale_factor a no-op, so per-output gaps shrink special workspaces.
+  local width, height = m.mode:match('(%d+)x(%d+)')
+  local margin = (1 - SPECIAL_SCALE) / 2 / m.scale
+  local x, y = math.floor(width * margin), math.floor(height * margin)
+  hl.workspace_rule({
+    workspace = 's[true] m[' .. m.name .. ']',
+    gaps_out = { top = y, right = x, bottom = y, left = x },
+  })
 end
 
 local function json_string(s)
@@ -63,7 +73,14 @@ local function adopt_unknown_monitors()
       for _, m in ipairs(monitors) do
         base = math.max(base, m.workspace_base + 10)
       end
-      local m = { name = mon.name, workspace_base = base, bar = 'bar_' .. mon.name:gsub('%W', '_'), windows = {} }
+      local m = {
+        name = mon.name,
+        mode = mon.width .. 'x' .. mon.height,
+        scale = mon.scale,
+        workspace_base = base,
+        bar = 'bar_' .. mon.name:gsub('%W', '_'),
+        windows = {},
+      }
       table.insert(monitors, m)
       monitor_by_name[m.name] = m
       add_workspace_rules(m)
@@ -326,7 +343,6 @@ hl.animation({ leaf = 'zoomFactor', enabled = true, speed = 7, bezier = 'quick' 
 hl.config({
   dwindle = {
     preserve_split = true,
-    special_scale_factor = 0.7,
   },
 })
 
