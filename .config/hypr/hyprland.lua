@@ -386,15 +386,6 @@ hl.config({
   },
 })
 
--- Hyprland logs nothing of its own by default; keep its log on (with timestamps) to diagnose
--- the silent exits that drop the session to safe mode.
-hl.config({
-  debug = {
-    disable_logs = false,
-    disable_time = false,
-  },
-})
-
 ---------------
 ---- INPUT ----
 ---------------
