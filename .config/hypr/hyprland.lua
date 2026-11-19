@@ -378,6 +378,22 @@ hl.config({
   },
 })
 
+-- HDR crashes Hyprland: never switch HDMI-A-1 to HDR, and don't offer color management to clients.
+hl.config({
+  render = {
+    cm_auto_hdr = 0,
+    cm_enabled  = false,
+  },
+})
+
+-- Hyprland logs nothing of its own by default; keep its log on (with timestamps) to diagnose
+-- the silent exits that drop the session to safe mode.
+hl.config({
+  debug = {
+    disable_logs = false,
+    disable_time = false,
+  },
+})
 
 ---------------
 ---- INPUT ----
