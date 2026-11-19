@@ -33,5 +33,7 @@ in
     playerctl
     libnotify
     imagemagick
+    # Theme hyprland.lua sets; targets.genericLinux pins XCURSOR_PATH to the profile, not ~/.local/share/icons.
+    bibata-cursors
   ];
 }
